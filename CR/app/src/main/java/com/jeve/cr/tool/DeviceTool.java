@@ -106,30 +106,11 @@ public class DeviceTool {
     }
 
     /**
-     * 获取手机品牌
+     * 设备信息
+     * @return
      */
-    public static String getPhoneBrand() {
-        return android.os.Build.BRAND;
+    public static String getDeviceInfo(){
+        return android.os.Build.BRAND + " " + android.os.Build.MODEL + " " +"安卓版本:" + android.os.Build.VERSION.RELEASE;
     }
 
-    /**
-     * 获取手机型号
-     */
-    public static String getPhoneModel() {
-        return android.os.Build.MODEL;
-    }
-
-    /**
-     * 获取手机Android API等级（22、23 ...）
-     */
-    public static int getBuildLevel() {
-        return android.os.Build.VERSION.SDK_INT;
-    }
-
-    /**
-     * 获取手机Android 版本（4.4、5.0、5.1 ...）
-     */
-    public static String getBuildVersion() {
-        return android.os.Build.VERSION.RELEASE;
-    }
 }

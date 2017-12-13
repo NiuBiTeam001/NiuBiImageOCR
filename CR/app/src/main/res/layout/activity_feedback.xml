@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.jeve.cr.activity.feedback.FeedbackActivity">
 
     <RelativeLayout
+        android:id="@+id/feedback_actionbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary">
@@ -43,7 +43,6 @@
             android:background="?android:attr/selectableItemBackground">
 
             <ImageView
-                android:id="@+id/feedback_send_iv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerHorizontal="true"
@@ -54,43 +53,58 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/distance_16dp"
-        android:layout_marginRight="@dimen/distance_16dp"
-        android:layout_marginTop="@dimen/distance_8dp">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/feedback_actionbar">
 
-        <EditText
-            android:id="@+id/feedback_suggestion_et"
+        <RelativeLayout
+            android:id="@+id/feedback_suggestion_re"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/et_backgroud"
-            android:elevation="@dimen/distance_8dp"
-            android:gravity="left|top"
-            android:hint="@string/feedback_suggestion"
-            android:paddingLeft="@dimen/distance_8dp"
-            android:paddingTop="@dimen/distance_8dp"
-            android:textColorHint="@color/et_hint_color"
-            android:textSize="@dimen/body_16sp" />
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/distance_16dp"
+            android:layout_marginRight="@dimen/distance_16dp"
+            android:layout_marginTop="@dimen/distance_8dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/distance_16dp"
-        android:layout_marginRight="@dimen/distance_16dp"
-        android:layout_marginTop="@dimen/distance_8dp">
+            <EditText
+                android:id="@+id/feedback_suggestion_et"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/et_backgroud"
+                android:elevation="@dimen/distance_8dp"
+                android:gravity="left|top"
+                android:hint="@string/feedback_suggestion"
+                android:paddingLeft="@dimen/distance_8dp"
+                android:paddingTop="@dimen/distance_8dp"
+                android:textColorHint="@color/et_hint_color"
+                android:textSize="@dimen/body_16sp" />
+        </RelativeLayout>
 
-        <EditText
-            android:id="@+id/feedback_bug_et"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/et_backgroud"
-            android:elevation="@dimen/distance_8dp"
-            android:gravity="left|top"
-            android:hint="@string/feedback_bug"
-            android:paddingLeft="@dimen/distance_8dp"
-            android:paddingTop="@dimen/distance_8dp"
-            android:textColorHint="@color/et_hint_color"
-            android:textSize="@dimen/body_16sp" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/feedback_suggestion_re"
+            android:layout_marginLeft="@dimen/distance_16dp"
+            android:layout_marginRight="@dimen/distance_16dp"
+            android:layout_marginTop="@dimen/distance_8dp">
+
+            <EditText
+                android:id="@+id/feedback_bug_et"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/et_backgroud"
+                android:elevation="@dimen/distance_8dp"
+                android:gravity="left|top"
+                android:hint="@string/feedback_bug"
+                android:paddingLeft="@dimen/distance_8dp"
+                android:paddingTop="@dimen/distance_8dp"
+                android:textColorHint="@color/et_hint_color"
+                android:textSize="@dimen/body_16sp" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/feedback_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

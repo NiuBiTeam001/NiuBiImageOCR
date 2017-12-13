@@ -19,12 +19,14 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.Constant;
 import com.jeve.cr.R;
+import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.BitmapTool;
 import com.jeve.cr.tool.FileTool;
@@ -82,8 +84,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initViews() {
         ImageView camera_iv = (ImageView) findViewById(R.id.main_activity_camera);
         ImageView photo_iv = (ImageView) findViewById(R.id.main_activity_photo);
+        Button feedback_btn = (Button) findViewById(R.id.main_activity_feedback);
         camera_iv.setOnClickListener(this);
         photo_iv.setOnClickListener(this);
+        feedback_btn.setOnClickListener(this);
     }
 
     @Override
@@ -132,6 +136,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.main_activity_photo:
                 break;
+            case R.id.main_activity_feedback:
+                startActivity(new Intent(this, FeedbackActivity.class));
+                break;
             default:
                 break;
         }
@@ -144,7 +151,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         boolean isCameraGranted = checkPermission(cameraPermission);
         Boolean isWriteGranted = checkPermission(writePermission);
         if (isCameraGranted && isWriteGranted) {
-            originalPath = Constant.ORIGINAL_PATH + "Picas_" + getCurrentDate(System.currentTimeMillis()) + ".jpg";
+            originalPath = Constant.ORIGINAL_PATH + getString(R.string.app_name)+ "_" + getCurrentDate(System.currentTimeMillis()) + ".jpg";
             Log.d(TAG, "-----设置路径----   originalPath=" + originalPath);
             File originalDir = new File(Constant.ORIGINAL_PATH);
             if (!originalDir.exists()) {
@@ -252,17 +259,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             try {
                 File originalFile = new File(originalPath);
                 if (originalFile.length() > 0) {
-                    Bitmap orginalBitmap = BitmapTool.getBigBitmap(originalPath);
-                    if (orginalBitmap == null) {
+                    Bitmap originalBitmap = BitmapTool.loadImage(originalPath,0);
+                    if (originalBitmap == null) {
                         Toast.makeText(this, getString(R.string.main_activity_takephoto_tip), Toast.LENGTH_SHORT)
                                 .show();
                         return;
                     }
                     int degree = BitmapTool.getPictureDegree(originalPath);
                     if (degree != 0) {
-                        orginalBitmap = BitmapTool.rotateBitmap(orginalBitmap, degree);
+                        originalBitmap = BitmapTool.rotateBitmap(originalBitmap, degree);
                     }
-                    BitmapTool.savePrimitiveImag(orginalBitmap);
+                    BitmapTool.savePrimitiveImag(originalBitmap);
 //                    Intent clipingIntent = new Intent(this, ClippingActivity.class);
 //                    clipingIntent.setFlags(CAMERA_FLAG);
 //                    startActivity(clipingIntent);
