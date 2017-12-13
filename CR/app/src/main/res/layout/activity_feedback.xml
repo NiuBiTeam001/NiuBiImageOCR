@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jeve.cr.activity.feedback.FeedbackActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <RelativeLayout
+            android:id="@+id/feedback_back_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_back" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/feedback_back_re"
+            android:text="@string/feedback_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/body_20sp" />
+
+        <RelativeLayout
+            android:id="@+id/feedback_send_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/feedback_send_iv"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_send" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/distance_16dp"
+        android:layout_marginRight="@dimen/distance_16dp"
+        android:layout_marginTop="@dimen/distance_8dp">
+
+        <EditText
+            android:id="@+id/feedback_suggestion_et"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/et_backgroud"
+            android:elevation="@dimen/distance_8dp"
+            android:gravity="left|top"
+            android:hint="@string/feedback_suggestion"
+            android:paddingLeft="@dimen/distance_8dp"
+            android:paddingTop="@dimen/distance_8dp"
+            android:textColorHint="@color/et_hint_color"
+            android:textSize="@dimen/body_16sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/distance_16dp"
+        android:layout_marginRight="@dimen/distance_16dp"
+        android:layout_marginTop="@dimen/distance_8dp">
+
+        <EditText
+            android:id="@+id/feedback_bug_et"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/et_backgroud"
+            android:elevation="@dimen/distance_8dp"
+            android:gravity="left|top"
+            android:hint="@string/feedback_bug"
+            android:paddingLeft="@dimen/distance_8dp"
+            android:paddingTop="@dimen/distance_8dp"
+            android:textColorHint="@color/et_hint_color"
+            android:textSize="@dimen/body_16sp" />
+    </RelativeLayout>
+</LinearLayout>
