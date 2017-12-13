@@ -32,11 +32,6 @@ import java.io.IOException;
  */
 public class BitmapTool {
 
-    //处理图片保存位置
-    public final static String DEALPATH = CrApplication.getContext().getFilesDir() + File.separator + "CR" + File.separator + "Deal Image" + File.separator + "dealImage.jpg";
-    //处理图片保存文件夹位置
-    private final static String DEALPATHFLODER = CrApplication.getContext().getFilesDir() + File.separator + "CR" + File.separator + "Deal Image" + File.separator;
-
     /**
      * 加载图片
      *
@@ -98,51 +93,8 @@ public class BitmapTool {
         }
         return newBitmap;
     }
-
-    //创建图片文件
-    private static File getOutputMediaFile() {
-        // Create a media file name
-        File mediaFile;
-        File imgFile;
-
-        mediaFile = new File(DEALPATHFLODER);
-        if (!mediaFile.exists()) {
-            mediaFile.mkdirs();
-        }
-        imgFile = new File(DEALPATH);
-        if (imgFile.exists())
-            imgFile.delete();
-
-        return imgFile;
-    }
-
-    //图片保存到本地
-    public static boolean saveBitmapToSdcard(Bitmap selectBitmap) {
-        File pictureFile = getOutputMediaFile();
-        if (pictureFile == null) {
-            return false;
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(pictureFile);
-            return selectBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.flush();
-                    fos.getFD().sync();
-                    fos.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static final String PRIMITIVE_SAVEPATH = CrApplication.getContext().getFilesDir() + File.separator + "primitive" +
+	
+	public static final String PRIMITIVE_SAVEPATH = CrApplication.getContext().getFilesDir() + File.separator + "primitive" +
             File.separator;
 
     //未经过任何处理的图片存放位置（退出就删除）

@@ -6,8 +6,6 @@ import com.baidu.ocr.sdk.OCR;
 import com.baidu.ocr.sdk.OnResultListener;
 import com.baidu.ocr.sdk.exception.OCRError;
 import com.baidu.ocr.sdk.model.AccessToken;
-import com.baidu.ocr.sdk.model.BankCardParams;
-import com.baidu.ocr.sdk.model.BankCardResult;
 import com.baidu.ocr.sdk.model.GeneralBasicParams;
 import com.baidu.ocr.sdk.model.GeneralResult;
 import com.baidu.ocr.sdk.model.WordSimple;
@@ -27,6 +25,7 @@ public class OCRTool {
             @Override
             public void onResult(AccessToken accessToken) {
                 token = accessToken.getAccessToken();
+                Log.d("LJW", "token = " + token);
             }
 
             @Override
@@ -74,39 +73,9 @@ public class OCRTool {
         });
     }
 
-    //银行卡识别
-    public void OCRBankCard(String filePath, final OcrBankCallBack ocrBankCallBack) {
-        // 银行卡识别参数设置
-        BankCardParams param = new BankCardParams();
-        param.setImageFile(new File(filePath));
-
-        // 调用银行卡识别服务
-        OCR.getInstance().recognizeBankCard(param, new OnResultListener<BankCardResult>() {
-            @Override
-            public void onResult(BankCardResult result) {
-                // 调用成功，返回BankCardResult对象
-                ocrBankCallBack.success(result.getBankCardNumber(), result.getBankName());
-            }
-
-            @Override
-            public void onError(OCRError error) {
-                // 调用失败，返回OCRError对象
-                ocrBankCallBack.error(error.toString());
-            }
-        });
-    }
-
     public interface OcrCallBack {
         //识别成功
         void success(String str);
-
-        //识别失败
-        void error(String error);
-    }
-
-    public interface OcrBankCallBack {
-        //识别成功
-        void success(String carNum, String bankName);
 
         //识别失败
         void error(String error);
