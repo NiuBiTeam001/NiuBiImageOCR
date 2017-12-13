@@ -1,16 +1,13 @@
 <resources>
     <string name="app_name">CR</string>
-    <!--打开相机-->
-    <string name="getphoto_too_big">对不起，没有足够内存来加载照片，请释放一些内存，重新进入应用后再试！</string>
-    <string name="main_activity_takephoto_tip">对不起获取照片失败，请重试！</string>
     <!--Feedback-->
     <string name="feedback_title">反馈</string>
     <string name="feedback_suggestion">请给我们建议，帮助我们更好的优化应用！</string>
     <string name="feedback_bug">应用出现了问题吧，请告诉我们吧！</string>
-    <string name="feedback_send_tip">请至少填写一项吧！</string>
-    <string name="feedback_send_success">提交成功啦！</string>
-    <string name="feedback_send_failed">请检测一下网络，稍后再试试！</string>
+
+    <string name="getphoto_too_big">对不起，没有足够内存来加载照片，请释放一些内存，重新进入应用后再试！</string>
+    <string name="main_activity_takephoto_tip">对不起获取照片失败，请重试！</string>
+
     <!--照片编辑-->
     <string name="image_edit_finish">完成</string>
-
 </resources>

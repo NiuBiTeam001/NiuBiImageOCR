@@ -21,16 +21,16 @@ import com.jeve.cr.tool.DeviceTool;
  */
 public class FlexImageView extends android.support.v7.widget.AppCompatImageView {
 
-    Paint linePaint;
-    RectF rectF;
-    int leftX, rightX, topY, bottomY;
-    int critical = 20;
-    int criticalC = 40;
-    int deviceWidth;
-    int deviceHeight;
-    int paintWidth = 4;
-    int bitmapWidth;
-    int bitmapHeight;
+    private Paint linePaint;
+    private RectF rectF;
+    private int leftX, rightX, topY, bottomY;
+    private int critical = 20;
+    private int criticalC = 40;
+    private int deviceWidth;
+    private int deviceHeight;
+    private int paintWidth = 4;
+    private int bitmapWidth;
+    private int bitmapHeight;
 
     public FlexImageView(Context context) {
         this(context, null);
@@ -84,7 +84,7 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
     }
 
     private int touchWitch = 0;
-    float touchX = 0, touchY = 0;
+    private float touchX = 0, touchY = 0;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
