@@ -10,5 +10,7 @@
     <string name="feedback_send_tip">请至少填写一项吧！</string>
     <string name="feedback_send_success">提交成功啦！</string>
     <string name="feedback_send_failed">请检测一下网络，稍后再试试！</string>
+    <!--照片编辑-->
+    <string name="image_edit_finish">完成</string>
 
 </resources>
