@@ -99,6 +99,7 @@ public class BitmapTool {
         return newBitmap;
     }
 
+
     //创建图片文件
     private static File getOutputMediaFile() {
         // Create a media file name
@@ -141,6 +142,14 @@ public class BitmapTool {
             }
         }
     }
+
+    /**
+     * 根据资源ID获取Bitmap
+     */
+    public static Bitmap getBitmap(int resId) {
+        return BitmapFactory.decodeResource(getResources(), resId);
+    }
+
 
     public static final String PRIMITIVE_SAVEPATH = CrApplication.getContext().getFilesDir() + File.separator + "primitive" +
             File.separator;
