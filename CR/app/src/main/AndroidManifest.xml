@@ -45,13 +45,15 @@
             android:name=".activity.feedback.FeedbackActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <!--友盟-->
+        <!-- 友盟 -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5a290d6ef43e485a93000030" />
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="jevely" />
+
+        <activity android:name=".activity.imageEdit.ImageEditActivity"></activity>
     </application>
 
 </manifest>
