@@ -33,9 +33,11 @@ import java.io.IOException;
 public class BitmapTool {
 
     //处理图片保存位置
-    public final static String DEALPATH = CrApplication.getContext().getFilesDir() + File.separator + "CR" + File.separator + "Deal Image" + File.separator + "dealImage.jpg";
+    public final static String DEALPATH = CrApplication.getContext().getFilesDir() + File.separator + "CR" + File
+            .separator + "Deal Image" + File.separator + "dealImage.jpg";
     //处理图片保存文件夹位置
-    private final static String DEALPATHFLODER = CrApplication.getContext().getFilesDir() + File.separator + "CR" + File.separator + "Deal Image" + File.separator;
+    private final static String DEALPATHFLODER = CrApplication.getContext().getFilesDir() + File.separator + "CR" +
+            File.separator + "Deal Image" + File.separator;
 
     /**
      * 加载图片
@@ -151,12 +153,12 @@ public class BitmapTool {
     }
 
 
-    public static final String PRIMITIVE_SAVEPATH = CrApplication.getContext().getFilesDir() + File.separator + "primitive" +
-            File.separator;
+    private static final String PRIMITIVE_SAVEPATH = CrApplication.getContext().getFilesDir() + File.separator + "CR" +
+            File.separator + "photo" + File.separator;
 
     //未经过任何处理的图片存放位置（退出就删除）
-    public static final String PRIMITIVE_PATH = CrApplication.getContext().getFilesDir() + File.separator + "primitive" +
-            File.separator + "primitiveImg.jpg";
+    public static final String PRIMITIVE_PATH = CrApplication.getContext().getFilesDir() + File.separator + "CR" +
+            File.separator + "photo" + File.separator + "primitiveImg.jpg";
 
     /**
      * 获取图片的旋转角度

@@ -4,4 +4,10 @@
     <dimen name="distance_8dp">8dp</dimen>
     <dimen name="body_20sp">20sp</dimen>
     <dimen name="body_16sp">16sp</dimen>
+
+    <dimen name="tip_text">12sp</dimen>
+    <dimen name="content_text">14sp</dimen>
+    <dimen name="small_title">16sp</dimen>
+    <dimen name="appbar_text">20sp</dimen>
+    <dimen name="big_title">24sp</dimen>
 </resources>

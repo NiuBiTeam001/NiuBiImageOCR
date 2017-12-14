@@ -5,14 +5,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jeve.cr.activity.MainActivity">
+    android:background="@color/white">
     <!--主布局-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
+        <RelativeLayout
+            android:id="@+id/drawer_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_dehaze"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/select_again_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toLeftOf="@+id/edit_re"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_select_again"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toLeftOf="@+id/ocr_re"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_crop"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ocr_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_translate"/>
+        </RelativeLayout>
+
         <LinearLayout
+            android:id="@+id/select_ll"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
@@ -33,138 +93,84 @@
                 android:src="@drawable/ic_photo"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/main_activity_feedback"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/select_ll"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/distance_16dp"
-            android:text="Feedback"/>
+            android:text="@string/main_activity_select_photo"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text"/>
 
-        <Button
-            android:id="@+id/bt"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/showimage_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/drawer_re"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/result_tv"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/distance_16dp"
-            android:text="bt"/>
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text"/>
+
     </RelativeLayout>
+
     <!--侧边栏-->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#2e2e2e"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
+                style="@style/sidebar_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
+                android:layout_marginTop="48dp"
+                android:text="@string/app_name"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/big_title"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_color1"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/feedback"
+                style="@style/sidebar_style"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
+                android:text="@string/feedback_title"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_color1"/>
 
             <TextView
+                android:id="@+id/version"
+                style="@style/sidebar_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="``````11111"
-                android:textColor="#fff"
-                android:textSize="40sp"/>
+                android:layout_marginStart="16dp"
+                android:textColor="@color/text_color2"
+                android:textSize="@dimen/content_text"/>
 
         </LinearLayout>
 
