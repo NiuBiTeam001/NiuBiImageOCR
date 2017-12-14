@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
 import com.jeve.cr.tool.BitmapTool;
 import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.view.FlexImageView;
 
-public class ImageEditActivity extends AppCompatActivity implements View.OnClickListener {
+public class ImageEditActivity extends BaseActivity implements View.OnClickListener {
 
     private FlexImageView flex;
 

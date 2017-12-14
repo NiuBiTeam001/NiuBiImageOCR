@@ -16,9 +16,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -54,6 +57,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int CAMERA_FLAG = 1;//标志从相机进入裁剪
     private String cameraPermission = "android.permission.CAMERA";
     private String writePermission = "android.permission.WRITE_EXTERNAL_STORAGE";
+    private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +90,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ImageView camera_iv = (ImageView) findViewById(R.id.main_activity_camera);
         ImageView photo_iv = (ImageView) findViewById(R.id.main_activity_photo);
         Button feedback_btn = (Button) findViewById(R.id.main_activity_feedback);
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
         camera_iv.setOnClickListener(this);
         photo_iv.setOnClickListener(this);
         feedback_btn.setOnClickListener(this);
+
+        Button bt = (Button) findViewById(R.id.bt);
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override
@@ -130,7 +144,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.main_activity_camera:
                 startCamera();
                 break;
@@ -151,7 +165,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         boolean isCameraGranted = checkPermission(cameraPermission);
         Boolean isWriteGranted = checkPermission(writePermission);
         if (isCameraGranted && isWriteGranted) {
-            originalPath = Constant.ORIGINAL_PATH + getString(R.string.app_name)+ "_" + getCurrentDate(System.currentTimeMillis()) + ".jpg";
+            originalPath = Constant.ORIGINAL_PATH + getString(R.string.app_name) + "_" + getCurrentDate(System
+                    .currentTimeMillis()) + ".jpg";
             Log.d(TAG, "-----设置路径----   originalPath=" + originalPath);
             File originalDir = new File(Constant.ORIGINAL_PATH);
             if (!originalDir.exists()) {
@@ -241,7 +256,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private void requestNeedPermissions() {
         permissionArray = new String[]{cameraPermission, writePermission};
-        requestPermission(this,permissionArray);
+        requestPermission(this, permissionArray);
     }
 
     @Override
@@ -259,7 +274,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             try {
                 File originalFile = new File(originalPath);
                 if (originalFile.length() > 0) {
-                    Bitmap originalBitmap = BitmapTool.loadImage(originalPath,0);
+                    Bitmap originalBitmap = BitmapTool.loadImage(originalPath, 0);
                     if (originalBitmap == null) {
                         Toast.makeText(this, getString(R.string.main_activity_takephoto_tip), Toast.LENGTH_SHORT)
                                 .show();
