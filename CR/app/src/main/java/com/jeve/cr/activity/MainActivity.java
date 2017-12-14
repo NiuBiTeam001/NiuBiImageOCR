@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,8 +63,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int CAMERA_FLAG = 1;//标志从相机进入裁剪
     private String cameraPermission = "android.permission.CAMERA";
     private String writePermission = "android.permission.WRITE_EXTERNAL_STORAGE";
-    private DrawerLayout drawer;
+    private Boolean dealImage = false;
 
+    private DrawerLayout drawer;
     private ImageView showimage_iv;
     private RelativeLayout select_again_re, edit_re, ocr_re;
     private TextView result_tv;
@@ -130,6 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 result_tv.setVisibility(View.GONE);
                 break;
             case R.id.edit_re:
+                dealImage = true;
                 startActivity(new Intent(this, ImageEditActivity.class));
                 break;
             case R.id.ocr_re:
@@ -179,7 +182,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             //7.0的StrictMode政策，使不能直接获取到uri
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                originalUri = FileProvider.getUriForFile(this, Constant.PACKAGE_NAME + ".provider", originalFile);
+                originalUri = FileProvider.getUriForFile(this, Constant.PACKAGE_NAME + ".fileProvider", originalFile);
                 cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 originalUri = Uri.fromFile(originalFile);
@@ -187,7 +190,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, originalUri);
             cameraIntent.putExtra("return-data", false);//将结果不保存在onActivityResult方法参数的data中
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-//            overridePendingTransition(R.anim.bottom_in_anim, R.anim.top_out_anim);
             long currentTime = System.currentTimeMillis();
             MainConfig.getInstance().setTakePhotoTime(currentTime);
         } else {
@@ -197,9 +199,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 获取系统相机的包名
-     *
-     * @param context
-     * @return
      */
     private String getSystemCameraPackageName(Activity context) {
         try {
@@ -234,9 +233,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 获取当前时间格式：yyyyMMdd_HHmmssSSS
-     *
-     * @param time
-     * @return
      */
     private String getCurrentDate(long time) {
         String pattern = "yyyyMMdd_HHmmssSSS";
@@ -256,6 +252,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         UMTool.getInstence().appStart();
+        if (dealImage) {
+            dealImage = false;
+            //更新照片
+            Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+            showimage_iv.setImageBitmap(newBitmap);
+        }
     }
 
     @Override
@@ -381,7 +383,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 通知本地相册刷新
      */
     public static void refreshLocalPhoto(String imagePath, Context context) {
-
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri uri = Uri.fromFile(new File(imagePath));
         intent.setData(uri);

@@ -281,7 +281,9 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
         setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(getDrawingCache());
         setDrawingCacheEnabled(false);
-        bitmap = Bitmap.createBitmap(bitmap, leftX, topY, rightX - leftX, bottomY - topY);
+        int border = paintWidth * 2 - 2;
+        bitmap = Bitmap.createBitmap(bitmap, leftX + border, topY + border, rightX -
+                leftX - 2 * (border), bottomY - topY - 2 * (border));
         return bitmap;
     }
 
