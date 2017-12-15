@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.Constant;
 import com.jeve.cr.R;
+import com.jeve.cr.activity.album.AlbumActivity;
 import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.activity.imageEdit.ImageEditActivity;
 import com.jeve.cr.config.MainConfig;
@@ -125,6 +126,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startCamera();
                 break;
             case R.id.main_activity_photo:
+                startActivity(new Intent(this, AlbumActivity.class));
                 break;
             case R.id.drawer_re:
                 drawer.openDrawer(GravityCompat.START);
