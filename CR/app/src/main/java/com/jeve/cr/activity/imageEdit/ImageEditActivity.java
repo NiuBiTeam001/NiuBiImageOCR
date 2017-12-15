@@ -29,8 +29,10 @@ public class ImageEditActivity extends BaseActivity implements View.OnClickListe
      * 初始化
      */
     private void init() {
+        Intent intent = getIntent();
+        String path = intent.getStringExtra("imagePath");
         int maxLength = DeviceTool.getWidthAndHeight(this).width;
-        Bitmap bitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, maxLength);
+        Bitmap bitmap = BitmapTool.loadImage(path, maxLength);
         Bitmap dealBitmap = BitmapTool.scBitmap(bitmap, maxLength);
 
         RelativeLayout back_re = (RelativeLayout) findViewById(R.id.back_re);
@@ -62,6 +64,8 @@ public class ImageEditActivity extends BaseActivity implements View.OnClickListe
         Bitmap resultBitmap = flex.cutImage();
         //保存图片
         BitmapTool.saveBitmapToSdcard(resultBitmap);
+        //传地址回去
+        String savePath = BitmapTool.DEALPATH;
         //finish
         finish();
     }

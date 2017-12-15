@@ -11,6 +11,10 @@
     <string name="getphoto_too_big">对不起，没有足够内存来加载照片，请释放一些内存，重新进入应用后再试！</string>
     <string name="main_activity_takephoto_tip">对不起获取照片失败，请重试！</string>
 
+
+    <!--album-->
+    <string name="album_title">相册</string>
+
     <string name="main_activity_select_photo">请选择需要识别的图片</string>
 
     <!--照片编辑-->
