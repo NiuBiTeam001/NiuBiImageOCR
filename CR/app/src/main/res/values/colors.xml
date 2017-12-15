@@ -11,4 +11,7 @@
     <color name="text_color1">#222222</color>
     <color name="line_color1">#dedede</color>
     <color name="text_color2">#b9b9b9</color>
+
+    <!--自定义剪裁控件边框颜色-->
+    <color name="edit_line_color">#cc838282</color>
 </resources>

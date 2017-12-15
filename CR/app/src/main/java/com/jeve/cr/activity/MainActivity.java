@@ -25,7 +25,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +71,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView showimage_iv;
     private RelativeLayout select_again_re, edit_re, ocr_re;
     private TextView result_tv;
+    private LinearLayout select_ll;
+    private TextView explain;
+    private ScrollView result_scroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
         result_tv = (TextView) findViewById(R.id.result_tv);
+        explain = (TextView) findViewById(R.id.explain);
+        select_ll = (LinearLayout) findViewById(R.id.select_ll);
+        result_scroll = (ScrollView) findViewById(R.id.result_scroll);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         String versionContent = "v" + DeviceTool.getVersionName(this);
@@ -130,6 +138,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 edit_re.setVisibility(View.GONE);
                 ocr_re.setVisibility(View.GONE);
                 result_tv.setVisibility(View.GONE);
+                result_scroll.setVisibility(View.GONE);
+                explain.setVisibility(View.VISIBLE);
+                select_ll.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_re:
                 dealImage = true;
@@ -139,15 +150,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
                     @Override
                     public void success(String str) {
+                        Log.d("LJW", "识别成功" + str);
                         result_tv.setText(str);
+                        result_tv.setVisibility(View.VISIBLE);
+                        result_scroll.setVisibility(View.VISIBLE);
                         showimage_iv.setVisibility(View.GONE);
                         edit_re.setVisibility(View.INVISIBLE);
                         ocr_re.setVisibility(View.INVISIBLE);
+                        explain.setVisibility(View.GONE);
+                        select_ll.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void error(String error) {
-
+                        Log.d("LJW", "识别失败" + error.toString());
                     }
                 });
                 break;

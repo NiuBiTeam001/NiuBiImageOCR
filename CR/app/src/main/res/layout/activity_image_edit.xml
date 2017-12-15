@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.jeve.cr.activity.imageEdit.ImageEditActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/activityback"
+                android:fitsSystemWindows="true"
+                tools:context="com.jeve.cr.activity.imageEdit.ImageEditActivity">
 
 
     <RelativeLayout
@@ -15,21 +16,23 @@
         <RelativeLayout
             android:id="@+id/back_re"
             android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?android:attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_arrow_back"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/finish_re"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,7 +41,7 @@
                 android:layout_centerVertical="true"
                 android:text="@string/image_edit_finish"
                 android:textColor="@color/text_color1"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </RelativeLayout>
 
@@ -48,6 +51,9 @@
         android:id="@+id/flex"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_re" />
+        android:layout_below="@+id/title_re"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="?attr/actionBarSize"/>
 
 </RelativeLayout>

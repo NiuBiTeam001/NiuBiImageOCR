@@ -22,19 +22,7 @@ import java.io.File;
  */
 public class OCRTool {
 
-    private OCRTool() {
-        OCR.getInstance().initAccessToken(new OnResultListener<AccessToken>() {
-            @Override
-            public void onResult(AccessToken accessToken) {
-                token = accessToken.getAccessToken();
-            }
-
-            @Override
-            public void onError(OCRError ocrError) {
-
-            }
-        }, CrApplication.getContext());
-    }
+    private OCRTool() {}
 
     private static OCRTool ocrTool;
 
@@ -50,6 +38,23 @@ public class OCRTool {
     }
 
     private String token;
+
+    /**
+     * 初始化
+     */
+    public void init() {
+        OCR.getInstance().initAccessToken(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken accessToken) {
+                token = accessToken.getAccessToken();
+            }
+
+            @Override
+            public void onError(OCRError ocrError) {
+
+            }
+        }, CrApplication.getContext());
+    }
 
     //识别文字
     public void OCRTest(String imagePath, final OcrCallBack ocrCallBack) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
+import com.jeve.cr.tool.OCRTool;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,7 +16,7 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
+        OCRTool.getInstence().init();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {

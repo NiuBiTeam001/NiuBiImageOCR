@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
+import com.jeve.cr.R;
 import com.jeve.cr.tool.DeviceTool;
 
 /**
@@ -28,7 +29,7 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
     private int criticalC = 40;
     private int deviceWidth;
     private int deviceHeight;
-    private int paintWidth = 4;
+    private int paintWidth = 6;
     private int bitmapWidth;
     private int bitmapHeight;
 
@@ -45,7 +46,7 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
         linePaint = new Paint();
         linePaint.setAntiAlias(true);
         linePaint.setDither(true);
-        linePaint.setColor(Color.BLACK);
+        linePaint.setColor(context.getResources().getColor(R.color.edit_line_color));
         linePaint.setStrokeWidth(paintWidth * 2 - 2);
         linePaint.setStyle(Paint.Style.STROKE);//空心
 
