@@ -33,4 +33,5 @@ dependencies {
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
     //兼容Android6.0
     compile 'cn.bmob.android:http-legacy:1.0'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 }
