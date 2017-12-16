@@ -36,9 +36,15 @@
             android:textSize="@dimen/body_20sp" />
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/album_recycler"
+    <GridView
+        android:id="@+id/album_gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/distance_8dp"
+        android:layout_marginRight="@dimen/distance_8dp"
+        android:layout_marginTop="@dimen/distance_8dp"
+        android:horizontalSpacing="@dimen/distance_16dp"
+        android:verticalSpacing="@dimen/distance_8dp"
+        android:numColumns="2"
         android:layout_below="@+id/album_actionbar"/>
 </RelativeLayout>

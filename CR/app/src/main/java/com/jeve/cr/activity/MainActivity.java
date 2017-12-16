@@ -75,11 +75,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout select_ll;
     private TextView explain;
     private ScrollView result_scroll;
+    private String photoPath;//从相册选取的照片路径
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        if (intent != null) {
+            photoPath = intent.getStringExtra("path");
+        }
         initViews();
         UMTool.getInstence().openDebug();
     }
@@ -126,7 +131,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startCamera();
                 break;
             case R.id.main_activity_photo:
-                startActivity(new Intent(this, AlbumActivity.class));
+                if (checkPermission(writePermission)) {
+                    startActivity(new Intent(this, AlbumActivity.class));
+                }else {
+                    requestPermission(this,writePermission);
+                }
                 break;
             case R.id.drawer_re:
                 drawer.openDrawer(GravityCompat.START);

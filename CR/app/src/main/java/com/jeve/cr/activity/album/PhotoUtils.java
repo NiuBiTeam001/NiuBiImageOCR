@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 /**
  * note: 用于获取设备上的照片
  * Created by zhangliang on 2017/12/14.
@@ -29,6 +30,7 @@ public class PhotoUtils {
                     photoList.add(file);
                 }
             }
+            cursor.close();
         }
         sortPhotoList(photoList);
         return photoList;

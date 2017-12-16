@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <ImageView
         android:id="@+id/album_item_iv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="@dimen/distance_8dp"
+        android:src="@mipmap/icon_default_image"
+        />
 </RelativeLayout>
