@@ -40,11 +40,11 @@ public class ImageLoaderTool {
 
     private Semaphore threadPoolSemaphore;
 
-    private ImageLoaderTool(int threadNum) {
-        init(threadNum);
+    private ImageLoaderTool() {
+        init();
     }
 
-    private void init(int threadNum) {
+    private void init() {
         linkedList = new LinkedList<>();
 
         mLunThread = new Thread() {
@@ -79,15 +79,15 @@ public class ImageLoaderTool {
             }
         };
 
-        mThreadPool = Executors.newFixedThreadPool(threadNum);
-        threadPoolSemaphore = new Semaphore(threadNum);
+        mThreadPool = Executors.newFixedThreadPool(THREAD_NUM);
+        threadPoolSemaphore = new Semaphore(THREAD_NUM);
     }
 
     public static ImageLoaderTool getInstance() {
         if (imageLoaderTool == null) {
             synchronized (ImageLoaderTool.class) {
                 if (imageLoaderTool == null) {
-                    imageLoaderTool = new ImageLoaderTool(THREAD_NUM);
+                    imageLoaderTool = new ImageLoaderTool();
                 }
             }
         }
