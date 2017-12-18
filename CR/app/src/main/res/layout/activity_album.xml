@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jeve.cr.activity.album.AlbumActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/activityback"
+                android:fitsSystemWindows="true"
+                tools:context="com.jeve.cr.activity.album.AlbumActivity">
 
     <RelativeLayout
         android:id="@+id/album_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:layout_height="?attr/actionBarSize">
 
         <RelativeLayout
             android:id="@+id/album_back_re"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:layout_centerVertical="true"
             android:background="?android:attr/selectableItemBackground">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_arrow_back"/>
         </RelativeLayout>
 
         <TextView
@@ -32,19 +31,19 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/album_back_re"
             android:text="@string/album_title"
-            android:textColor="@color/white"
-            android:textSize="@dimen/body_20sp" />
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/appbar_text"/>
     </RelativeLayout>
 
     <GridView
         android:id="@+id/album_gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/album_actionbar"
         android:layout_marginLeft="@dimen/distance_8dp"
         android:layout_marginRight="@dimen/distance_8dp"
         android:layout_marginTop="@dimen/distance_8dp"
         android:horizontalSpacing="@dimen/distance_16dp"
-        android:verticalSpacing="@dimen/distance_8dp"
         android:numColumns="2"
-        android:layout_below="@+id/album_actionbar"/>
+        android:verticalSpacing="@dimen/distance_8dp"/>
 </RelativeLayout>

@@ -14,8 +14,17 @@
     <!--album-->
     <string name="album_title">相册</string>
 
-    <string name="main_activity_select_photo">请选择需要识别的图片</string>
+    <string name="main_activity_select_photo">请选择需要识别的图片，请去除识别文字以外的内容，以免造成识别错误！</string>
+
+    <!--主页-->
+    <string name="main_select_image_again">重选</string>
+    <string name="main_deal_image_again">剪裁</string>
+    <string name="main_translate_image_again">识别</string>
+    <string name="main_out_tip">再按一次退出</string>
 
     <!--照片编辑-->
     <string name="image_edit_finish">完成</string>
+
+    <!--识别失败-->
+    <string name="ocr_error">识别失败，您需要提供一张字迹清晰，工整的图片</string>
 </resources>

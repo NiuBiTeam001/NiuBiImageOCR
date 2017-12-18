@@ -1,10 +1,9 @@
 package com.jeve.cr.activity.album;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -12,16 +11,18 @@ import android.widget.RelativeLayout;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
-import com.jeve.cr.activity.MainActivity;
+import com.jeve.cr.tool.BitmapTool;
+import com.jeve.cr.tool.DeviceTool;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class AlbumActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
+public class AlbumActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     private GridView gridView;
     private AlbumAdapter adapter;
     private ArrayList<File> fileList = new ArrayList<>();
     private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class AlbumActivity extends BaseActivity implements View.OnClickListener,
     private void initViews() {
         RelativeLayout back_re = (RelativeLayout) findViewById(R.id.album_back_re);
         gridView = (GridView) findViewById(R.id.album_gv);
-        adapter = new AlbumAdapter(this,fileList);
+        adapter = new AlbumAdapter(this, fileList);
         gridView.setAdapter(adapter);
         back_re.setOnClickListener(this);
         gridView.setOnItemClickListener(this);
@@ -63,11 +64,16 @@ public class AlbumActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        if (!fileList.isEmpty()){
+        if (!fileList.isEmpty()) {
             String path = fileList.get(position).getAbsolutePath();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("path",path);
-            startActivity(intent);
+            Bitmap originalBitmap = BitmapTool.loadImage(path, DeviceTool.getWidthAndHeight(this).width);
+            int degree = BitmapTool.getPictureDegree(path);
+            if (degree != 0) {
+                originalBitmap = BitmapTool.rotateBitmap(originalBitmap, degree);
+            }
+            originalBitmap = BitmapTool.scBitmap(originalBitmap, DeviceTool.getWidthAndHeight(this).width);
+            BitmapTool.savePrimitiveImag(originalBitmap);
+            setResult(0);
             finish();
         }
     }
@@ -75,9 +81,10 @@ public class AlbumActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (fileList.size() > 0){
+        if (fileList.size() > 0) {
             fileList.clear();
         }
+        Log.d("LJW", "相册 onDestroy");
     }
 
 }

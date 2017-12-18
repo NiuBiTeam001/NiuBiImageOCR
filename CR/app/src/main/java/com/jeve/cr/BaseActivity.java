@@ -1,6 +1,7 @@
 package com.jeve.cr;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -66,12 +67,15 @@ import com.jeve.cr.tool.UMTool;
 public class BaseActivity extends AppCompatActivity {
 
     private final int PERMISSION_REQUEST = 0;
+    private CrApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_base);
+        application = (CrApplication) getApplication();
+        application.addActivity(this);
     }
 
     /**
@@ -142,5 +146,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
         //友盟
         UMTool.getInstence().setPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        application.removeActivity(this);
     }
 }

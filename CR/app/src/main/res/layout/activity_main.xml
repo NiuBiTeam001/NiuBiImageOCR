@@ -33,12 +33,21 @@
             android:background="?android:attr/selectableItemBackground"
             android:visibility="gone">
 
-            <ImageView
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/ic_select_again"/>-->
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_select_again"/>
+                android:text="@string/main_select_image_again"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -49,12 +58,21 @@
             android:background="?android:attr/selectableItemBackground"
             android:visibility="gone">
 
-            <ImageView
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/ic_crop"/>-->
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_crop"/>
+                android:text="@string/main_deal_image_again"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -65,12 +83,20 @@
             android:background="?android:attr/selectableItemBackground"
             android:visibility="gone">
 
-            <ImageView
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/ic_translate"/>-->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_translate"/>
+                android:text="@string/main_translate_image_again"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -101,7 +127,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/select_ll"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/distance_16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
             android:text="@string/main_activity_select_photo"
             android:textColor="@color/text_color1"
             android:textSize="@dimen/content_text"/>

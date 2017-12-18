@@ -41,7 +41,7 @@
                 android:layout_centerVertical="true"
                 android:text="@string/image_edit_finish"
                 android:textColor="@color/text_color1"
-                android:textSize="14sp"/>
+                android:textSize="@dimen/small_title"/>
 
         </RelativeLayout>
 

@@ -21,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -63,10 +64,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private String originalPath;
     private Uri originalUri;
     private static final int CAMERA_REQUEST_CODE = 2;//调用相机请求码
-    private static final int CAMERA_FLAG = 1;//标志从相机进入裁剪
     private String cameraPermission = "android.permission.CAMERA";
     private String writePermission = "android.permission.WRITE_EXTERNAL_STORAGE";
-    private Boolean dealImage = false;
+    private final int RESULT_ACTIVITY_PHOTO = 0;
+    private final int RESULT_ACTIVITY_DEAL = 3;
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
@@ -75,16 +76,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout select_ll;
     private TextView explain;
     private ScrollView result_scroll;
-    private String photoPath;//从相册选取的照片路径
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        if (intent != null) {
-            photoPath = intent.getStringExtra("path");
-        }
         initViews();
         UMTool.getInstence().openDebug();
     }
@@ -132,9 +128,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.main_activity_photo:
                 if (checkPermission(writePermission)) {
-                    startActivity(new Intent(this, AlbumActivity.class));
-                }else {
-                    requestPermission(this,writePermission);
+                    startActivityForResult(new Intent(this, AlbumActivity.class), RESULT_ACTIVITY_PHOTO);
+                } else {
+                    requestPermission(this, writePermission);
                 }
                 break;
             case R.id.drawer_re:
@@ -154,14 +150,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 select_ll.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_re:
-                dealImage = true;
-                startActivity(new Intent(this, ImageEditActivity.class));
+                startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
                 OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
                     @Override
                     public void success(String str) {
                         Log.d("LJW", "识别成功" + str);
+                        if (TextUtils.isEmpty(str)) {
+                            Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         result_tv.setText(str);
                         result_tv.setVisibility(View.VISIBLE);
                         result_scroll.setVisibility(View.VISIBLE);
@@ -175,6 +174,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void error(String error) {
                         Log.d("LJW", "识别失败" + error.toString());
+                        Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
@@ -279,12 +279,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         UMTool.getInstence().appStart();
-        if (dealImage) {
-            dealImage = false;
-            //更新照片
-            Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
-            showimage_iv.setImageBitmap(newBitmap);
-        }
     }
 
     @Override
@@ -314,6 +308,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     select_again_re.setVisibility(View.VISIBLE);
                     edit_re.setVisibility(View.VISIBLE);
                     ocr_re.setVisibility(View.VISIBLE);
+                    explain.setVisibility(View.GONE);
 
                     BitmapTool.savePrimitiveImag(originalBitmap);
                     new DeleteSystemSamePhotoThread(originalPath).start();
@@ -321,6 +316,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } catch (Exception e) {
                 Toast.makeText(this, getString(R.string.main_activity_takephoto_tip), Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == RESULT_ACTIVITY_PHOTO) {
+            //相册
+            Bitmap originalBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+            showimage_iv.setImageBitmap(originalBitmap);
+            showimage_iv.setVisibility(View.VISIBLE);
+
+            select_again_re.setVisibility(View.VISIBLE);
+            edit_re.setVisibility(View.VISIBLE);
+            ocr_re.setVisibility(View.VISIBLE);
+        } else if (requestCode == RESULT_ACTIVITY_DEAL) {
+            //更新照片
+            Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+            showimage_iv.setImageBitmap(newBitmap);
         }
     }
 
@@ -360,9 +368,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             }
             refreshLocalPhoto(originalPath, MainActivity.this);
-//            if (!MainConfig.getInstance().getCfgSaveOriginalPhoto()) {
-//                FileTool.deleteFile(new File(deletePath));
-//            }
         }
     }
 
@@ -414,5 +419,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Uri uri = Uri.fromFile(new File(imagePath));
         intent.setData(uri);
         context.sendBroadcast(intent);
+    }
+
+    /**
+     * 双击back退出
+     */
+    private long time;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - time > 2000) {
+                time = System.currentTimeMillis();
+                Toast.makeText(MainActivity.this, getString(R.string.main_out_tip), Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
+                return false;
+            }
+        }
+        return false;
     }
 }

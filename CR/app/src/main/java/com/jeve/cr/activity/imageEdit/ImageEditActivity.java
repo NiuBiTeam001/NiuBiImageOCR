@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -62,6 +63,8 @@ public class ImageEditActivity extends BaseActivity implements View.OnClickListe
         Bitmap resultBitmap = flex.cutImage();
         //保存图片
         BitmapTool.saveBitmapToSdcard(resultBitmap);
+        //告诉MainActivity更新
+        setResult(3);
         //finish
         finish();
     }
