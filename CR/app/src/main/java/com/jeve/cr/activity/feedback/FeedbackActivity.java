@@ -1,6 +1,8 @@
 package com.jeve.cr.activity.feedback;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.res.ResourcesCompat;
@@ -8,9 +10,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -29,6 +34,9 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
     private EditText bug_et;
     private ProgressBar progressBar;
     private RelativeLayout send_re;
+    private EditText type_et;
+    private PopupWindow popupWindow;
+    private RelativeLayout title_re;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +50,15 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
      */
     private void initViews() {
         RelativeLayout back_re = (RelativeLayout) findViewById(R.id.feedback_back_re);
+        title_re = (RelativeLayout) findViewById(R.id.feedback_actionbar);
+        type_et = (EditText) findViewById(R.id.request_type_et);
         send_re = (RelativeLayout) findViewById(R.id.feedback_send_re);
         suggestion_et = (EditText) findViewById(R.id.feedback_suggestion_et);
         progressBar = (ProgressBar) findViewById(R.id.feedback_progressbar);
         bug_et = (EditText) findViewById(R.id.feedback_bug_et);
         back_re.setOnClickListener(this);
         send_re.setOnClickListener(this);
+        type_et.setOnClickListener(this);
     }
 
     @Override
@@ -55,6 +66,25 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.feedback_back_re:
                 finish();
+                break;
+            case R.id.request_type_et:
+                showPopWindow(title_re);
+                break;
+            case R.id.feedback_other:
+                type_et.setText(getString(R.string.feedback_tag_others));
+                popupWindow.dismiss();
+                break;
+            case R.id.feedback_bug:
+                type_et.setText(getString(R.string.feedback_tag_bug));
+                popupWindow.dismiss();
+                break;
+            case R.id.feedback_language:
+                type_et.setText(getString(R.string.feedback_tag_language));
+                popupWindow.dismiss();
+                break;
+            case R.id.feedback_ui:
+                type_et.setText(getString(R.string.feedback_tag_ui));
+                popupWindow.dismiss();
                 break;
             case R.id.feedback_send_re:
                 String suggestion = suggestion_et.getText().toString();
@@ -120,14 +150,53 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         send_re.setClickable(true);
     }
 
-    private void showPopWindow(){
+    private void showPopWindow(View view) {
         closeKeyboard();
-        View view = LayoutInflater.from(this).inflate(R.layout.feedback_pop_item_layout,null);
-        CheckedTextView others = view.findViewById(R.id.feedback_other);
-        CheckedTextView bug = view.findViewById(R.id.feedback_bug);
-        CheckedTextView language = view.findViewById(R.id.feedback_language);
-        CheckedTextView ui = view.findViewById(R.id.feedback_ui);
+        View popLayout = LayoutInflater.from(this).inflate(R.layout.feedback_pop_item_layout, null);
+        CheckedTextView others = popLayout.findViewById(R.id.feedback_other);
+        CheckedTextView bug = popLayout.findViewById(R.id.feedback_bug);
+        CheckedTextView language = popLayout.findViewById(R.id.feedback_language);
+        CheckedTextView ui = popLayout.findViewById(R.id.feedback_ui);
 
+        CheckedTextView[] checkedTextView = new CheckedTextView[]{others, bug, language, ui};
+        String chooseType = type_et.getText().toString();
+        if (!TextUtils.isEmpty(chooseType)) {
+            for (CheckedTextView aCheckedTextView : checkedTextView) {
+                if (chooseType.equals(aCheckedTextView.getText().toString())) {
+                    aCheckedTextView.setChecked(true);
+                    aCheckedTextView.setTextColor(getResources().getColor(R.color.text_color3));
+                }
+            }
+        }
+
+        others.setOnClickListener(this);
+        bug.setOnClickListener(this);
+        language.setOnClickListener(this);
+        ui.setOnClickListener(this);
+
+        LinearLayout popLayout_ll = popLayout.findViewById(R.id.pop_layout);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) popLayout_ll.getLayoutParams();
+        layoutParams.width = DeviceTool.getScreenSize(this).x - DeviceTool.dip2px(32);
+        popLayout_ll.setLayoutParams(layoutParams);
+
+        int width = WindowManager.LayoutParams.WRAP_CONTENT;
+        int height = WindowManager.LayoutParams.WRAP_CONTENT;
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.7f;//设置阴影透明度
+        getWindow().setAttributes(lp);
+        popupWindow = new PopupWindow(popLayout, width, height, true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
+        popupWindow.setTouchable(true);
+        Bitmap bitmap = null;
+        popupWindow.setBackgroundDrawable(new BitmapDrawable(null, bitmap));
+        popupWindow.showAsDropDown(view, DeviceTool.dip2px(16), DeviceTool.dip2px(8));
     }
 
     /**

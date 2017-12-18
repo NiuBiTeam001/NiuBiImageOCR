@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
+
+import com.jeve.cr.CrApplication;
 
 /**
  * 设备工具
@@ -113,4 +118,25 @@ public class DeviceTool {
         return android.os.Build.BRAND + " " + android.os.Build.MODEL + " " +"安卓版本:" + android.os.Build.VERSION.RELEASE;
     }
 
+    public static int dip2px(float dp) {
+        Resources res = CrApplication.getContext().getResources();
+        float density = res.getDisplayMetrics().density;
+        return (int) (dp * density + 0.5f);
+    }
+
+    public static Point getScreenSize(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point p = new Point();
+        display.getSize(p);
+
+        Configuration config = context.getResources().getConfiguration();
+        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // 横屏
+            return new Point(Math.max(p.x, p.y), Math.min(p.x, p.y));
+        } else /*if (config.orientation == Configuration.ORIENTATION_PORTRAIT)*/ {
+            // 竖屏
+            return new Point(Math.min(p.x, p.y), Math.max(p.x, p.y));
+        }
+    }
 }

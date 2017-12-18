@@ -5,9 +5,9 @@
         android:state_focused="false"
         android:state_pressed="false"/>
 
-    <item android:drawable="#cacaca" android:state_pressed="true"/>
+    <item android:drawable="@color/bg_color1" android:state_pressed="true"/>
 
-    <item android:drawable="#cacaca" android:state_focused="true"/>
+    <item android:drawable="@color/bg_color1" android:state_focused="true"/>
 
-    <item android:drawable="#cacaca" android:state_checked="true"/>
+    <item android:drawable="@color/bg_color1" android:state_checked="true"/>
 </selector>

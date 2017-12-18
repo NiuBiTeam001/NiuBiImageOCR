@@ -53,9 +53,10 @@
         android:layout_below="@+id/feedback_actionbar">
 
         <RelativeLayout
-            android:id="@+id/feedback_request_tyoe_re"
+            android:id="@+id/feedback_request_type_re"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:layout_marginLeft="@dimen/distance_16dp"
             android:layout_marginRight="@dimen/distance_16dp"
             android:layout_marginTop="@dimen/distance_8dp">
@@ -67,9 +68,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:background="@null"
+                android:background="@drawable/et_backgroud"
                 android:focusable="false"
-                android:hint=""
+                android:hint="@string/feedback_tag_others"
                 android:paddingEnd="@dimen/distance_8dp"
                 android:paddingStart="@dimen/distance_8dp"
                 android:textColor="@color/text_color1"
@@ -91,6 +92,7 @@
             android:id="@+id/feedback_suggestion_re"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/feedback_request_type_re"
             android:layout_marginLeft="@dimen/distance_16dp"
             android:layout_marginRight="@dimen/distance_16dp"
             android:layout_marginTop="@dimen/distance_8dp">
