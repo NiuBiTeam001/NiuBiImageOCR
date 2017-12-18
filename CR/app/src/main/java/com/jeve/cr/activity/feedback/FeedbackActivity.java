@@ -1,9 +1,15 @@
 package com.jeve.cr.activity.feedback;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -80,11 +86,11 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
             public void done(String s, BmobException e) {
                 progressBar.setVisibility(View.GONE);
                 operate();
-                Log.d(TAG,"提交返回的字符串" + s);
-                if (e != null){
+                Log.d(TAG, "提交返回的字符串" + s);
+                if (e != null) {
                     Toast.makeText(FeedbackActivity.this, getString(R.string.feedback_send_failed), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG,e.toString());
-                }else {
+                    Log.d(TAG, e.toString());
+                } else {
                     Toast.makeText(FeedbackActivity.this, getString(R.string.feedback_send_success), Toast.LENGTH_SHORT).show();
                 }
                 finish();
@@ -95,7 +101,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
     /**
      * 提交过程中，不可操作
      */
-    private void noOperate(){
+    private void noOperate() {
         suggestion_et.setEnabled(false);
         suggestion_et.setFocusable(false);
         bug_et.setEnabled(false);
@@ -106,11 +112,40 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
     /**
      * 可操作
      */
-    private void operate(){
+    private void operate() {
         suggestion_et.setEnabled(true);
         suggestion_et.setFocusable(true);
         bug_et.setEnabled(true);
         bug_et.setFocusable(true);
         send_re.setClickable(true);
     }
+
+    private void showPopWindow(){
+        closeKeyboard();
+        View view = LayoutInflater.from(this).inflate(R.layout.feedback_pop_item_layout,null);
+        CheckedTextView others = view.findViewById(R.id.feedback_other);
+        CheckedTextView bug = view.findViewById(R.id.feedback_bug);
+        CheckedTextView language = view.findViewById(R.id.feedback_language);
+        CheckedTextView ui = view.findViewById(R.id.feedback_ui);
+
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    private void closeKeyboard() {
+        try {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (manager.isActive()) {
+                IBinder windowToken = this.getCurrentFocus().getWindowToken();
+                if (windowToken != null) {
+                    manager.hideSoftInputFromWindow(windowToken, 2);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
