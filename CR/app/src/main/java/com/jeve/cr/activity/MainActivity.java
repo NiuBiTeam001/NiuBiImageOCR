@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private DrawerLayout drawer;
     private ImageView showimage_iv;
     private RelativeLayout select_again_re, edit_re, ocr_re, copy_re;
+    private RelativeLayout copy_tip_re;
     private TextView result_tv;
     private LinearLayout select_ll;
     private TextView explain;
@@ -101,6 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
         copy_re = (RelativeLayout) findViewById(R.id.copy_re);
+        copy_tip_re = (RelativeLayout) findViewById(R.id.copy_tip_re);
         result_tv = (TextView) findViewById(R.id.result_tv);
         explain = (TextView) findViewById(R.id.explain);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
@@ -117,6 +119,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
         copy_re.setOnClickListener(this);
+        copy_tip_re.setOnClickListener(this);
     }
 
     @Override
@@ -175,6 +178,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         explain.setVisibility(View.GONE);
                         select_ll.setVisibility(View.GONE);
                         copy_re.setVisibility(View.VISIBLE);
+                        if (MainConfig.getInstance().getCopyTip()) {
+                            MainConfig.getInstance().setCopyTip(false);
+                            //提示用户可以自由复制
+                            copy_tip_re.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
@@ -186,6 +194,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.copy_re:
                 copyTest(result_tv.getText().toString());
+                break;
+            case R.id.copy_tip_re:
+                copy_tip_re.setVisibility(View.GONE);
                 break;
         }
     }

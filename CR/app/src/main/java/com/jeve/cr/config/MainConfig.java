@@ -28,20 +28,13 @@ public class MainConfig extends BaseConfig {
      * 拍照的时间
      */
     private static final String TAKE_PHOTO_TIME = "take_photo_time";
-
     /**
-     * 添加图片提示
+     * 复制提示
      */
-    private static final String ADD_IMAGE_TIP = "add_image_tip";
-    /**
-     * 功能按键提示
-     */
-    private static final String FUNCTION_TIP = "function_tip";
+    private static final String COPY_TIP = "function_tip";
 
     /**
      * 设置拍照的时间
-     *
-     * @param time
      */
     public void setTakePhotoTime(Long time) {
         setLong(TAKE_PHOTO_TIME, time);
@@ -52,30 +45,16 @@ public class MainConfig extends BaseConfig {
     }
 
     /**
-     * 设置是否图片提示
+     * 设置是否复制提示
      */
-    public void setAddImageTip(Boolean imageTip) {
-        setBoolean(ADD_IMAGE_TIP, imageTip);
+    public void setCopyTip(Boolean imageTip) {
+        setBoolean(COPY_TIP, imageTip);
     }
 
     /**
-     * 获取是否图片提示
+     * 获取是否复制提示
      */
-    public Boolean getAddImageTip() {
-        return getBoolean(ADD_IMAGE_TIP, false);
-    }
-
-    /**
-     * 设置是否功能提示
-     */
-    public void setFunctionTip(Boolean imageTip) {
-        setBoolean(FUNCTION_TIP, imageTip);
-    }
-
-    /**
-     * 获取是否功能提示
-     */
-    public Boolean getFunctionTip() {
-        return getBoolean(FUNCTION_TIP, false);
+    public Boolean getCopyTip() {
+        return getBoolean(COPY_TIP, true);
     }
 }

@@ -151,14 +151,38 @@
 
             <TextView
                 android:id="@+id/result_tv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:textColor="@color/text_color1"
+                android:textIsSelectable="true"
                 android:textSize="@dimen/content_text"/>
         </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/copy_tip_re"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/copy_tip_back"
+            android:layout_below="@+id/drawer_re"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/copy_tip_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/main_coyp_tip"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
