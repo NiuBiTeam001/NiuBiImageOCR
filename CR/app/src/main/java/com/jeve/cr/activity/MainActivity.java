@@ -2,6 +2,8 @@ package com.jeve.cr.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -71,7 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
-    private RelativeLayout select_again_re, edit_re, ocr_re;
+    private RelativeLayout select_again_re, edit_re, ocr_re, copy_re;
     private TextView result_tv;
     private LinearLayout select_ll;
     private TextView explain;
@@ -98,6 +100,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         select_again_re = (RelativeLayout) findViewById(R.id.select_again_re);
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
+        copy_re = (RelativeLayout) findViewById(R.id.copy_re);
         result_tv = (TextView) findViewById(R.id.result_tv);
         explain = (TextView) findViewById(R.id.explain);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
@@ -113,6 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         select_again_re.setOnClickListener(this);
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
+        copy_re.setOnClickListener(this);
     }
 
     @Override
@@ -148,6 +152,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 result_scroll.setVisibility(View.GONE);
                 explain.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
+                copy_re.setVisibility(View.GONE);
                 break;
             case R.id.edit_re:
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
@@ -169,6 +174,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         ocr_re.setVisibility(View.INVISIBLE);
                         explain.setVisibility(View.GONE);
                         select_ll.setVisibility(View.GONE);
+                        copy_re.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -177,6 +183,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show();
                     }
                 });
+                break;
+            case R.id.copy_re:
+                copyTest(result_tv.getText().toString());
                 break;
         }
     }
@@ -439,5 +448,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         return false;
+    }
+
+    /**
+     * 复制功能
+     */
+    private void copyTest(String content) {
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("copy", content);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
+        Toast.makeText(this, getString(R.string.main_coyp_success), Toast.LENGTH_SHORT).show();
     }
 }
