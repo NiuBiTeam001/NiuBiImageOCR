@@ -8,8 +8,8 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class Feedback extends BmobObject {
-    private String suggestion;
-    private String bug;
+    private String tag;//其它，bug，文案，界面
+    private String content;
     private String deviceInfo;
 
     public void setDeviceInfo(String deviceInfo) {
@@ -17,12 +17,11 @@ public class Feedback extends BmobObject {
     }
 
 
-    public void setSuggestion(String suggestion) {
-        this.suggestion = suggestion;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-
-    public void setBug(String bug) {
-        this.bug = bug;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
