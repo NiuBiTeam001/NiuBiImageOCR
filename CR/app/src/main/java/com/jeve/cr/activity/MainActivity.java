@@ -310,7 +310,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     if (degree != 0) {
                         originalBitmap = BitmapTool.rotateBitmap(originalBitmap, degree);
                     }
-                    originalBitmap = BitmapTool.scBitmap(originalBitmap, DeviceTool.getWidthAndHeight(this).width);
+                    originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
                     showimage_iv.setImageBitmap(originalBitmap);
                     showimage_iv.setVisibility(View.VISIBLE);
 
@@ -328,12 +328,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else if (requestCode == RESULT_ACTIVITY_PHOTO) {
             //相册
             Bitmap originalBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+            originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
             showimage_iv.setImageBitmap(originalBitmap);
             showimage_iv.setVisibility(View.VISIBLE);
 
             select_again_re.setVisibility(View.VISIBLE);
             edit_re.setVisibility(View.VISIBLE);
             ocr_re.setVisibility(View.VISIBLE);
+            explain.setVisibility(View.GONE);
+            BitmapTool.savePrimitiveImag(originalBitmap);
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
             //更新照片
             Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);

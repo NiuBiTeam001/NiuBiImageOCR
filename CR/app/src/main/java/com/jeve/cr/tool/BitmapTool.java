@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.widget.ImageView;
 
 import com.jeve.cr.CrApplication;
 
@@ -73,12 +74,19 @@ public class BitmapTool {
     }
 
     //缩放Bitmap
-    public static Bitmap scBitmap(Bitmap bitmap, int maxlength) {
+    public static Bitmap scBitmap(Bitmap bitmap, ImageView imageView) {
+        boolean widthBig = true;
         float bitmapWidth = bitmap.getWidth();
         float bitmapHeight = bitmap.getHeight();
-        float widthSc = maxlength / bitmapWidth;
-        float heightSc = maxlength / bitmapHeight;
-        float sc = widthSc < heightSc ? widthSc : heightSc;
+        if (bitmapWidth < bitmapHeight) {
+            widthBig = false;
+        }
+        float sc;
+        if (widthBig) {
+            sc =  imageView.getWidth()/bitmapWidth;
+        } else {
+            sc =  imageView.getHeight()/bitmapHeight;
+        }
         // 取得想要缩放的matrix参数
         Matrix matrix = new Matrix();
         matrix.postScale(sc, sc);

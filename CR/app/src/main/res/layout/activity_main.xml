@@ -139,8 +139,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/drawer_re"
             android:layout_marginBottom="?attr/actionBarSize"
-            android:adjustViewBounds="true"
-            android:visibility="gone"/>
+            android:adjustViewBounds="true"/>
 
         <ScrollView
             android:id="@+id/result_scroll"

@@ -71,7 +71,6 @@ public class AlbumActivity extends BaseActivity implements View.OnClickListener,
             if (degree != 0) {
                 originalBitmap = BitmapTool.rotateBitmap(originalBitmap, degree);
             }
-            originalBitmap = BitmapTool.scBitmap(originalBitmap, DeviceTool.getWidthAndHeight(this).width);
             BitmapTool.savePrimitiveImag(originalBitmap);
             setResult(0);
             finish();

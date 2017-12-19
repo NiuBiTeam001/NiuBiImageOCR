@@ -25,7 +25,7 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
     private Paint linePaint;
     private RectF rectF;
     private int leftX, rightX, topY, bottomY;
-    private int critical = 20;
+    private int critical = 30;
     private int criticalC = 40;
     private int deviceWidth;
     private int deviceHeight;
@@ -47,23 +47,16 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
         linePaint.setAntiAlias(true);
         linePaint.setDither(true);
         linePaint.setColor(context.getResources().getColor(R.color.edit_line_color));
-        linePaint.setStrokeWidth(paintWidth * 2 - 2);
+        linePaint.setStrokeWidth(paintWidth * 2);
         linePaint.setStyle(Paint.Style.STROKE);//空心
-
-        DeviceTool.WH wh = DeviceTool.getWidthAndHeight(context);
-        deviceWidth = wh.width - 10;
-        deviceHeight = wh.height - 10;
-
-        leftX = 10;
-        topY = 10;
-        rightX = deviceWidth;
-        bottomY = deviceHeight;
-        rectF = new RectF(leftX, topY, rightX, bottomY);
     }
+
+    private Bitmap sendBitmap;
 
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        sendBitmap = bm;
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         bitmapWidth = bm.getWidth();
         bitmapHeight = bm.getHeight();
@@ -279,12 +272,11 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
     }
 
     public Bitmap cutImage() {
-        setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(getDrawingCache());
-        setDrawingCacheEnabled(false);
-        int border = paintWidth * 2 - 2;
-        bitmap = Bitmap.createBitmap(bitmap, leftX + border, topY + border, rightX -
-                leftX - 2 * (border), bottomY - topY - 2 * (border));
+        Bitmap bitmap = Bitmap.createBitmap(sendBitmap, leftX, topY, rightX - leftX, bottomY - topY);
+        if (sendBitmap != bitmap && !sendBitmap.isRecycled()) {
+            sendBitmap.recycle();
+            sendBitmap = null;
+        }
         return bitmap;
     }
 

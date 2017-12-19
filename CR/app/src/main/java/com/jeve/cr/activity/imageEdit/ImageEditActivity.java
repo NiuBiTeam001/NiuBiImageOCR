@@ -15,6 +15,8 @@ import com.jeve.cr.tool.BitmapTool;
 import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.view.FlexImageView;
 
+import static android.R.attr.maxLength;
+
 public class ImageEditActivity extends BaseActivity implements View.OnClickListener {
 
     private FlexImageView flex;
@@ -30,14 +32,12 @@ public class ImageEditActivity extends BaseActivity implements View.OnClickListe
      * 初始化
      */
     private void init() {
-        int maxLength = DeviceTool.getWidthAndHeight(this).width;
-        Bitmap bitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, maxLength);
-        Bitmap dealBitmap = BitmapTool.scBitmap(bitmap, maxLength);
+        Bitmap bitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
 
         RelativeLayout back_re = (RelativeLayout) findViewById(R.id.back_re);
         RelativeLayout finish_re = (RelativeLayout) findViewById(R.id.finish_re);
         flex = (FlexImageView) findViewById(R.id.flex);
-        flex.setImageBitmap(dealBitmap);
+        flex.setImageBitmap(bitmap);
 
         back_re.setOnClickListener(this);
         finish_re.setOnClickListener(this);
