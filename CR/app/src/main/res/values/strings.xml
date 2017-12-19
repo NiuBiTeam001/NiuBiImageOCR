@@ -8,8 +8,7 @@
     <string name="feedback_tag_language">应用文案问题</string>
     <string name="feedback_tag_ui">用户交互问题</string>
     <string name="feedback_suggestion">请给我们建议，帮助我们更好的优化应用！</string>
-    <string name="feedback_bug">应用如果出了问题，请反馈给我们，我们将马上处理!</string>
-    <string name="feedback_send_tip">请至少填写一项吧！</string>
+    <string name="feedback_send_tip">请填写一下反馈内容吧！</string>
     <string name="feedback_send_failed">请检查一下网络，稍后再试！</string>
     <string name="feedback_send_success">提交成功啦！</string>
 

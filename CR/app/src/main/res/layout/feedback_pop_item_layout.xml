@@ -1,60 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pop_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/feedback_pop_bg"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:orientation="vertical">
 
-    <CheckedTextView
-        android:id="@+id/feedback_other"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pop_layout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/feedback_pop_item_bg"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/distance_8dp"
-        android:paddingStart="@dimen/distance_8dp"
-        android:text="@string/feedback_tag_others"
-        android:textColor="@color/text_color1"
-        android:textSize="@dimen/content_text" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/feedback_pop_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
 
-    <CheckedTextView
-        android:id="@+id/feedback_bug"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/feedback_pop_item_bg"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/distance_8dp"
-        android:paddingStart="@dimen/distance_8dp"
-        android:text="@string/feedback_tag_bug"
-        android:textColor="@color/text_color1"
-        android:textSize="@dimen/content_text" />
+        <CheckedTextView
+            android:id="@+id/feedback_other"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/feedback_pop_item_bg"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/distance_8dp"
+            android:paddingStart="@dimen/distance_8dp"
+            android:text="@string/feedback_tag_others"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text" />
 
-    <CheckedTextView
-        android:id="@+id/feedback_language"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/feedback_pop_item_bg"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/distance_8dp"
-        android:paddingStart="@dimen/distance_8dp"
-        android:text="@string/feedback_tag_language"
-        android:textColor="@color/text_color1"
-        android:textSize="@dimen/content_text" />
+        <CheckedTextView
+            android:id="@+id/feedback_bug"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/feedback_pop_item_bg"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/distance_8dp"
+            android:paddingStart="@dimen/distance_8dp"
+            android:text="@string/feedback_tag_bug"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text" />
 
-    <CheckedTextView
-        android:id="@+id/feedback_ui"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/feedback_pop_item_bg"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/distance_8dp"
-        android:paddingStart="@dimen/distance_8dp"
-        android:text="@string/feedback_tag_ui"
-        android:textColor="@color/text_color1"
-        android:textSize="@dimen/content_text" />
+        <CheckedTextView
+            android:id="@+id/feedback_language"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/feedback_pop_item_bg"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/distance_8dp"
+            android:paddingStart="@dimen/distance_8dp"
+            android:text="@string/feedback_tag_language"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text" />
 
+        <CheckedTextView
+            android:id="@+id/feedback_ui"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/feedback_pop_item_bg"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/distance_8dp"
+            android:paddingStart="@dimen/distance_8dp"
+            android:text="@string/feedback_tag_ui"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text" />
+
+    </LinearLayout>
 </LinearLayout>
