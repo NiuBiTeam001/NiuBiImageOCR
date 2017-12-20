@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="C R"
-        android:textSize="32sp"/>
+        android:text="@string/app_name"
+        android:textSize="@dimen/appbar_text"/>
 
 </RelativeLayout>

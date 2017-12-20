@@ -17,9 +17,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +43,7 @@ import com.jeve.cr.R;
 import com.jeve.cr.activity.album.AlbumActivity;
 import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.activity.imageEdit.ImageEditActivity;
+import com.jeve.cr.adapter.MainBackViewPagerAdapter;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.BitmapTool;
 import com.jeve.cr.tool.DeviceTool;
@@ -70,6 +74,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private String writePermission = "android.permission.WRITE_EXTERNAL_STORAGE";
     private final int RESULT_ACTIVITY_PHOTO = 0;
     private final int RESULT_ACTIVITY_DEAL = 3;
+    private MainBackViewPagerAdapter mainBackViewPagerAdapter;
+    private int orcModen;
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
@@ -79,6 +85,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout select_ll;
     private TextView explain;
     private ScrollView result_scroll;
+    private TextView copy_tip_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +103,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ImageView photo_iv = (ImageView) findViewById(R.id.main_activity_photo);
         TextView feedback = (TextView) findViewById(R.id.feedback);
         TextView version = (TextView) findViewById(R.id.version);
+        copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
         showimage_iv = (ImageView) findViewById(R.id.showimage_iv);
         RelativeLayout drawer_re = (RelativeLayout) findViewById(R.id.drawer_re);
         select_again_re = (RelativeLayout) findViewById(R.id.select_again_re);
@@ -107,6 +115,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         explain = (TextView) findViewById(R.id.explain);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
         result_scroll = (ScrollView) findViewById(R.id.result_scroll);
+        ViewPager back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         String versionContent = "v" + DeviceTool.getVersionName(this);
@@ -120,6 +129,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ocr_re.setOnClickListener(this);
         copy_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
+
+        mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
+        back_viewpager.setAdapter(mainBackViewPagerAdapter);
+        back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                orcModen = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        if (MainConfig.getInstance().getChangeModeTip()) {
+            MainConfig.getInstance().setChangeModeTip(false);
+            //提示用户可以自由复制
+            copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
+            copy_tip_re.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -161,36 +196,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
-                OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
-                    @Override
-                    public void success(String str) {
-                        Log.d("LJW", "识别成功" + str);
-                        if (TextUtils.isEmpty(str)) {
-                            Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show();
-                            return;
+                if (!DeviceTool.isNetworkConnected(this)) {
+                    Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (orcModen == 0) {
+                    //文字识别
+                    OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
+                        @Override
+                        public void success(String str) {
+                            Log.d("LJW", "识别成功" + str);
+                            if (TextUtils.isEmpty(str)) {
+                                handler.sendEmptyMessage(0);
+                                return;
+                            }
+                            result_tv.setText(str);
+                            showTextRsult();
                         }
-                        result_tv.setText(str);
-                        result_tv.setVisibility(View.VISIBLE);
-                        result_scroll.setVisibility(View.VISIBLE);
-                        showimage_iv.setVisibility(View.GONE);
-                        edit_re.setVisibility(View.INVISIBLE);
-                        ocr_re.setVisibility(View.INVISIBLE);
-                        explain.setVisibility(View.GONE);
-                        select_ll.setVisibility(View.GONE);
-                        copy_re.setVisibility(View.VISIBLE);
-                        if (MainConfig.getInstance().getCopyTip()) {
-                            MainConfig.getInstance().setCopyTip(false);
-                            //提示用户可以自由复制
-                            copy_tip_re.setVisibility(View.VISIBLE);
-                        }
-                    }
 
-                    @Override
-                    public void error(String error) {
-                        Log.d("LJW", "识别失败" + error.toString());
-                        Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void error(String error) {
+                            Log.d("LJW", "识别失败" + error.toString());
+                            handler.sendEmptyMessage(0);
+                        }
+                    });
+                } else if (orcModen == 1) {
+                    //银行卡识别
+                    OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrBankCallBack() {
+                        @Override
+                        public void success(String carNum, String bankName) {
+                            Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
+                            if (TextUtils.isEmpty(carNum)) {
+                                handler.sendEmptyMessage(0);
+                                return;
+                            }
+                            StringBuffer stringBuffer = new StringBuffer();
+                            stringBuffer.append(getString(R.string.main_bank_num));
+                            stringBuffer.append(carNum);
+                            stringBuffer.append("\n");
+                            stringBuffer.append(getString(R.string.main_bank_bank));
+                            stringBuffer.append(bankName);
+                            result_tv.setText(stringBuffer.toString());
+                            showTextRsult();
+                        }
+
+                        @Override
+                        public void error(String error) {
+                            Log.d("LJW", "识别失败" + error.toString());
+                            handler.sendEmptyMessage(0);
+                        }
+                    });
+                }
                 break;
             case R.id.copy_re:
                 copyTest(result_tv.getText().toString());
@@ -198,6 +254,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.copy_tip_re:
                 copy_tip_re.setVisibility(View.GONE);
                 break;
+        }
+    }
+
+    private void showTextRsult() {
+        result_tv.setVisibility(View.VISIBLE);
+        result_scroll.setVisibility(View.VISIBLE);
+        showimage_iv.setVisibility(View.GONE);
+        edit_re.setVisibility(View.INVISIBLE);
+        ocr_re.setVisibility(View.INVISIBLE);
+        explain.setVisibility(View.GONE);
+        select_ll.setVisibility(View.GONE);
+        copy_re.setVisibility(View.VISIBLE);
+        if (MainConfig.getInstance().getCopyTip()) {
+            MainConfig.getInstance().setCopyTip(false);
+            //提示用户可以自由复制
+            copy_tip_tv.setText(getString(R.string.main_coyp_tip));
+            copy_tip_re.setVisibility(View.VISIBLE);
         }
     }
 
@@ -338,20 +411,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         } else if (requestCode == RESULT_ACTIVITY_PHOTO) {
             //相册
-            Bitmap originalBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
-            originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
-            showimage_iv.setImageBitmap(originalBitmap);
-            showimage_iv.setVisibility(View.VISIBLE);
+            if (data == null)
+                return;
+            String back = data.getStringExtra("success");
+            if (TextUtils.equals("success", back)) {
+                Bitmap originalBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+                originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
+                showimage_iv.setImageBitmap(originalBitmap);
+                showimage_iv.setVisibility(View.VISIBLE);
 
-            select_again_re.setVisibility(View.VISIBLE);
-            edit_re.setVisibility(View.VISIBLE);
-            ocr_re.setVisibility(View.VISIBLE);
-            explain.setVisibility(View.GONE);
-            BitmapTool.savePrimitiveImag(originalBitmap);
+                select_again_re.setVisibility(View.VISIBLE);
+                edit_re.setVisibility(View.VISIBLE);
+                ocr_re.setVisibility(View.VISIBLE);
+                explain.setVisibility(View.GONE);
+                BitmapTool.savePrimitiveImag(originalBitmap);
+            }
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
-            //更新照片
-            Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
-            showimage_iv.setImageBitmap(newBitmap);
+            if (data == null)
+                return;
+            String back = data.getStringExtra("success");
+            if (TextUtils.equals("success", back)) {
+                //更新照片
+                Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
+                showimage_iv.setImageBitmap(newBitmap);
+            }
         }
     }
 
@@ -475,4 +558,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         cm.setPrimaryClip(mClipData);
         Toast.makeText(this, getString(R.string.main_coyp_success), Toast.LENGTH_SHORT).show();
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
 }

@@ -4,187 +4,197 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <!--主布局-->
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/activityback"
-        android:fitsSystemWindows="true">
-
-        <RelativeLayout
-            android:id="@+id/drawer_re"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?android:attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_dehaze"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/select_again_re"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_toLeftOf="@+id/edit_re"
-            android:background="?android:attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/main_select_image_again"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/edit_re"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_toLeftOf="@+id/ocr_re"
-            android:background="?android:attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/main_deal_image_again"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/copy_re"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_toLeftOf="@+id/ocr_re"
-            android:background="?android:attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/main_translate_copy"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/ocr_re"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentEnd="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/main_translate_image_again"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title"/>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/select_ll"
+        android:layout_height="match_parent">
+        <!--底部模式切换ViewPager-->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/back_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"/>
 
-            <ImageView
-                android:id="@+id/main_activity_camera"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_camera"/>
-
-            <ImageView
-                android:id="@+id/main_activity_photo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_photo"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/explain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_ll"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/main_activity_select_photo"
-            android:textColor="@color/text_color1"
-            android:textSize="@dimen/content_text"/>
-
-        <ImageView
-            android:id="@+id/showimage_iv"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/drawer_re"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:adjustViewBounds="true"/>
+            android:background="@drawable/activityback"
+            android:fitsSystemWindows="true">
 
-        <ScrollView
-            android:id="@+id/result_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/drawer_re"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:visibility="gone">
+            <RelativeLayout
+                android:id="@+id/drawer_re"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_dehaze"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/select_again_re"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toLeftOf="@+id/edit_re"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/main_select_image_again"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/small_title"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/edit_re"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toLeftOf="@+id/ocr_re"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/main_deal_image_again"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/small_title"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/copy_re"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toLeftOf="@+id/ocr_re"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/main_translate_copy"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/small_title"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ocr_re"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/main_translate_image_again"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/small_title"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/select_ll"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/main_activity_camera"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_camera"/>
+
+                <ImageView
+                    android:id="@+id/main_activity_photo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_photo"/>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/result_tv"
+                android:id="@+id/explain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_below="@+id/select_ll"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/main_activity_select_photo"
                 android:textColor="@color/text_color1"
-                android:textIsSelectable="true"
                 android:textSize="@dimen/content_text"/>
-        </ScrollView>
 
-        <RelativeLayout
-            android:id="@+id/copy_tip_re"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/copy_tip_back"
-            android:layout_below="@+id/drawer_re"
-            android:visibility="gone">
+            <ImageView
+                android:id="@+id/showimage_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/drawer_re"
+                android:layout_marginBottom="?attr/actionBarSize"
+                android:adjustViewBounds="true"/>
 
-            <TextView
-                android:id="@+id/copy_tip_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/main_coyp_tip"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title"/>
+            <ScrollView
+                android:id="@+id/result_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/drawer_re"
+                android:layout_marginBottom="?attr/actionBarSize"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/result_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/text_color1"
+                    android:textIsSelectable="true"
+                    android:textSize="@dimen/content_text"/>
+            </ScrollView>
+
+            <RelativeLayout
+                android:id="@+id/copy_tip_re"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/drawer_re"
+                android:background="@color/copy_tip_back"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/copy_tip_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/main_coyp_tip"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/small_title"/>
+
+            </RelativeLayout>
         </RelativeLayout>
-
-    </RelativeLayout>
+    </FrameLayout>
 
     <!--侧边栏-->
     <ScrollView

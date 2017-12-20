@@ -112,7 +112,6 @@ public class DeviceTool {
 
     /**
      * 设备信息
-     * @return
      */
     public static String getDeviceInfo(){
         return android.os.Build.BRAND + " " + android.os.Build.MODEL + " " +"安卓版本:" + android.os.Build.VERSION.RELEASE;

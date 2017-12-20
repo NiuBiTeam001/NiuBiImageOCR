@@ -27,11 +27,15 @@ public class MainConfig extends BaseConfig {
     /**
      * 拍照的时间
      */
-    private static final String TAKE_PHOTO_TIME = "take_photo_time";
+    private final String TAKE_PHOTO_TIME = "take_photo_time";
     /**
      * 复制提示
      */
-    private static final String COPY_TIP = "function_tip";
+    private final String COPY_TIP = "function_tip";
+    /**
+     * 切换模式提示
+     */
+    private final String CHANGE_MODE_TIP = "change_mode_tip";
 
     /**
      * 设置拍照的时间
@@ -56,5 +60,19 @@ public class MainConfig extends BaseConfig {
      */
     public Boolean getCopyTip() {
         return getBoolean(COPY_TIP, true);
+    }
+
+    /**
+     * 设置是否切换模式提示
+     */
+    public void setChangeModeTip(Boolean imageTip) {
+        setBoolean(CHANGE_MODE_TIP, imageTip);
+    }
+
+    /**
+     * 获取是否切换模式提示
+     */
+    public Boolean getChangeModeTip() {
+        return getBoolean(CHANGE_MODE_TIP, true);
     }
 }

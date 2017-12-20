@@ -1,5 +1,6 @@
 package com.jeve.cr.activity.album;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +73,9 @@ public class AlbumActivity extends BaseActivity implements View.OnClickListener,
                 originalBitmap = BitmapTool.rotateBitmap(originalBitmap, degree);
             }
             BitmapTool.savePrimitiveImag(originalBitmap);
-            setResult(0);
+            Intent intent = new Intent();
+            intent.putExtra("success", "success");
+            setResult(0, intent);
             finish();
         }
     }

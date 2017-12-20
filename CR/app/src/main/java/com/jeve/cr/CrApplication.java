@@ -32,8 +32,8 @@ public class CrApplication extends Application {
         Bmob.initialize(this, APPLICATION_ID);
         //全局报错处理初始化
         //设置该CrashHandler为程序的默认处理器
-        AppExceptionDeal catchExcep = new AppExceptionDeal(this);
-        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+//        AppExceptionDeal catchExcep = new AppExceptionDeal(this);
+//        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
     }
 
     public static Context getContext() {

@@ -64,7 +64,9 @@ public class ImageEditActivity extends BaseActivity implements View.OnClickListe
         //保存图片
         BitmapTool.saveBitmapToSdcard(resultBitmap);
         //告诉MainActivity更新
-        setResult(3);
+        Intent intent = new Intent();
+        intent.putExtra("success", "success");
+        setResult(3, intent);
         //finish
         finish();
     }
