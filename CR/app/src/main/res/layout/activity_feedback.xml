@@ -39,11 +39,14 @@
             android:layout_alignParentEnd="true"
             android:background="?android:attr/selectableItemBackground">
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_send" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/feedback_send"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
         </RelativeLayout>
     </RelativeLayout>
 

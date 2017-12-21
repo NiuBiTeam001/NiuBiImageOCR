@@ -11,6 +11,7 @@
     <string name="feedback_send_tip">请填写一下反馈内容吧！</string>
     <string name="feedback_send_failed">请检查一下网络，稍后再试！</string>
     <string name="feedback_send_success">提交成功啦！</string>
+    <string name="feedback_send">发送</string>
 
     <string name="getphoto_too_big">对不起，没有足够内存来加载照片，请释放一些内存，重新进入应用后再试！</string>
     <string name="main_activity_takephoto_tip">对不起获取照片失败，请重试！</string>
@@ -32,6 +33,9 @@
     <string name="main_bank_num">卡号：</string>
     <string name="main_bank_bank">银行卡：</string>
     <string name="main_net_error">请检查网络是否连接！</string>
+
+    <!--feedback-->
+
 
     <!--照片编辑-->
     <string name="image_edit_finish">完成</string>
