@@ -186,11 +186,12 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:text="@string/main_coyp_tip"
-                    android:textColor="@color/text_color1"
-                    android:textSize="@dimen/small_title"/>
+                    android:textColor="@color/white"
+                    android:textSize="22sp"/>
 
             </RelativeLayout>
         </RelativeLayout>
