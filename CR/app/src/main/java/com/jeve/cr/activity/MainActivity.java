@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private final int RESULT_ACTIVITY_DEAL = 3;
     private MainBackViewPagerAdapter mainBackViewPagerAdapter;
     private int orcModen;
+    private boolean ocrFinish = false;
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
@@ -191,6 +192,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 explain.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 copy_re.setVisibility(View.GONE);
+                ocrFinish = false;
                 break;
             case R.id.edit_re:
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
@@ -206,6 +208,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void success(String str) {
                             Log.d("LJW", "识别成功" + str);
+                            ocrFinish = true;
                             if (TextUtils.isEmpty(str)) {
                                 handler.sendEmptyMessage(0);
                                 return;
@@ -225,6 +228,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrBankCallBack() {
                         @Override
                         public void success(String carNum, String bankName) {
+                            ocrFinish = true;
                             Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
                             if (TextUtils.isEmpty(carNum)) {
                                 handler.sendEmptyMessage(0);
@@ -536,6 +540,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (ocrFinish) {
+                showimage_iv.setVisibility(View.GONE);
+                select_again_re.setVisibility(View.GONE);
+                edit_re.setVisibility(View.GONE);
+                ocr_re.setVisibility(View.GONE);
+                result_tv.setVisibility(View.GONE);
+                result_scroll.setVisibility(View.GONE);
+                explain.setVisibility(View.VISIBLE);
+                select_ll.setVisibility(View.VISIBLE);
+                copy_re.setVisibility(View.GONE);
+                ocrFinish = false;
+                return false;
+            }
             if (System.currentTimeMillis() - time > 2000) {
                 time = System.currentTimeMillis();
                 Toast.makeText(MainActivity.this, getString(R.string.main_out_tip), Toast.LENGTH_SHORT).show();
