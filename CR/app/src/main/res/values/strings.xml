@@ -2,7 +2,7 @@
     <string name="app_name">图片文字识别助手</string>
     <!--Feedback-->
     <string name="feedback_title">反馈</string>
-    <string name="feedback_type">反馈类型</string>
+    <string name="feedback_type">请选择反馈类型</string>
     <string name="feedback_tag_others">其它</string>
     <string name="feedback_tag_bug">功能反馈</string>
     <string name="feedback_tag_language">应用文案问题</string>
