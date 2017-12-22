@@ -50,6 +50,7 @@ import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.tool.FileTool;
 import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
+import com.jeve.cr.tool.ShareTool;
 import com.jeve.cr.tool.UMTool;
 
 import java.io.File;
@@ -103,6 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ImageView camera_iv = (ImageView) findViewById(R.id.main_activity_camera);
         ImageView photo_iv = (ImageView) findViewById(R.id.main_activity_photo);
         TextView feedback = (TextView) findViewById(R.id.feedback);
+//        TextView rate_us = (TextView) findViewById(R.id.rate_us);
         TextView version = (TextView) findViewById(R.id.version);
         copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
         showimage_iv = (ImageView) findViewById(R.id.showimage_iv);
@@ -125,6 +127,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         photo_iv.setOnClickListener(this);
         drawer_re.setOnClickListener(this);
         feedback.setOnClickListener(this);
+//        rate_us.setOnClickListener(this);
         select_again_re.setOnClickListener(this);
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
@@ -182,6 +185,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.feedback:
                 startActivity(new Intent(this, FeedbackActivity.class));
                 break;
+            /*case R.id.rate_us:
+                ShareTool.goToMarket();
+                break;*/
             case R.id.select_again_re:
                 showimage_iv.setVisibility(View.GONE);
                 select_again_re.setVisibility(View.GONE);
