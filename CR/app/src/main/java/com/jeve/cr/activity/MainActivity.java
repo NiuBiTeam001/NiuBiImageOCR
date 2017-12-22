@@ -24,6 +24,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -71,7 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView showimage_iv;
     private RelativeLayout select_again_re, edit_re, ocr_re, copy_re;
     private RelativeLayout copy_tip_re;
-    private TextView result_tv;
+    private EditText result_tv;
     private LinearLayout select_ll;
     private TextView explain;
     private ScrollView result_scroll;
@@ -103,7 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
         copy_re = (RelativeLayout) findViewById(R.id.copy_re);
         copy_tip_re = (RelativeLayout) findViewById(R.id.copy_tip_re);
-        result_tv = (TextView) findViewById(R.id.result_tv);
+        result_tv = (EditText) findViewById(R.id.result_tv);
         explain = (TextView) findViewById(R.id.explain);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
         result_scroll = (ScrollView) findViewById(R.id.result_scroll);
@@ -154,6 +156,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public boolean onLongClick(View v) {
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_FREE_COPY);
                 return false;
+            }
+        });
+        result_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                result_tv.setFocusable(true);
+                result_tv.setFocusableInTouchMode(true);
+                result_tv.requestFocus();
+                result_tv.requestFocusFromTouch();
+                //弹出键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
             }
         });
     }
@@ -291,6 +305,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void showTextRsult() {
+        result_tv.clearFocus();
+        result_tv.setFocusable(false);
         result_tv.setVisibility(View.VISIBLE);
         result_scroll.setVisibility(View.VISIBLE);
         showimage_iv.setVisibility(View.GONE);

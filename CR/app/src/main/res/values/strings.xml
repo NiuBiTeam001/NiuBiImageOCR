@@ -29,7 +29,7 @@
     <string name="main_translate_copy">复制</string>
     <string name="main_out_tip">再按一次退出</string>
     <string name="main_coyp_success">成功复制到剪贴板</string>
-    <string name="main_coyp_tip">长按文字可以自由复制\n(点击消失)</string>
+    <string name="main_coyp_tip">单击文字可以编辑\n长按文字可以自由复制\n(点击消失)</string>
     <string name="main_change_mode_tip">左右滑动空白区域\n可以切换识别模式\n(点击消失)</string>
     <string name="main_bank_num">卡号：</string>
     <string name="main_bank_bank">银行卡：</string>
