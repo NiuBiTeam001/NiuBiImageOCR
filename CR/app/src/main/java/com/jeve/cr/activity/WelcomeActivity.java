@@ -16,7 +16,6 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        OCRTool.getInstence().init();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -26,6 +25,5 @@ public class WelcomeActivity extends BaseActivity {
         };
         Timer timer = new Timer();
         timer.schedule(timerTask, 2000);
-
     }
 }

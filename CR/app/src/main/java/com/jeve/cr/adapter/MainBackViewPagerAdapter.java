@@ -2,9 +2,11 @@ package com.jeve.cr.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jeve.cr.R;
 
@@ -16,7 +18,7 @@ import com.jeve.cr.R;
 public class MainBackViewPagerAdapter extends PagerAdapter {
 
     private Context context;
-    private int[] imageID = {R.mipmap.textback, R.mipmap.bankback};
+    private String[] title = {"文字识别", "银行卡识别"};
 
     public MainBackViewPagerAdapter(Context context) {
         this.context = context;
@@ -34,14 +36,11 @@ public class MainBackViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setAdjustViewBounds(true);
-        container.addView(imageView);
-        imageView.setImageResource(imageID[position]);
-        return imageView;
+        View view = LayoutInflater.from(context).inflate(R.layout.main_viewpager_layout, container, false);
+        TextView tv = view.findViewById(R.id.viewpager_tv);
+        tv.setText(title[position]);
+        container.addView(view);
+        return view;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.jeve.cr.tool;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.baidu.ocr.sdk.OCR;
@@ -22,7 +23,8 @@ import java.io.File;
  */
 public class OCRTool {
 
-    private OCRTool() {}
+    private OCRTool() {
+    }
 
     private static OCRTool ocrTool;
 
@@ -42,7 +44,7 @@ public class OCRTool {
     /**
      * 初始化
      */
-    public void init() {
+    public void init(Context context) {
         OCR.getInstance().initAccessToken(new OnResultListener<AccessToken>() {
             @Override
             public void onResult(AccessToken accessToken) {
@@ -53,7 +55,7 @@ public class OCRTool {
             public void onError(OCRError ocrError) {
 
             }
-        }, CrApplication.getContext());
+        }, context);
     }
 
     //识别文字

@@ -10,4 +10,6 @@
     <dimen name="small_title">16sp</dimen>
     <dimen name="appbar_text">20sp</dimen>
     <dimen name="big_title">24sp</dimen>
+    <dimen name="big_text">36sp</dimen>
+
 </resources>

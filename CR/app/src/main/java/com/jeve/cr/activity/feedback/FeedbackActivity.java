@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
 import com.jeve.cr.tool.DeviceTool;
+import com.jeve.cr.tool.UMTool;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -99,6 +100,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
      * @param suggestion 提交的建议
      */
     private void send(String suggestion) {
+        UMTool.getInstence().sendEvent(UMTool.Action.CR_FEEDBACK_SUCCESS);
         progressBar.setVisibility(View.VISIBLE);
         noOperate();
         Feedback content = new Feedback();

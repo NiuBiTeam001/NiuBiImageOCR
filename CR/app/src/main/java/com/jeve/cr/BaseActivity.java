@@ -14,6 +14,9 @@ import com.jeve.cr.CrApplication;
 import com.jeve.cr.R;
 import com.jeve.cr.tool.UMTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Activity基类
  * 主要实现权限访问
@@ -66,7 +69,6 @@ import com.jeve.cr.tool.UMTool;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private final int PERMISSION_REQUEST = 0;
     private CrApplication application;
 
     @Override
@@ -95,8 +97,8 @@ public class BaseActivity extends AppCompatActivity {
      * @param activity    activity
      * @param permissions 权限（支持多个）
      */
-    public void requestPermission(Activity activity, String[] permissions) {
-        ActivityCompat.requestPermissions(activity, permissions, PERMISSION_REQUEST);
+    public void requestPermission(Activity activity, String[] permissions, int requestCode) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
     /**
@@ -104,8 +106,8 @@ public class BaseActivity extends AppCompatActivity {
      *
      * @param activity activity
      */
-    public void requestPermission(Activity activity, String permissions) {
-        ActivityCompat.requestPermissions(activity, new String[]{permissions}, PERMISSION_REQUEST);
+    public void requestPermission(Activity activity, String permissions, int requestCode) {
+        ActivityCompat.requestPermissions(activity, new String[]{permissions}, requestCode);
     }
 
 
@@ -113,24 +115,24 @@ public class BaseActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        requestError(permissions[i]);
-                    } else {
-                        requestSuccess(permissions[i]);
-                    }
-                }
-                break;
+        List<String> success = new ArrayList<>();
+        List<String> error = new ArrayList<>();
+        for (int i = 0; i < permissions.length; i++) {
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                error.add(permissions[i]);
+            } else {
+                success.add(permissions[i]);
+            }
         }
+        requestSuccess(requestCode, success);
+        requestError(requestCode, error);
     }
 
-    public void requestSuccess(String permission) {
+    public void requestSuccess(int requestCode, List<String> permission) {
 
     }
 
-    public void requestError(String permission) {
+    public void requestError(int requestCode, List<String> permission) {
 
     }
 

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.jeve.cr.system.AppExceptionDeal;
+import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
 
 import java.util.ArrayList;
@@ -30,10 +31,14 @@ public class CrApplication extends Application {
         context = getApplicationContext();
         //Bmob初始化
         Bmob.initialize(this, APPLICATION_ID);
+        //百度SDK初始化
+        OCRTool.getInstence().init(this);
         //全局报错处理初始化
         //设置该CrashHandler为程序的默认处理器
 //        AppExceptionDeal catchExcep = new AppExceptionDeal(this);
 //        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+        //友盟
+        UMTool.getInstence().init();
     }
 
     public static Context getContext() {

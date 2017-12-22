@@ -1,6 +1,5 @@
 package com.jeve.cr.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,14 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -28,8 +24,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -53,30 +47,24 @@ import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
-
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.writePermission;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
-    private String[] permissionArray;
     private String originalPath;
-    private Uri originalUri;
     private static final int CAMERA_REQUEST_CODE = 2;//调用相机请求码
     private String cameraPermission = "android.permission.CAMERA";
     private String writePermission = "android.permission.WRITE_EXTERNAL_STORAGE";
     private final int RESULT_ACTIVITY_PHOTO = 0;
     private final int RESULT_ACTIVITY_DEAL = 3;
-    private MainBackViewPagerAdapter mainBackViewPagerAdapter;
     private int orcModen;
     private boolean ocrFinish = false;
+    private final int CAMERA_REQUEST_PERMISSION_CODE = 5;
+    private final int SD_REQUEST_PERMISSION_CODE = 6;
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
@@ -87,13 +75,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView explain;
     private ScrollView result_scroll;
     private TextView copy_tip_tv;
+    private ViewPager back_viewpager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        UMTool.getInstence().openDebug();
+        UMTool.getInstence().sendEvent(UMTool.Action.CR_APP_START);
     }
 
     /**
@@ -116,7 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         explain = (TextView) findViewById(R.id.explain);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
         result_scroll = (ScrollView) findViewById(R.id.result_scroll);
-        ViewPager back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
+        back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         String versionContent = "v" + DeviceTool.getVersionName(this);
@@ -131,7 +120,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         copy_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
 
-        mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
+        MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
         back_viewpager.setAdapter(mainBackViewPagerAdapter);
         back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -156,33 +145,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
             copy_tip_re.setVisibility(View.VISIBLE);
         }
+
+        result_tv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_FREE_COPY);
+                return false;
+            }
+        });
     }
 
     @Override
-    public void requestSuccess(String permission) {
-        super.requestSuccess(permission);
+    public void requestSuccess(int requestCode, List<String> permission) {
+        super.requestSuccess(requestCode, permission);
+        switch (requestCode) {
+            case SD_REQUEST_PERMISSION_CODE:
+                //相册
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_PHOTO_CLICK);
+                startActivityForResult(new Intent(this, AlbumActivity.class), RESULT_ACTIVITY_PHOTO);
+                break;
+            case CAMERA_REQUEST_PERMISSION_CODE:
+                //相机
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_CLICK);
+                startCamera();
+                break;
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.main_activity_camera:
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_CLICK);
                 startCamera();
                 break;
             case R.id.main_activity_photo:
                 if (checkPermission(writePermission)) {
+                    UMTool.getInstence().sendEvent(UMTool.Action.CR_PHOTO_CLICK);
                     startActivityForResult(new Intent(this, AlbumActivity.class), RESULT_ACTIVITY_PHOTO);
                 } else {
-                    requestPermission(this, writePermission);
+                    requestPermission(this, writePermission, SD_REQUEST_PERMISSION_CODE);
                 }
                 break;
             case R.id.drawer_re:
                 drawer.openDrawer(GravityCompat.START);
                 break;
             case R.id.feedback:
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_FEEDBACK_CLICK);
                 startActivity(new Intent(this, FeedbackActivity.class));
                 break;
             case R.id.select_again_re:
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_SELECT_AGAIN);
                 showimage_iv.setVisibility(View.GONE);
                 select_again_re.setVisibility(View.GONE);
                 edit_re.setVisibility(View.GONE);
@@ -192,9 +205,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 explain.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 copy_re.setVisibility(View.GONE);
+                back_viewpager.setVisibility(View.VISIBLE);
                 ocrFinish = false;
                 break;
             case R.id.edit_re:
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_DEAL_CLICK);
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
@@ -202,7 +217,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
                 if (orcModen == 0) {
+                    UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
                     //文字识别
                     OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
                         @Override
@@ -210,20 +227,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             Log.d("LJW", "识别成功" + str);
                             ocrFinish = true;
                             if (TextUtils.isEmpty(str)) {
+                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                 handler.sendEmptyMessage(0);
                                 return;
                             }
+                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
                             result_tv.setText(str);
                             showTextRsult();
                         }
 
                         @Override
                         public void error(String error) {
-                            Log.d("LJW", "识别失败" + error.toString());
+                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                             handler.sendEmptyMessage(0);
                         }
                     });
                 } else if (orcModen == 1) {
+                    UMTool.getInstence().sendEvent(UMTool.Action.CR_BANK_CR);
                     //银行卡识别
                     OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrBankCallBack() {
                         @Override
@@ -231,9 +251,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             ocrFinish = true;
                             Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
                             if (TextUtils.isEmpty(carNum)) {
+                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                 handler.sendEmptyMessage(0);
                                 return;
                             }
+                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
                             StringBuffer stringBuffer = new StringBuffer();
                             stringBuffer.append(getString(R.string.main_bank_num));
                             stringBuffer.append(carNum);
@@ -246,13 +268,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                         @Override
                         public void error(String error) {
-                            Log.d("LJW", "识别失败" + error.toString());
+                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                             handler.sendEmptyMessage(0);
                         }
                     });
                 }
                 break;
             case R.id.copy_re:
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_ALLCOPY);
                 copyTest(result_tv.getText().toString());
                 break;
             case R.id.copy_tip_re:
@@ -270,6 +293,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         explain.setVisibility(View.GONE);
         select_ll.setVisibility(View.GONE);
         copy_re.setVisibility(View.VISIBLE);
+        back_viewpager.setVisibility(View.GONE);
         if (MainConfig.getInstance().getCopyTip()) {
             MainConfig.getInstance().setCopyTip(false);
             //提示用户可以自由复制
@@ -304,6 +328,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (intent != null) {
                 cameraIntent.setPackage(systemCameraPackageName);
             }
+            Uri originalUri;
             //7.0的StrictMode政策，使不能直接获取到uri
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 originalUri = FileProvider.getUriForFile(this, Constant.PACKAGE_NAME + ".fileProvider", originalFile);
@@ -368,22 +393,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 申请需要的权限
      */
     private void requestNeedPermissions() {
-        permissionArray = new String[]{cameraPermission, writePermission};
-        requestPermission(this, permissionArray);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UMTool.getInstence().appStart();
+        String[] permissionArray = new String[]{cameraPermission, writePermission};
+        requestPermission(this, permissionArray, CAMERA_REQUEST_PERMISSION_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE) {
-            Log.d(TAG, "拍照完成进入：onActivityResult");
-            Log.d(TAG, "originalPath=" + originalPath);
+            UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_SUCCESS);
             try {
                 File originalFile = new File(originalPath);
                 if (originalFile.length() > 0) {
@@ -411,6 +429,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     new DeleteSystemSamePhotoThread(originalPath).start();
                 }
             } catch (Exception e) {
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_ERROR);
                 Toast.makeText(this, getString(R.string.main_activity_takephoto_tip), Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == RESULT_ACTIVITY_PHOTO) {
@@ -419,6 +438,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return;
             String back = data.getStringExtra("success");
             if (TextUtils.equals("success", back)) {
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_PHOTO_SUCCESS);
                 Bitmap originalBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
                 originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
                 showimage_iv.setImageBitmap(originalBitmap);
@@ -435,6 +455,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return;
             String back = data.getStringExtra("success");
             if (TextUtils.equals("success", back)) {
+                UMTool.getInstence().sendEvent(UMTool.Action.CR_DEAL_SUCCESS);
                 //更新照片
                 Bitmap newBitmap = BitmapTool.loadImage(BitmapTool.PRIMITIVE_PATH, 0);
                 showimage_iv.setImageBitmap(newBitmap);
