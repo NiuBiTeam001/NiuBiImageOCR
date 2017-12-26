@@ -64,7 +64,7 @@ public class OCRTool {
         GeneralBasicParams params = new GeneralBasicParams();
         params.setDetectDirection(true);
         params.setImageFile(new File(imagePath));
-        OCR.getInstance().recognizeGeneralBasic(params, new OnResultListener<GeneralResult>() {
+        OCR.getInstance().recognizeAccurateBasic(params, new OnResultListener<GeneralResult>() {
             @Override
             public void onResult(GeneralResult generalResult) {
                 for (WordSimple w : generalResult.getWordList()) {
