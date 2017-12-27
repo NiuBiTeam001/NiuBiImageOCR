@@ -71,24 +71,6 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/copy_re"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_toLeftOf="@+id/ocr_re"
-                android:background="?android:attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/main_translate_copy"
-                    android:textColor="@color/text_color1"
-                    android:textSize="@dimen/small_title" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/ocr_re"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
@@ -150,25 +132,6 @@
                 android:layout_marginBottom="?attr/actionBarSize"
                 android:adjustViewBounds="true" />
 
-            <ScrollView
-                android:id="@+id/result_scroll"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/drawer_re"
-                android:layout_marginBottom="?attr/actionBarSize"
-                android:visibility="gone">
-
-                <EditText
-                    android:id="@+id/result_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="16dp"
-                    android:background="#00000000"
-                    android:paddingRight="16dp"
-                    android:textColor="@color/text_color1"
-                    android:textSize="@dimen/content_text" />
-            </ScrollView>
 
             <RelativeLayout
                 android:id="@+id/copy_tip_re"

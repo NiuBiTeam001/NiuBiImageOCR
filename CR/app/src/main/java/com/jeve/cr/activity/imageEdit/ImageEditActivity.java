@@ -2,20 +2,14 @@ package com.jeve.cr.activity.imageEdit;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
 import com.jeve.cr.tool.BitmapTool;
-import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.view.FlexImageView;
-
-import static android.R.attr.maxLength;
 
 public class ImageEditActivity extends BaseActivity implements View.OnClickListener {
 

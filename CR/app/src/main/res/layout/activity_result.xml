@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/activityback"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:id="@+id/back_re"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/share_re"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_toStartOf="@+id/copy_re"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/main_translate_share"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/small_title"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/copy_re"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentEnd="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/main_translate_copy"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/small_title"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/result_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/copy_re"
+        android:layout_marginBottom="?attr/actionBarSize">
+
+        <EditText
+            android:id="@+id/result_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#00000000"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/content_text"/>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/copy_tip_re"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/drawer_re"
+        android:background="@color/copy_tip_back"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/copy_tip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/main_coyp_tip"
+            android:textColor="@color/white"
+            android:textSize="22sp"/>
+
+    </RelativeLayout>
+</RelativeLayout>
