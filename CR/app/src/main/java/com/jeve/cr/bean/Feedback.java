@@ -1,4 +1,4 @@
-package com.jeve.cr.activity.feedback;
+package com.jeve.cr.bean;
 
 import cn.bmob.v3.BmobObject;
 

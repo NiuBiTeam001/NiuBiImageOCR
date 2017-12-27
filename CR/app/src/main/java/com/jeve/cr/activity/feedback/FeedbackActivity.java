@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
+import com.jeve.cr.bean.Feedback;
 import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.tool.UMTool;
 
