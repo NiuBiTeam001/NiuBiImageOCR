@@ -1,5 +1,7 @@
 package com.jeve.cr.config;
 
+import java.io.FileReader;
+
 /**
  * note:主配置类
  * Created by zhangliang on 2017/12/13.
@@ -38,6 +40,11 @@ public class MainConfig extends BaseConfig {
     private final String CHANGE_MODE_TIP = "change_mode_tip";
 
     /**
+     * 第一次使用本应用
+     */
+    private final String FIRST_USE_APP = "first_use_app";
+
+    /**
      * 设置拍照的时间
      */
     public void setTakePhotoTime(Long time) {
@@ -74,5 +81,18 @@ public class MainConfig extends BaseConfig {
      */
     public Boolean getChangeModeTip() {
         return getBoolean(CHANGE_MODE_TIP, true);
+    }
+
+    /**
+     * 设置第一次使用本应用
+     *
+     * @param first
+     */
+    public void setFirstUseApp(boolean first) {
+        setBoolean(FIRST_USE_APP, first);
+    }
+
+    public Boolean getFirstUseApp() {
+        return getBoolean(FIRST_USE_APP, true);
     }
 }
