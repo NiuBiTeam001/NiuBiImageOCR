@@ -44,16 +44,16 @@ public class CrApplication extends Application {
         UMTool.getInstence().init();
         //第一次进入应用，需要在后台建立用户设备id，和次数的数据库，后面处理只需要进行修改或其它处理
         if (MainConfig.getInstance().getFirstUseApp()) {
-        MainConfig.getInstance().setFirstUseApp(false);
-        UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
-            @Override
-            public void onUserRecordLister(UserRecord record, int respondCode) {
-                if (record == null && respondCode == UserSystemTool.DATA_NULL_RESPOND_CODE) {
-                    //表示数据库之前并没有保存唯一设备id的这条数据
-                    UserSystemTool.getInstance().initUser();
+            MainConfig.getInstance().setFirstUseApp(false);
+            UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
+                @Override
+                public void onUserRecordLister(UserRecord record, int respondCode) {
+                    if (record == null && respondCode != UserSystemTool.NET_UNENABLE_RESPOND_CODE) {
+                        //表示数据库之前并没有保存唯一设备id的这条数据
+                        UserSystemTool.getInstance().initUser(3);
+                    }
                 }
-            }
-        });
+            });
         }
     }
 

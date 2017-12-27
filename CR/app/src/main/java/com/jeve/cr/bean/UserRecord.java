@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobObject;
 public class UserRecord extends BmobObject {
     private String userId;//设备唯一表示
     private Integer useTimes;//使用次数
+    private Boolean todayGetTime;//当天是否领取次数
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -17,5 +18,9 @@ public class UserRecord extends BmobObject {
 
     public void setUseTimes(Integer useTimes) {
         this.useTimes = useTimes;
+    }
+
+    public void setTodayGetTime(Boolean todayGetTime) {
+        this.todayGetTime = todayGetTime;
     }
 }
