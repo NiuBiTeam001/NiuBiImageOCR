@@ -1,8 +1,6 @@
 package com.jeve.cr.activity;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,16 +18,16 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +45,6 @@ import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.tool.FileTool;
 import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
-import com.jeve.cr.tool.ShareTool;
 import com.jeve.cr.tool.UMTool;
 
 import java.io.File;
@@ -56,10 +53,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static com.jeve.cr.R.id.copy_re;
-import static com.jeve.cr.R.id.result_scroll;
-import static com.jeve.cr.R.id.result_tv;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
@@ -78,8 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout select_again_re, edit_re, ocr_re;
     private RelativeLayout copy_tip_re;
     private LinearLayout select_ll;
-    private TextView explain;
-    private TextView copy_tip_tv;
+    private TextView main_ocr_count;
     private ViewPager back_viewpager;
 
     @Override
@@ -99,14 +91,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         TextView feedback = (TextView) findViewById(R.id.feedback);
 //        TextView rate_us = (TextView) findViewById(R.id.rate_us);
         TextView version = (TextView) findViewById(R.id.version);
-        copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
+        TextView copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
+        TextView get_ocr_count = (TextView) findViewById(R.id.get_ocr_count);
         showimage_iv = (ImageView) findViewById(R.id.showimage_iv);
         RelativeLayout drawer_re = (RelativeLayout) findViewById(R.id.drawer_re);
         select_again_re = (RelativeLayout) findViewById(R.id.select_again_re);
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
         copy_tip_re = (RelativeLayout) findViewById(R.id.copy_tip_re);
-        explain = (TextView) findViewById(R.id.explain);
+        main_ocr_count = (TextView) findViewById(R.id.main_ocr_count);
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
         back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -116,6 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         photo_iv.setOnClickListener(this);
         drawer_re.setOnClickListener(this);
         feedback.setOnClickListener(this);
+        get_ocr_count.setOnClickListener(this);
         select_again_re.setOnClickListener(this);
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
@@ -146,6 +140,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_re.setVisibility(View.VISIBLE);
         }
 
+        setOcrCount("2");
     }
 
     @Override
@@ -196,7 +191,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 select_again_re.setVisibility(View.GONE);
                 edit_re.setVisibility(View.GONE);
                 ocr_re.setVisibility(View.GONE);
-                explain.setVisibility(View.VISIBLE);
+                main_ocr_count.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 back_viewpager.setVisibility(View.VISIBLE);
                 break;
@@ -269,6 +264,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.copy_tip_re:
                 MainConfig.getInstance().setChangeModeTip(false);
                 copy_tip_re.setVisibility(View.GONE);
+                break;
+            case R.id.get_ocr_count:
+                //免费获取次数
                 break;
         }
     }
@@ -390,11 +388,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     originalBitmap = BitmapTool.scBitmap(originalBitmap, showimage_iv);
                     showimage_iv.setImageBitmap(originalBitmap);
                     showimage_iv.setVisibility(View.VISIBLE);
+                    back_viewpager.setVisibility(View.GONE);
 
                     select_again_re.setVisibility(View.VISIBLE);
                     edit_re.setVisibility(View.VISIBLE);
                     ocr_re.setVisibility(View.VISIBLE);
-                    explain.setVisibility(View.GONE);
+                    main_ocr_count.setVisibility(View.GONE);
                     select_ll.setVisibility(View.GONE);
 
                     BitmapTool.savePrimitiveImag(originalBitmap);
@@ -416,11 +415,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showimage_iv.setImageBitmap(originalBitmap);
                 showimage_iv.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.GONE);
+                back_viewpager.setVisibility(View.GONE);
 
                 select_again_re.setVisibility(View.VISIBLE);
                 edit_re.setVisibility(View.VISIBLE);
                 ocr_re.setVisibility(View.VISIBLE);
-                explain.setVisibility(View.GONE);
+                main_ocr_count.setVisibility(View.GONE);
                 BitmapTool.savePrimitiveImag(originalBitmap);
             }
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
@@ -558,4 +558,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         }
     };
+
+    /**
+     * 设置识别次数
+     *
+     * @param ocrCount 次数
+     */
+    private void setOcrCount(String ocrCount) {
+        String count = String.format(getString(R.string.main_activity_ocr_count), ocrCount);
+        SpannableString spannableString = new SpannableString(count);
+        RelativeSizeSpan sizeSpan02 = new RelativeSizeSpan(1.4f);
+        spannableString.setSpan(sizeSpan02, count.length() - 1, spannableString.length(), Spanned
+                .SPAN_INCLUSIVE_EXCLUSIVE);
+        main_ocr_count.setText(spannableString);
+    }
 }
