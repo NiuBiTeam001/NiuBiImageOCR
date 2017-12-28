@@ -79,6 +79,11 @@
             android:name=".activity.result.ResultActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <meta-data
+            android:name="YOUMI_CHANNEL"
+            android:value="11030" >
+        </meta-data>
     </application>
 
 </manifest>

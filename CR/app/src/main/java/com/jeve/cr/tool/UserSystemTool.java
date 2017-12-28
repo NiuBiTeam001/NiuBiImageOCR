@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.jeve.cr.CrApplication;
 import com.jeve.cr.bean.UserRecord;
+import com.jeve.cr.config.MainConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +28,16 @@ public class UserSystemTool {
     private UserRecord record;
     private static UserSystemTool tool;
     private String deviceId = "";
+    private String objectId = "";
     public static final int DATA_NULL_RESPOND_CODE = 101;//数据为null
     public static final int NET_UNENABLE_RESPOND_CODE = 9016;//网络不可用
+    public static final int SUCCESS = 0;
+    public static final int FAILED = 1;
 
     private UserSystemTool() {
         this.record = new UserRecord();
         deviceId = getPesudoUniqueID();
+        objectId = MainConfig.getInstance().getUserObjectId();
     }
 
     private String getPesudoUniqueID() {
@@ -66,15 +71,15 @@ public class UserSystemTool {
 
     public void initUser(int retryTime) {
         final int[] retry = {retryTime};
-        //将设备唯一id设置为objectID，方便做其它操作
         record.setUserId(deviceId);
         record.setUseTimes(0);
         record.setTodayGetTime(false);
         record.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
-                if (e == null) {//表示成功
-                    //s 为objectId
+                //表示成功
+                if (e == null) {
+                    MainConfig.getInstance().setUserObjectId(s);
                 } else {//失败 s 为null
                     --retry[0];
                     if (retry[0] >= 1) {
@@ -121,19 +126,60 @@ public class UserSystemTool {
     }
 
     /**
-     * 修改一行数据
-     *
-     * @param times
+     * 查询用户
      */
-    public void updateUser(Integer times) {
-        record.setUseTimes(times);
-        record.update(deviceId, new UpdateListener() {
+    public void queryUser(final UserRecordQueryListener listener) {
+        BmobQuery<UserRecord> query = new BmobQuery<>();
+        query.getObject(objectId, new QueryListener<UserRecord>() {
+            @Override
+            public void done(UserRecord userRecord, BmobException e) {
+                if (listener != null) {
+                    listener.onUserRecordQueryLister(userRecord);
+                }
+            }
+        });
+    }
+
+    /**
+     * 修改剩余次数，Bmob原子操作
+     *
+     * @param times 正：表示递增times次   负：递减times次
+     */
+    public void updateUserTimes(Integer times, final UserRecordUpdateListener listener) {
+        record.increment("useTimes", times);
+        record.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {//成功
-
+                    if (listener != null) {
+                        listener.onUserRecordUpdateListener(SUCCESS);
+                    }
                 } else {//失败
+                    if (listener != null) {
+                        listener.onUserRecordUpdateListener(FAILED);
+                    }
+                }
+            }
+        });
+    }
 
+    /**
+     * 修改今天是否领取
+     */
+    public void updateUserIsGetTimes(Boolean isGet, final UserRecordUpdateListener listener) {
+        record.setTodayGetTime(isGet);
+        record.update(objectId, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                //成功
+                if (e == null) {
+                    if (listener != null) {
+                        listener.onUserRecordUpdateListener(SUCCESS);
+                    }
+                } else {//失败
+                    if (listener != null) {
+                        listener.onUserRecordUpdateListener(FAILED);
+                    }
                 }
             }
         });
@@ -143,10 +189,11 @@ public class UserSystemTool {
      * 删除一行
      */
     public void deleteUser() {
-        record.delete(deviceId, new UpdateListener() {
+        record.delete(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                if (e == null) {//成功
+                //成功
+                if (e == null) {
                     Log.d(TAG, "删除成功:" + record.getUpdatedAt());
                 } else {//失败
                     Log.d(TAG, "删除失败：" + e.getMessage());
@@ -157,5 +204,13 @@ public class UserSystemTool {
 
     public interface UserRecordListener {
         void onUserRecordLister(UserRecord record, int respondCode);
+    }
+
+    public interface UserRecordQueryListener {
+        void onUserRecordQueryLister(UserRecord record);
+    }
+
+    public interface UserRecordUpdateListener {
+        void onUserRecordUpdateListener(int respondCode);
     }
 }

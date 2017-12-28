@@ -9,6 +9,8 @@
 #Bmob代码混淆
 -keep class cn.bmob.v3.**
 
+-keep public class com.mi.adtracker.MiAdTracker{ *; }
+
 -keepattributes *Annotation*,InnerClasses
 
 #基本

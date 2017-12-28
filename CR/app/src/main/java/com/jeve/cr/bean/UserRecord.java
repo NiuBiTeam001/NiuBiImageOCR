@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class UserRecord extends BmobObject {
-    private String userId;//设备唯一表示
+    private String userId;//设备唯一标识
     private Integer useTimes;//使用次数
     private Boolean todayGetTime;//当天是否领取次数
 

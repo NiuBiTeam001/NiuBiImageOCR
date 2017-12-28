@@ -1,7 +1,5 @@
 package com.jeve.cr.config;
 
-import java.io.FileReader;
-
 /**
  * note:主配置类
  * Created by zhangliang on 2017/12/13.
@@ -43,6 +41,11 @@ public class MainConfig extends BaseConfig {
      * 第一次使用本应用
      */
     private final String FIRST_USE_APP = "first_use_app";
+
+    /**
+     * 用户的objectID
+     */
+    private final String USER_OBJECT_ID = "user_object_id";
 
     /**
      * 设置拍照的时间
@@ -92,7 +95,12 @@ public class MainConfig extends BaseConfig {
         setBoolean(FIRST_USE_APP, first);
     }
 
-    public Boolean getFirstUseApp() {
-        return getBoolean(FIRST_USE_APP, true);
-    }
+    public Boolean getFirstUseApp() {return getBoolean(FIRST_USE_APP, true);}
+
+    /**
+     * 设置用户objectid
+     */
+    public void setUserObjectId(String objectId){setString(USER_OBJECT_ID,objectId);}
+
+    public String getUserObjectId(){return getString(USER_OBJECT_ID,"");}
 }
