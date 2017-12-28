@@ -1,6 +1,7 @@
 package com.jeve.cr.tool;
 
 import android.content.Context;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -31,8 +32,25 @@ public class UserSystemTool {
 
     private UserSystemTool() {
         this.record = new UserRecord();
-        TelephonyManager manager = (TelephonyManager) (CrApplication.getContext().getSystemService(Context.TELEPHONY_SERVICE));
-        deviceId = manager.getDeviceId();
+        deviceId = getPesudoUniqueID();
+    }
+
+    private String getPesudoUniqueID() {
+        String deviceId = "35" + //we make this look like a valid IMEI
+                Build.BOARD.length() % 10 +
+                Build.BRAND.length() % 10 +
+                Build.CPU_ABI.length() % 10 +
+                Build.DEVICE.length() % 10 +
+                Build.DISPLAY.length() % 10 +
+                Build.HOST.length() % 10 +
+                Build.ID.length() % 10 +
+                Build.MANUFACTURER.length() % 10 +
+                Build.MODEL.length() % 10 +
+                Build.PRODUCT.length() % 10 +
+                Build.TAGS.length() % 10 +
+                Build.TYPE.length() % 10 +
+                Build.USER.length() % 10; //13 digits
+        return deviceId;
     }
 
     public static UserSystemTool getInstance() {
@@ -46,7 +64,7 @@ public class UserSystemTool {
         return tool;
     }
 
-    public void initUser( int retryTime) {
+    public void initUser(int retryTime) {
         final int[] retry = {retryTime};
         //将设备唯一id设置为objectID，方便做其它操作
         record.setUserId(deviceId);
