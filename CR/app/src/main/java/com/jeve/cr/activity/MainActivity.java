@@ -39,6 +39,7 @@ import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.activity.imageEdit.ImageEditActivity;
 import com.jeve.cr.activity.result.ResultActivity;
 import com.jeve.cr.adapter.MainBackViewPagerAdapter;
+import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.BitmapTool;
 import com.jeve.cr.tool.DeviceTool;
@@ -46,6 +47,10 @@ import com.jeve.cr.tool.FileTool;
 import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
+import com.jeve.cr.tool.UserSystemTool;
+import com.jeve.cr.youmi.UmiManager;
+
+import net.youmi.android.nm.sp.SpotManager;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -114,7 +119,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
-
+        TextView umiSpot = (TextView) findViewById(R.id.umi_spot);
+        umiSpot.setOnClickListener(this);
         MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
         back_viewpager.setAdapter(mainBackViewPagerAdapter);
         back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -267,6 +273,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.get_ocr_count:
                 //免费获取次数
+                UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
+                    @Override
+                    public void onUserRecordQueryLister(UserRecord record) {
+                        if (record.getTodayGetTime()){
+                            Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT).show();
+                        }else {
+                            UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool.UserRecordUpdateListener() {
+                                @Override
+                                public void onUserRecordUpdateListener(int respondCode) {
+                                    if (respondCode == UserSystemTool.SUCCESS){
+                                        //成功了，显示次数
+                                        setOcrCount("2");
+                                    }else {
+                                        //失败给出提示
+                                        Toast.makeText(MainActivity.this, getString(R.string.feedback_send_failed), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                break;
+            case R.id.umi_spot:
+                UmiManager.showSpot(this);
+                break;
+            default:
                 break;
         }
     }
@@ -571,5 +603,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         spannableString.setSpan(sizeSpan02, count.length() - 1, spannableString.length(), Spanned
                 .SPAN_INCLUSIVE_EXCLUSIVE);
         main_ocr_count.setText(spannableString);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SpotManager.getInstance(this).isSpotShowing()) {
+            UmiManager.hideSpot(this);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UmiManager.spotOnPause(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        UmiManager.spotOnStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UmiManager.spotOnDestroy(this);
+        UmiManager.spotExit(this);
     }
 }

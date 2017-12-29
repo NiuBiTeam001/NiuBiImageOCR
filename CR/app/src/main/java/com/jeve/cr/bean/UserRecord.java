@@ -23,4 +23,12 @@ public class UserRecord extends BmobObject {
     public void setTodayGetTime(Boolean todayGetTime) {
         this.todayGetTime = todayGetTime;
     }
+
+    public Integer getUseTimes() {
+        return useTimes;
+    }
+
+    public Boolean getTodayGetTime() {
+        return todayGetTime;
+    }
 }

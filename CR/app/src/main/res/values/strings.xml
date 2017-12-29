@@ -47,4 +47,7 @@
     <!--识别失败-->
     <string name="ocr_error">识别失败，您需要提供一张字迹清晰，工整的图片！</string>
     <string name="ocr_error2">识别失败，您需要提供一张字迹清晰，工整的图片，并检查手机时间是否正确！</string>
+
+    <!--User System-->
+    <string name="get_ocr_times">对不起，你今天已经领了哦！</string>
 </resources>

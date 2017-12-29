@@ -7,5 +7,13 @@
         <external-path
             name="CR"
             path="" />
+        <!--7.0方便umi对下载的apk进行安装-->
+        <cache-path
+            name="apk1"
+            path="." />
+        <external-path
+            name="apk2"
+            path="." />
     </paths>
+
 </resources>

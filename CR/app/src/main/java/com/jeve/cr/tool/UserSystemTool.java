@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jeve.cr.CrApplication;
+import com.jeve.cr.R;
 import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
 
@@ -112,6 +114,7 @@ public class UserSystemTool {
                     UserRecord record = new UserRecord();
                     record.setUserId(object.getString("userId"));
                     record.setUseTimes(object.getInt("useTimes"));
+                    record.setObjectId(object.getString("objectId"));
                     if (listener != null) {
                         listener.onUserRecordLister(record, 0);
                     }
