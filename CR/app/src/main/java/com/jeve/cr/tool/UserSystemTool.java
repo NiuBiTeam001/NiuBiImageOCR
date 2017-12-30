@@ -3,6 +3,7 @@ package com.jeve.cr.tool;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,6 +41,9 @@ public class UserSystemTool {
         this.record = new UserRecord();
         deviceId = getPesudoUniqueID();
         objectId = MainConfig.getInstance().getUserObjectId();
+        if (TextUtils.isEmpty(objectId)) {
+            objectId = getPesudoUniqueID();
+        }
     }
 
     private String getPesudoUniqueID() {
