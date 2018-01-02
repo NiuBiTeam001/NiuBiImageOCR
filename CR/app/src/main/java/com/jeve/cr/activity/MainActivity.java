@@ -123,6 +123,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         copy_tip_re.setOnClickListener(this);
         TextView umiSpot = (TextView) findViewById(R.id.umi_spot);
         umiSpot.setOnClickListener(this);
+        TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
+        stopOcr.setOnClickListener(this);
         MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
         back_viewpager.setAdapter(mainBackViewPagerAdapter);
         back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -318,6 +320,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.umi_spot:
                 UmiManager.showSpot(this);
+                break;
+            case R.id.stop_scan_ocr:
                 break;
             default:
                 break;
