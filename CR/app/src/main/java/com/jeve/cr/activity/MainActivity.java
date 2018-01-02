@@ -78,6 +78,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout select_ll;
     private TextView main_ocr_count;
     private ViewPager back_viewpager;
+    private LinearLayout main_count_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         select_ll = (LinearLayout) findViewById(R.id.select_ll);
         back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
+        main_count_ll = (LinearLayout) findViewById(R.id.main_count_ll);
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
@@ -145,8 +147,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
             copy_tip_re.setVisibility(View.VISIBLE);
         }
-
-        setOcrCount("2");
     }
 
     @Override
@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 select_again_re.setVisibility(View.GONE);
                 edit_re.setVisibility(View.GONE);
                 ocr_re.setVisibility(View.GONE);
-                main_ocr_count.setVisibility(View.VISIBLE);
+                main_count_ll.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 back_viewpager.setVisibility(View.VISIBLE);
                 break;
@@ -210,62 +210,80 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
-                if (orcModen == 0) {
-                    UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
-                    //文字识别
-                    OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
-                        @Override
-                        public void success(String str) {
-                            Log.d("LJW", "识别成功" + str);
-                            if (TextUtils.isEmpty(str)) {
-                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                handler.sendEmptyMessage(0);
-                                return;
-                            }
-                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
-                            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                            intent.putExtra("result", str);
-                            startActivity(intent);
-                        }
+                if (Integer.parseInt(main_ocr_count.getText().toString()) == 0) {
+                    //没有次数,叫用户看广告赚取次数
 
-                        @Override
-                        public void error(String error) {
-                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                            handler.sendEmptyMessage(1);
-                        }
-                    });
-                } else if (orcModen == 1) {
-                    UMTool.getInstence().sendEvent(UMTool.Action.CR_BANK_CR);
-                    //银行卡识别
-                    OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrBankCallBack() {
-                        @Override
-                        public void success(String carNum, String bankName) {
-                            Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
-                            if (TextUtils.isEmpty(carNum)) {
-                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                handler.sendEmptyMessage(0);
-                                return;
-                            }
-                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
-                            StringBuffer stringBuffer = new StringBuffer();
-                            stringBuffer.append(getString(R.string.main_bank_num));
-                            stringBuffer.append(carNum);
-                            stringBuffer.append("\n");
-                            stringBuffer.append(getString(R.string.main_bank_bank));
-                            stringBuffer.append(bankName);
-                            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                            intent.putExtra("result", stringBuffer.toString());
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void error(String error) {
-                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                            handler.sendEmptyMessage(0);
-                        }
-                    });
+                    return;
                 }
+                //获取网络次数
+                UserSystemTool.getInstance().updateUserTimes(-1, new UserSystemTool.UserRecordUpdateListener() {
+                    @Override
+                    public void onUserRecordUpdateListener(int respondCode) {
+                        setOcrCount(Integer.parseInt(main_ocr_count.getText().toString()) - 1);
+                        if (respondCode == UserSystemTool.SUCCESS) {
+                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
+                            if (orcModen == 0) {
+                                UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
+                                //文字识别
+                                OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
+                                    @Override
+                                    public void success(String str) {
+                                        Log.d("LJW", "识别成功" + str);
+                                        if (TextUtils.isEmpty(str)) {
+                                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                            handler.sendEmptyMessage(0);
+                                            return;
+                                        }
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
+                                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                                        intent.putExtra("result", str);
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void error(String error) {
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                        handler.sendEmptyMessage(1);
+                                    }
+                                });
+                            } else if (orcModen == 1) {
+                                UMTool.getInstence().sendEvent(UMTool.Action.CR_BANK_CR);
+                                //银行卡识别
+                                OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool
+                                        .OcrBankCallBack() {
+                                    @Override
+                                    public void success(String carNum, String bankName) {
+                                        Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
+                                        if (TextUtils.isEmpty(carNum)) {
+                                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                            handler.sendEmptyMessage(0);
+                                            return;
+                                        }
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
+                                        StringBuffer stringBuffer = new StringBuffer();
+                                        stringBuffer.append(getString(R.string.main_bank_num));
+                                        stringBuffer.append(carNum);
+                                        stringBuffer.append("\n");
+                                        stringBuffer.append(getString(R.string.main_bank_bank));
+                                        stringBuffer.append(bankName);
+                                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                                        intent.putExtra("result", stringBuffer.toString());
+                                        startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void error(String error) {
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                        handler.sendEmptyMessage(0);
+                                    }
+                                });
+                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
                 break;
             case R.id.copy_tip_re:
                 MainConfig.getInstance().setChangeModeTip(false);
@@ -276,18 +294,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
                     @Override
                     public void onUserRecordQueryLister(UserRecord record) {
-                        if (record.getTodayGetTime()){
-                            Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT).show();
-                        }else {
-                            UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool.UserRecordUpdateListener() {
+                        if (record.getTodayGetTime()) {
+                            Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool
+                                    .UserRecordUpdateListener() {
                                 @Override
                                 public void onUserRecordUpdateListener(int respondCode) {
-                                    if (respondCode == UserSystemTool.SUCCESS){
+                                    if (respondCode == UserSystemTool.SUCCESS) {
                                         //成功了，显示次数
-                                        setOcrCount("2");
-                                    }else {
+                                        setOcrCount(2);
+                                    } else {
                                         //失败给出提示
-                                        Toast.makeText(MainActivity.this, getString(R.string.feedback_send_failed), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, getString(R.string.feedback_send_failed),
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -425,7 +446,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     select_again_re.setVisibility(View.VISIBLE);
                     edit_re.setVisibility(View.VISIBLE);
                     ocr_re.setVisibility(View.VISIBLE);
-                    main_ocr_count.setVisibility(View.GONE);
+                    main_count_ll.setVisibility(View.GONE);
                     select_ll.setVisibility(View.GONE);
 
                     BitmapTool.savePrimitiveImag(originalBitmap);
@@ -452,7 +473,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 select_again_re.setVisibility(View.VISIBLE);
                 edit_re.setVisibility(View.VISIBLE);
                 ocr_re.setVisibility(View.VISIBLE);
-                main_ocr_count.setVisibility(View.GONE);
+                main_count_ll.setVisibility(View.GONE);
                 BitmapTool.savePrimitiveImag(originalBitmap);
             }
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
@@ -596,13 +617,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      *
      * @param ocrCount 次数
      */
-    private void setOcrCount(String ocrCount) {
-        String count = String.format(getString(R.string.main_activity_ocr_count), ocrCount);
-        SpannableString spannableString = new SpannableString(count);
-        RelativeSizeSpan sizeSpan02 = new RelativeSizeSpan(1.4f);
-        spannableString.setSpan(sizeSpan02, count.length() - 1, spannableString.length(), Spanned
-                .SPAN_INCLUSIVE_EXCLUSIVE);
-        main_ocr_count.setText(spannableString);
+    private void setOcrCount(int ocrCount) {
+        main_ocr_count.setText(ocrCount + "");
     }
 
     @Override

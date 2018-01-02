@@ -111,8 +111,8 @@
                     android:src="@drawable/ic_photo"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/main_ocr_count"
+            <LinearLayout
+                android:id="@+id/main_count_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/select_ll"
@@ -120,10 +120,26 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/main_activity_select_photo"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/content_text"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/main_activity_ocr_count"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/content_text"/>
+
+                <TextView
+                    android:id="@+id/main_ocr_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/text_color1"
+                    android:textSize="@dimen/appbar_text"/>
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/showimage_iv"
