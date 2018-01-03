@@ -61,7 +61,6 @@ public class CrApplication extends Application {
     private void initUser() {
         //第一次进入应用，需要在后台建立用户设备id，和次数的数据库，后面处理只需要进行修改或其它处理
         if (MainConfig.getInstance().getFirstUseApp()) {
-            saveUs();
             MainConfig.getInstance().setFirstUseApp(false);
             UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
                 @Override
@@ -92,17 +91,6 @@ public class CrApplication extends Application {
         return context;
     }
 
-    /**
-     * 第一次进应用，添加一个拯救措施
-     */
-    private void saveUs(){
-        SaveUs saveUs = new SaveUs();
-        saveUs.setStop(false);
-        saveUs.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {}
-        });
-    }
 
     /**
      * Activity关闭时，删除Activity列表中的Activity对象

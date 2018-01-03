@@ -1,14 +1,8 @@
 package com.jeve.cr.tool;
 
-import android.content.Context;
 import android.os.Build;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.jeve.cr.CrApplication;
-import com.jeve.cr.R;
 import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
 
@@ -31,7 +25,7 @@ public class UserSystemTool {
     private UserRecord record;
     private static UserSystemTool tool;
     private String deviceId = "";
-    private String objectId = "";
+    private String objectId = MainConfig.getInstance().getUserObjectId();
     public static final int DATA_NULL_RESPOND_CODE = 101;//数据为null
     public static final int NET_UNENABLE_RESPOND_CODE = 9016;//网络不可用
     public static final int SUCCESS = 0;
@@ -40,7 +34,6 @@ public class UserSystemTool {
     private UserSystemTool() {
         this.record = new UserRecord();
         deviceId = getPesudoUniqueID();
-        objectId = MainConfig.getInstance().getUserObjectId();
     }
 
     private String getPesudoUniqueID() {

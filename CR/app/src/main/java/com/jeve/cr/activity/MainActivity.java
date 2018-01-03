@@ -39,6 +39,7 @@ import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.activity.imageEdit.ImageEditActivity;
 import com.jeve.cr.activity.result.ResultActivity;
 import com.jeve.cr.adapter.MainBackViewPagerAdapter;
+import com.jeve.cr.bean.SaveUs;
 import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.BitmapTool;
@@ -58,6 +59,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
@@ -335,6 +339,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 UmiManager.showSpot(this);
                 break;
             case R.id.stop_scan_ocr:
+                stopOcrScan();
                 break;
             default:
                 break;
@@ -636,6 +641,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private void setOcrCount(int ocrCount) {
         main_ocr_count.setText(ocrCount + "");
+    }
+
+    private void stopOcrScan(){
+        //TODO 需要正式隐藏到
+        String OBJECT_ID = "19db0d160b";
+        SaveUs saveUs = new SaveUs();
+        saveUs.setStop(true);
+        saveUs.update(OBJECT_ID, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null){
+                    Toast.makeText(MainActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this, "设置失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
