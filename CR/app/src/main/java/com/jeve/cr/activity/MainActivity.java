@@ -149,6 +149,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
             copy_tip_re.setVisibility(View.VISIBLE);
         }
+        UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
+            @Override
+            public void onUserRecordQueryLister(UserRecord record) {
+                if (record != null) {
+                    setOcrCount(record.getUseTimes());
+                }
+            }
+        });
     }
 
     @Override
@@ -307,6 +315,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     if (respondCode == UserSystemTool.SUCCESS) {
                                         //成功了，显示次数
                                         setOcrCount(2);
+                                        UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool.UserRecordUpdateListener() {
+                                            @Override
+                                            public void onUserRecordUpdateListener(int respondCode) {
+                                            }
+                                        });
                                     } else {
                                         //失败给出提示
                                         Toast.makeText(MainActivity.this, getString(R.string.feedback_send_failed),

@@ -41,9 +41,6 @@ public class UserSystemTool {
         this.record = new UserRecord();
         deviceId = getPesudoUniqueID();
         objectId = MainConfig.getInstance().getUserObjectId();
-        if (TextUtils.isEmpty(objectId)) {
-            objectId = getPesudoUniqueID();
-        }
     }
 
     private String getPesudoUniqueID() {
