@@ -60,7 +60,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -403,10 +405,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     PackageInfo packageInfo = packages.get(i);
                     String strLabel = packageInfo.applicationInfo.loadLabel(
                             context.getPackageManager()).toString();
-                    Log.d(TAG, "------------------" + strLabel);
                     if ("相机,照相机,照相,拍照,摄像,Camera,camera".contains(strLabel)) {
                         systemCameraPackageName = packageInfo.packageName;
-                        Log.d(TAG, "+++++++++++++++++++" + systemCameraPackageName);
                         if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                             break;
                         }
@@ -643,7 +643,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         main_ocr_count.setText(ocrCount + "");
     }
 
-    private void stopOcrScan(){
+    /**
+     * 拯救措施
+     * 设置是否中止
+     */
+    private void stopOcrScan() {
         //TODO 需要正式隐藏到
         String OBJECT_ID = "19db0d160b";
         SaveUs saveUs = new SaveUs();
@@ -651,13 +655,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         saveUs.update(OBJECT_ID, new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                if (e == null){
+                if (e == null) {
                     Toast.makeText(MainActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(MainActivity.this, "设置失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /**
+     * 获取是否中止
+     * @return
+     */
+    private SaveUs getOcrScan() {
+        String OBJECT_ID = "19db0d160b";
+        BmobQuery<SaveUs> query = new BmobQuery<>();
+        final SaveUs[] mSaveUs = new SaveUs[1];
+        query.getObject(OBJECT_ID, new QueryListener<SaveUs>() {
+            @Override
+            public void done(SaveUs saveUs, BmobException e) {
+                //注意saveUs可能为null
+                mSaveUs[0] = saveUs;
+            }
+        });
+        return mSaveUs[0];
     }
 
     @Override
