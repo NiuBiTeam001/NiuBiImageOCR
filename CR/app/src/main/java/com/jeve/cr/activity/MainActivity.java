@@ -222,13 +222,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
+                if (getOcrScan().getStop()) {
+                    Toast.makeText(this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!DeviceTool.isNetworkConnected(this)) {
                     Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Integer.parseInt(main_ocr_count.getText().toString()) == 0) {
                     //没有次数,叫用户看广告赚取次数
-
+                    Toast.makeText(this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //获取网络次数
@@ -321,7 +325,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     if (respondCode == UserSystemTool.SUCCESS) {
                                         //成功了，显示次数
                                         setOcrCount(2);
-                                        UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool.UserRecordUpdateListener() {
+                                        UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool
+                                                .UserRecordUpdateListener() {
                                             @Override
                                             public void onUserRecordUpdateListener(int respondCode) {
                                             }
@@ -666,6 +671,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 获取是否中止
+     *
      * @return
      */
     private SaveUs getOcrScan() {

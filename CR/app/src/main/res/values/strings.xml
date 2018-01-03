@@ -37,6 +37,8 @@
     <string name="main_bank_num">卡号：</string>
     <string name="main_bank_bank">银行卡：</string>
     <string name="main_net_error">请检查网络是否连接！</string>
+    <string name="main_all_stop">处理人数过多，请稍后再试！</string>
+    <string name="main_ad_watch">抱歉！识别次数已用完。您可以通过广告获取1到4次随机次数。</string>
 
     <!--feedback-->
 
