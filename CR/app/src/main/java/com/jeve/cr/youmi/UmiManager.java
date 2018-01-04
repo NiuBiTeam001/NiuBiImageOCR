@@ -87,7 +87,7 @@ public class UmiManager {
             }
 
             @Override
-            public void onSpotClicked(boolean b) {
+            public void onSpotClicked(boolean isWebPage) {
                 Log.d(TAG, "onSpotClicked()");
             }
         });

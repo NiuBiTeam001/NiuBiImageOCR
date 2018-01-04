@@ -48,6 +48,11 @@ public class MainConfig extends BaseConfig {
     private final String USER_OBJECT_ID = "user_object_id";
 
     /**
+     * 保存用户的剩余使用次数
+     */
+    private final String USER_LEAVE_OCR_TIMES = "user_leave_ocr_times";
+
+    /**
      * 设置拍照的时间
      */
     public void setTakePhotoTime(Long time) {
@@ -103,4 +108,11 @@ public class MainConfig extends BaseConfig {
     public void setUserObjectId(String objectId){setString(USER_OBJECT_ID,objectId);}
 
     public String getUserObjectId(){return getString(USER_OBJECT_ID,"");}
+
+    /**
+     * 本地保存用户剩余次数
+     */
+    public void setUserLeaveOcrTimes(int times){setInt(USER_LEAVE_OCR_TIMES,times);}
+
+    public int getUserLeaveOcrTimes(){return getInt(USER_LEAVE_OCR_TIMES,0);}
 }

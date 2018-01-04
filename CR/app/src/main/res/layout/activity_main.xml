@@ -258,6 +258,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/line_color1"/>
+
+            <TextView
+                android:id="@+id/update"
+                style="@style/sidebar_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="update"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_color1"/>
             <!--<TextView
                 android:id="@+id/rate_us"
                 style="@style/sidebar_style"

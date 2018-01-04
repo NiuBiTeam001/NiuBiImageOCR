@@ -49,6 +49,7 @@ import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
 import com.jeve.cr.tool.UserSystemTool;
+import com.jeve.cr.update.UpdateEditActivity;
 import com.jeve.cr.youmi.UmiManager;
 
 import net.youmi.android.nm.sp.SpotManager;
@@ -131,6 +132,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         umiSpot.setOnClickListener(this);
         TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
         stopOcr.setOnClickListener(this);
+        TextView update = (TextView) findViewById(R.id.update);
+        update.setOnClickListener(this);
         MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
         back_viewpager.setAdapter(mainBackViewPagerAdapter);
         back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -155,14 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
             copy_tip_re.setVisibility(View.VISIBLE);
         }
-        UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
-            @Override
-            public void onUserRecordQueryLister(UserRecord record) {
-                if (record != null) {
-                    setOcrCount(record.getUseTimes());
-                }
-            }
-        });
+        setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
     }
 
     @Override
@@ -347,6 +343,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.stop_scan_ocr:
                 stopOcrScan();
+                break;
+            case R.id.update:
+                startActivity(new Intent(this, UpdateEditActivity.class));
                 break;
             default:
                 break;

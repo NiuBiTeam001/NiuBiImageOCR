@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jeve.cr.update.UpdateEditActivity">
+    <RelativeLayout
+        android:id="@+id/feedback_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:id="@+id/update_back_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_arrow_back" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/update_back_re"
+            android:text="@string/update_title"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/appbar_text" />
+
+        <RelativeLayout
+            android:id="@+id/update_send_re"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentEnd="true"
+            android:background="?android:attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/update_send"
+                android:textColor="@color/text_color1"
+                android:textSize="@dimen/small_title"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/update_version_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/distance_8dp"
+        android:hint="@string/update_version_code_hint"
+        android:textSize="@dimen/body_16sp"/>
+    <EditText
+        android:id="@+id/update_version_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/distance_8dp"
+        android:hint="@string/update_version_name_hint"
+        android:textSize="@dimen/body_16sp"/>
+    <EditText
+        android:id="@+id/update_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/distance_8dp"
+        android:hint="@string/update_type_hint"
+        android:inputType="number"
+        android:textSize="@dimen/body_16sp"/>
+    <EditText
+        android:id="@+id/update_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="@dimen/distance_8dp"
+        android:gravity="left|top"
+        android:hint="@string/update_content_hint"
+        android:textSize="@dimen/body_16sp"/>
+</LinearLayout>

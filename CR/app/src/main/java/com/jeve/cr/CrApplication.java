@@ -79,8 +79,7 @@ public class CrApplication extends Application {
                 @Override
                 public void onUserRecordQueryLister(UserRecord record) {
                     if (record != null) {
-                        //// TODO: 2017/12/28
-
+                        MainConfig.getInstance().setUserLeaveOcrTimes(record.getUseTimes());
                     }
                 }
             });

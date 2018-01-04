@@ -52,4 +52,18 @@
 
     <!--User System-->
     <string name="get_ocr_times">对不起，你今天已经领了哦！</string>
+
+    <!--update-->
+    <string name="update_title">更新</string>
+    <string name="update_send">发送</string>
+    <string name="update_version_code_hint">设置版本号（如：10000）</string>
+    <string name="update_version_name_hint">设置版本名字（如：V1.0.0）</string>
+    <string name="update_type_hint">0：半强制  1：强制</string>
+    <string name="update_content_hint">更新内容</string>
+    <string name="update_version_code_tip">版本号不能为null</string>
+    <string name="update_version_name_tip">版本名不能为null</string>
+    <string name="update_type_tip">更新类型不能为null</string>
+    <string name="update_content_tip">更新内容不能为null</string>
+    <string name="update_success">提交成功</string>
+    <string name="update_failed">提交失败</string>
 </resources>
