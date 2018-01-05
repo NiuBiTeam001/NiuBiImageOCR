@@ -68,7 +68,7 @@ public class UserSystemTool {
     public void initUser(int retryTime) {
         final int[] retry = {retryTime};
         record.setUserId(deviceId);
-        record.setUseTimes(0);
+        record.setUseTimes(2);
         record.setTodayGetTime(false);
         record.save(new SaveListener<String>() {
             @Override
