@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
@@ -70,18 +71,24 @@ public class UserSystemTool {
         record.setUserId(deviceId);
         record.setUseTimes(2);
         record.setTodayGetTime(false);
-        record.save(new SaveListener<String>() {
+        Bmob.getServerTime(new QueryListener<Long>() {
             @Override
-            public void done(String s, BmobException e) {
-                //表示成功
-                if (e == null) {
-                    MainConfig.getInstance().setUserObjectId(s);
-                } else {//失败 s 为null
-                    --retry[0];
-                    if (retry[0] >= 1) {
-                        initUser(retry[0]);
+            public void done(Long time, BmobException e) {
+                record.setResetTime(time);
+                record.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        //表示成功
+                        if (e == null) {
+                            MainConfig.getInstance().setUserObjectId(s);
+                        } else {//失败 s 为null
+                            --retry[0];
+                            if (retry[0] >= 1) {
+                                initUser(retry[0]);
+                            }
+                        }
                     }
-                }
+                });
             }
         });
     }
