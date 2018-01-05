@@ -50,6 +50,7 @@ import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
 import com.jeve.cr.tool.UserSystemTool;
 import com.jeve.cr.update.UpdateEditActivity;
+import com.jeve.cr.update.UpdateManager;
 import com.jeve.cr.youmi.UmiManager;
 
 import net.youmi.android.nm.sp.SpotManager;
@@ -92,6 +93,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        new UpdateManager().checkUpdate(this);
         UMTool.getInstence().sendEvent(UMTool.Action.CR_APP_START);
     }
 

@@ -53,6 +53,16 @@ public class MainConfig extends BaseConfig {
     private final String USER_LEAVE_OCR_TIMES = "user_leave_ocr_times";
 
     /**
+     * 更新查询时间
+     */
+    private final String UPDATE_QUERY_TIME = "update_query_time";
+
+    /**
+     * 半强制更新
+     */
+    private final String HALF_FORCE_UPDATE = "half_force_update";
+
+    /**
      * 设置拍照的时间
      */
     public void setTakePhotoTime(Long time) {
@@ -115,4 +125,18 @@ public class MainConfig extends BaseConfig {
     public void setUserLeaveOcrTimes(int times){setInt(USER_LEAVE_OCR_TIMES,times);}
 
     public int getUserLeaveOcrTimes(){return getInt(USER_LEAVE_OCR_TIMES,0);}
+
+    /**
+     * 设置更新查询时间
+     */
+    public void setUpdateQueryTime(long time){setLong(UPDATE_QUERY_TIME,time);}
+
+    public long getUpdateQueryTime(){return getLong(UPDATE_QUERY_TIME,0);}
+
+    /**
+     * 半强制更新
+     */
+    public void setHalfForceUpdate(boolean show){setBoolean(HALF_FORCE_UPDATE,show);}
+
+    public boolean getHalfForceUpdate(){return getBoolean(HALF_FORCE_UPDATE,false);}
 }

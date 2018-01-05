@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
+import com.jeve.cr.config.MainConfig;
+import com.jeve.cr.tool.DeviceTool;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
@@ -40,7 +42,7 @@ public class UpdateEditActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.update_back_re:
                 finish();
                 break;
@@ -53,19 +55,23 @@ public class UpdateEditActivity extends BaseActivity implements View.OnClickList
     }
 
     private void send() {
-        if (TextUtils.isEmpty(versionCode.getText().toString())){
+        if (!DeviceTool.isNetworkConnected(this)) {
+            Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(versionCode.getText().toString())) {
             Toast.makeText(this, getString(R.string.update_version_code_tip), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(versionName.getText().toString())){
+        if (TextUtils.isEmpty(versionName.getText().toString())) {
             Toast.makeText(this, getString(R.string.update_version_name_tip), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(update_type.getText().toString())){
+        if (TextUtils.isEmpty(update_type.getText().toString())) {
             Toast.makeText(this, getString(R.string.update_type_tip), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(update_content.getText().toString())){
+        if (TextUtils.isEmpty(update_content.getText().toString())) {
             Toast.makeText(this, getString(R.string.update_content_tip), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -78,10 +84,13 @@ public class UpdateEditActivity extends BaseActivity implements View.OnClickList
         info.update(OBJECT_ID, new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                if (e == null){
+                if (e == null) {
                     Toast.makeText(UpdateEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+                    if (Integer.valueOf(update_type.getText().toString()) == 0) {
+                        MainConfig.getInstance().setHalfForceUpdate(false);
+                    }
                     finish();
-                }else {
+                } else {
                     Toast.makeText(UpdateEditActivity.this, getString(R.string.update_failed), Toast.LENGTH_SHORT).show();
                 }
             }
