@@ -48,6 +48,7 @@ import com.jeve.cr.tool.FileTool;
 import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
 import com.jeve.cr.tool.UMTool;
+import com.jeve.cr.tool.UserInitTool;
 import com.jeve.cr.tool.UserSystemTool;
 import com.jeve.cr.update.UpdateEditActivity;
 import com.jeve.cr.update.UpdateManager;
@@ -93,6 +94,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        //update
         new UpdateManager().checkUpdate(this);
         UMTool.getInstence().sendEvent(UMTool.Action.CR_APP_START);
     }
@@ -160,7 +162,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             copy_tip_tv.setText(getString(R.string.main_change_mode_tip));
             copy_tip_re.setVisibility(View.VISIBLE);
         }
-        setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
+
+        //获取用户使用次数
+        UserInitTool.initUser(this, handler);
     }
 
     @Override
@@ -228,7 +232,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (Integer.parseInt(main_ocr_count.getText().toString()) == 0) {
+
+                if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
                     //没有次数,叫用户看广告赚取次数
                     Toast.makeText(this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
                     return;
@@ -237,7 +242,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 UserSystemTool.getInstance().updateUserTimes(-1, new UserSystemTool.UserRecordUpdateListener() {
                     @Override
                     public void onUserRecordUpdateListener(int respondCode) {
-                        setOcrCount(Integer.parseInt(main_ocr_count.getText().toString()) - 1);
+                        MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() - 1);
+                        setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
                         if (respondCode == UserSystemTool.SUCCESS) {
                             UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
                             if (orcModen == 0) {
@@ -635,6 +641,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (msg.what == 1) {
                 Toast.makeText(MainActivity.this, getString(R.string.ocr_error2), Toast.LENGTH_SHORT)
                         .show();
+            } else if (msg.what == 2) {
+                setOcrCount((Integer) msg.obj);
             }
 
         }

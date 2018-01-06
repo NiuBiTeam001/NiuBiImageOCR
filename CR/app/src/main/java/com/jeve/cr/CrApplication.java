@@ -61,79 +61,11 @@ public class CrApplication extends Application {
         UmiManager.initUmi();
         //插屏初始化
         UmiManager.initSpotAd();
-        initUser();
-        initUserFreeGet();
-    }
-
-    private void initUser() {
-        if (DeviceTool.isNetworkConnected(this)) {
-            //第一次进入应用，需要在后台建立用户设备id，和次数的数据库，后面处理只需要进行修改或其它处理
-            if (MainConfig.getInstance().getFirstUseApp()) {
-                MainConfig.getInstance().setFirstUseApp(false);
-                UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
-                    @Override
-                    public void onUserRecordLister(UserRecord record, int respondCode) {
-                        if (record == null && respondCode != UserSystemTool.NET_UNENABLE_RESPOND_CODE) {
-                            //表示数据库之前并没有保存唯一设备id的这条数据
-                            UserSystemTool.getInstance().initUser(3);
-                        } else if (record != null) {
-                            //避免用户清除数据后，将本地objectid清除
-                            MainConfig.getInstance().setUserObjectId(record.getObjectId());
-                        }
-                    }
-                });
-            } else {
-                UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
-                    @Override
-                    public void onUserRecordQueryLister(UserRecord record) {
-                        if (record != null) {
-                            MainConfig.getInstance().setUserLeaveOcrTimes(record.getUseTimes());
-                        }
-                    }
-                });
-            }
-        }
-
-    }
-
-    /**
-     * 初始化用户免费获取次数
-     */
-    private void initUserFreeGet() {
-        String objectID = MainConfig.getInstance().getUserObjectId();
-        if (TextUtils.isEmpty(objectID)) {
-            return;
-        }
-        BmobQuery<UserRecord> query = new BmobQuery<>();
-        query.getObject(objectID, new QueryListener<UserRecord>() {
-            @Override
-            public void done(final UserRecord userRecord, BmobException e) {
-                Bmob.getServerTime(new QueryListener<Long>() {
-                    @Override
-                    public void done(Long time, BmobException e) {
-                        //如果大于了一天需要将置为可以免费获取
-                        SimpleDateFormat format = new SimpleDateFormat("dd");
-                        int format1 = Integer.parseInt(format.format(new Date(time)));
-                        int format2 = Integer.parseInt(format.format(new Date(userRecord.getResetTime())));
-                        if (Math.abs(format1 - format2) >= 1) {
-                            userRecord.setTodayGetTime(false);
-                            userRecord.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
     }
 
     public static Context getContext() {
         return context;
     }
-
 
     /**
      * Activity关闭时，删除Activity列表中的Activity对象
