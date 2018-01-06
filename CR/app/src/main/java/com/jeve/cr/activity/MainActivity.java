@@ -643,8 +643,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         .show();
             } else if (msg.what == 2) {
                 setOcrCount((Integer) msg.obj);
+            } else if (msg.what == 3) {
+                setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
             }
-
         }
     };
 

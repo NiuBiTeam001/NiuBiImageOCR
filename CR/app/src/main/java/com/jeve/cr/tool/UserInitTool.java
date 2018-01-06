@@ -48,6 +48,9 @@ public class UserInitTool {
             } else {
                 getUseCount(handler);
             }
+        }else{
+            //没有网络情况下
+
         }
 
     }
