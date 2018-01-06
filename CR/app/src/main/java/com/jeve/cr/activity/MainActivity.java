@@ -1,5 +1,6 @@
 package com.jeve.cr.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,15 +20,13 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +39,7 @@ import com.jeve.cr.activity.feedback.FeedbackActivity;
 import com.jeve.cr.activity.imageEdit.ImageEditActivity;
 import com.jeve.cr.activity.result.ResultActivity;
 import com.jeve.cr.adapter.MainBackViewPagerAdapter;
+import com.jeve.cr.bean.RecordOcrTotalTimes;
 import com.jeve.cr.bean.SaveUs;
 import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
@@ -47,6 +48,7 @@ import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.tool.FileTool;
 import com.jeve.cr.tool.MD5Tool;
 import com.jeve.cr.tool.OCRTool;
+import com.jeve.cr.tool.RecordOcrTotalTimesTool;
 import com.jeve.cr.tool.UMTool;
 import com.jeve.cr.tool.UserInitTool;
 import com.jeve.cr.tool.UserSystemTool;
@@ -79,6 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private int orcModen;
     private final int CAMERA_REQUEST_PERMISSION_CODE = 5;
     private final int SD_REQUEST_PERMISSION_CODE = 6;
+    private int allOcrCount = 0;
+    private int photoSelectClick = 0;
 
     private DrawerLayout drawer;
     private ImageView showimage_iv;
@@ -88,6 +92,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView main_ocr_count;
     private ViewPager back_viewpager;
     private LinearLayout main_count_ll;
+    private RelativeLayout drawer_re;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         TextView copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
         TextView get_ocr_count = (TextView) findViewById(R.id.get_ocr_count);
         showimage_iv = (ImageView) findViewById(R.id.showimage_iv);
-        RelativeLayout drawer_re = (RelativeLayout) findViewById(R.id.drawer_re);
+        drawer_re = (RelativeLayout) findViewById(R.id.drawer_re);
         select_again_re = (RelativeLayout) findViewById(R.id.select_again_re);
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
         ocr_re = (RelativeLayout) findViewById(R.id.ocr_re);
@@ -165,6 +170,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         //获取用户使用次数
         UserInitTool.initUser(this, handler);
+        //获取总使用数
+        RecordOcrTotalTimesTool.getRecordOcrTotalTimes(new RecordOcrTotalTimesTool.RecordOcrTotalTimesListener() {
+            @Override
+            public void onRecordOcrTotalTimesListener(RecordOcrTotalTimes times) {
+                allOcrCount = times.getTotalTimes();
+            }
+        });
     }
 
     @Override
@@ -189,9 +201,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.main_activity_camera:
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_CLICK);
+                if (!MainConfig.getInstance().getPhotoSelectTip()) {
+                    MainConfig.getInstance().setPhotoSelectTip(true);
+                    showPhotoSelectTipPop();
+                    photoSelectClick = 4;
+                    return;
+                }
                 startCamera();
                 break;
             case R.id.main_activity_photo:
+                if (!MainConfig.getInstance().getPhotoSelectTip()) {
+                    MainConfig.getInstance().setPhotoSelectTip(true);
+                    showPhotoSelectTipPop();
+                    photoSelectClick = 5;
+                    return;
+                }
                 if (checkPermission(writePermission)) {
                     UMTool.getInstence().sendEvent(UMTool.Action.CR_PHOTO_CLICK);
                     startActivityForResult(new Intent(this, AlbumActivity.class), RESULT_ACTIVITY_PHOTO);
@@ -232,7 +256,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
+                    Toast.makeText(this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
                     //没有次数,叫用户看广告赚取次数
                     Toast.makeText(this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
@@ -242,7 +269,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 UserSystemTool.getInstance().updateUserTimes(-1, new UserSystemTool.UserRecordUpdateListener() {
                     @Override
                     public void onUserRecordUpdateListener(int respondCode) {
+                        //总次数加一
+                        RecordOcrTotalTimesTool.updateTotalTimes(1);
+                        //用户次数减一
                         MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() - 1);
+                        //设置用户次数
                         setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
                         if (respondCode == UserSystemTool.SUCCESS) {
                             UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
@@ -632,6 +663,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return false;
     }
 
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -645,6 +677,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 setOcrCount((Integer) msg.obj);
             } else if (msg.what == 3) {
                 setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
+            } else if (msg.what == 4) {
+                //启动相机
+                startCamera();
+            } else if (msg.what == 5) {
+                //启动相册
+                if (checkPermission(writePermission)) {
+                    UMTool.getInstence().sendEvent(UMTool.Action.CR_PHOTO_CLICK);
+                    startActivityForResult(new Intent(MainActivity.this, AlbumActivity.class), RESULT_ACTIVITY_PHOTO);
+                } else {
+                    requestPermission(MainActivity.this, writePermission, SD_REQUEST_PERMISSION_CODE);
+                }
             }
         }
     };
@@ -717,6 +760,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onStop() {
         super.onStop();
         UmiManager.spotOnStop(this);
+    }
+
+    //照片提示说明
+    private void showPhotoSelectTipPop() {
+        // TODO: 2016/5/17 构建一个popupwindow的布局
+        View popupView = MainActivity.this.getLayoutInflater().inflate(R.layout.popwindowlayout, null);
+        Point point = DeviceTool.getScreenSize(this);
+        final PopupWindow window = new PopupWindow(popupView, (int) (point.x / 4.0f * 3), (int) (point.y / 4.0f * 3));
+        // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+        window.setOutsideTouchable(false);
+        // TODO：更新popupwindow的状态
+        window.update();
+        // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+        int setX = (int) ((point.x - (point.x / 4.0f * 3)) / 2);
+        window.showAsDropDown(drawer_re, setX, 20);
+        TextView close = popupView.findViewById(R.id.pop_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handler.sendEmptyMessage(photoSelectClick);
+                window.dismiss();
+            }
+        });
     }
 
     @Override

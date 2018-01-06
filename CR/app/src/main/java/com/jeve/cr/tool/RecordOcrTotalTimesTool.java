@@ -41,7 +41,7 @@ public class RecordOcrTotalTimesTool {
         });
     }
 
-    interface RecordOcrTotalTimesListener{
+    public interface RecordOcrTotalTimesListener{
         void onRecordOcrTotalTimesListener(RecordOcrTotalTimes times);
     }
 }

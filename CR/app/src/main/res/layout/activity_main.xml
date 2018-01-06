@@ -236,7 +236,7 @@
                 style="@style/sidebar_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ad"
+                android:text="@string/main_ad"
                 android:textColor="@color/text_color1"
                 android:textSize="@dimen/small_title"/>
 
@@ -250,7 +250,7 @@
                 style="@style/sidebar_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="终止扫描"
+                android:text="@string/main_stop_app"
                 android:textColor="@color/text_color1"
                 android:textSize="@dimen/small_title"/>
 
@@ -264,7 +264,7 @@
                 style="@style/sidebar_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="update"
+                android:text="@string/main_update"
                 android:textColor="@color/text_color1"
                 android:textSize="@dimen/small_title"/>
 

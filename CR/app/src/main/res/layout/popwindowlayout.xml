@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/popback"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="@string/main_photo_select_tip_title"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/appbar_text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="@string/main_photo_select_tip_content01"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/small_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="@string/main_photo_select_tip_content02"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/small_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="@string/main_photo_select_tip_content03"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/small_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="@string/main_photo_select_tip_content04"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/small_title" />
+
+    <TextView
+        android:id="@+id/pop_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/popcloseback"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:paddingEnd="40dp"
+        android:paddingStart="40dp"
+        android:paddingTop="16dp"
+        android:text="@string/main_photo_select_tip_close"
+        android:textColor="@color/text_color1"
+        android:textSize="@dimen/appbar_text" />
+
+</LinearLayout>

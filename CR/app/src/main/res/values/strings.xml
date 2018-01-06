@@ -39,6 +39,16 @@
     <string name="main_net_error">请检查网络是否连接！</string>
     <string name="main_all_stop">处理人数过多，请稍后再试！</string>
     <string name="main_ad_watch">抱歉！识别次数已用完。您可以通过广告获取1到4次随机次数。</string>
+    <string name="main_all_count">抱歉！识别用户过多，请稍后再试！</string>
+    <string name="main_photo_select_tip_title">照片选取说明</string>
+    <string name="main_photo_select_tip_content01">1.请选取亮度较好的图片。</string>
+    <string name="main_photo_select_tip_content02">2.请选择清晰度较好的图片。</string>
+    <string name="main_photo_select_tip_content03">3.请将尽量将识别文字以外的文字排除。</string>
+    <string name="main_photo_select_tip_content04">参考以上规则可提高识别度！</string>
+    <string name="main_photo_select_tip_close">关闭</string>
+    <string name="main_ad">广告</string>
+    <string name="main_stop_app">终止程序扫描</string>
+    <string name="main_update">升级</string>
 
     <!--feedback-->
 
