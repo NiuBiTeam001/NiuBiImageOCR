@@ -50,7 +50,7 @@ public class UserInitTool {
             }
         }else{
             //没有网络情况下
-
+            handler.sendEmptyMessage(3);
         }
 
     }
