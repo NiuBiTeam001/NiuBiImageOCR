@@ -26,7 +26,6 @@ public class UserSystemTool {
     private UserRecord record;
     private static UserSystemTool tool;
     private String deviceId = "";
-    private String objectId = MainConfig.getInstance().getUserObjectId();
     public static final int DATA_NULL_RESPOND_CODE = 101;//数据为null
     public static final int NET_UNENABLE_RESPOND_CODE = 9016;//网络不可用
     public static final int SUCCESS = 0;
@@ -134,7 +133,7 @@ public class UserSystemTool {
      */
     public void queryUser(final UserRecordQueryListener listener) {
         BmobQuery<UserRecord> query = new BmobQuery<>();
-        query.getObject(objectId, new QueryListener<UserRecord>() {
+        query.getObject(MainConfig.getInstance().getUserObjectId(), new QueryListener<UserRecord>() {
             @Override
             public void done(UserRecord userRecord, BmobException e) {
                 if (listener != null) {
@@ -151,7 +150,7 @@ public class UserSystemTool {
      */
     public void updateUserTimes(Integer times, final UserRecordUpdateListener listener) {
         record.increment("useTimes", times);
-        record.update(objectId, new UpdateListener() {
+        record.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {//成功
@@ -172,7 +171,7 @@ public class UserSystemTool {
      */
     public void updateUserIsGetTimes(Boolean isGet, final UserRecordUpdateListener listener) {
         record.setTodayGetTime(isGet);
-        record.update(objectId, new UpdateListener() {
+        record.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 //成功
@@ -193,7 +192,7 @@ public class UserSystemTool {
      * 删除一行
      */
     public void deleteUser() {
-        record.delete(objectId, new UpdateListener() {
+        record.delete(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 //成功

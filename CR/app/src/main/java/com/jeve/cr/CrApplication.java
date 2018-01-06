@@ -100,8 +100,12 @@ public class CrApplication extends Application {
      * 初始化用户免费获取次数
      */
     private void initUserFreeGet() {
+        String objectID = MainConfig.getInstance().getUserObjectId();
+        if (TextUtils.isEmpty(objectID)) {
+            return;
+        }
         BmobQuery<UserRecord> query = new BmobQuery<>();
-        query.getObject(MainConfig.getInstance().getUserObjectId(), new QueryListener<UserRecord>() {
+        query.getObject(objectID, new QueryListener<UserRecord>() {
             @Override
             public void done(final UserRecord userRecord, BmobException e) {
                 Bmob.getServerTime(new QueryListener<Long>() {
@@ -111,7 +115,7 @@ public class CrApplication extends Application {
                         SimpleDateFormat format = new SimpleDateFormat("dd");
                         int format1 = Integer.parseInt(format.format(new Date(time)));
                         int format2 = Integer.parseInt(format.format(new Date(userRecord.getResetTime())));
-                        if (Math.abs(format1 - format2) >= 1){
+                        if (Math.abs(format1 - format2) >= 1) {
                             userRecord.setTodayGetTime(false);
                             userRecord.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
                                 @Override
