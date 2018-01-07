@@ -93,6 +93,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ViewPager back_viewpager;
     private LinearLayout main_count_ll;
     private RelativeLayout drawer_re;
+    private RelativeLayout ad_re, get_free_re;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +115,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        TextView rate_us = (TextView) findViewById(R.id.rate_us);
         TextView version = (TextView) findViewById(R.id.version);
         TextView copy_tip_tv = (TextView) findViewById(R.id.copy_tip_tv);
-        TextView get_ocr_count = (TextView) findViewById(R.id.get_ocr_count);
         showimage_iv = (ImageView) findViewById(R.id.showimage_iv);
+        ad_re = (RelativeLayout) findViewById(R.id.ad_re);
+        get_free_re = (RelativeLayout) findViewById(R.id.get_free_re);
         drawer_re = (RelativeLayout) findViewById(R.id.drawer_re);
         select_again_re = (RelativeLayout) findViewById(R.id.select_again_re);
         edit_re = (RelativeLayout) findViewById(R.id.edit_re);
@@ -129,16 +131,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
+        get_free_re.setOnClickListener(this);
+        ad_re.setOnClickListener(this);
         photo_iv.setOnClickListener(this);
         drawer_re.setOnClickListener(this);
         feedback.setOnClickListener(this);
-        get_ocr_count.setOnClickListener(this);
         select_again_re.setOnClickListener(this);
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
-        TextView umiSpot = (TextView) findViewById(R.id.umi_spot);
-        umiSpot.setOnClickListener(this);
         TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
         stopOcr.setOnClickListener(this);
         TextView update = (TextView) findViewById(R.id.update);
@@ -242,6 +243,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 main_count_ll.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 back_viewpager.setVisibility(View.VISIBLE);
+                ad_re.setVisibility(View.VISIBLE);
+                get_free_re.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_re:
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_DEAL_CLICK);
@@ -344,7 +347,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 MainConfig.getInstance().setChangeModeTip(false);
                 copy_tip_re.setVisibility(View.GONE);
                 break;
-            case R.id.get_ocr_count:
+            case R.id.get_free_re:
                 //免费获取次数
                 UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
                     @Override
@@ -353,7 +356,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT)
                                     .show();
                         } else {
-                            if (record.getUseTimes() > 0){
+                            if (record.getUseTimes() > 0) {
                                 Toast.makeText(MainActivity.this, getString(R.string.get_ocr_time_tip), Toast.LENGTH_SHORT)
                                         .show();
                                 return;
@@ -382,7 +385,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     }
                 });
                 break;
-            case R.id.umi_spot:
+            case R.id.ad_re:
                 UmiManager.showSpot(this);
                 break;
             case R.id.stop_scan_ocr:
@@ -518,6 +521,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     ocr_re.setVisibility(View.VISIBLE);
                     main_count_ll.setVisibility(View.GONE);
                     select_ll.setVisibility(View.GONE);
+                    ad_re.setVisibility(View.GONE);
+                    get_free_re.setVisibility(View.GONE);
 
                     BitmapTool.savePrimitiveImag(originalBitmap);
                     new DeleteSystemSamePhotoThread(originalPath).start();
@@ -544,6 +549,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 edit_re.setVisibility(View.VISIBLE);
                 ocr_re.setVisibility(View.VISIBLE);
                 main_count_ll.setVisibility(View.GONE);
+                ad_re.setVisibility(View.GONE);
+                get_free_re.setVisibility(View.GONE);
                 BitmapTool.savePrimitiveImag(originalBitmap);
             }
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
