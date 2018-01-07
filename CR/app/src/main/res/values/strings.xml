@@ -62,6 +62,7 @@
 
     <!--User System-->
     <string name="get_ocr_times">对不起，你今天已经领了哦！</string>
+    <string name="get_ocr_time_tip">您仍有剩余次数可以用，请先使用完剩余次数再领取！</string>
 
     <!--update-->
     <string name="update_title">更新</string>

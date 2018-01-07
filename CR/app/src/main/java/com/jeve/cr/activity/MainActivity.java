@@ -353,6 +353,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT)
                                     .show();
                         } else {
+                            if (record.getUseTimes() > 0){
+                                Toast.makeText(MainActivity.this, getString(R.string.get_ocr_time_tip), Toast.LENGTH_SHORT)
+                                        .show();
+                                return;
+                            }
                             UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool
                                     .UserRecordUpdateListener() {
                                 @Override
