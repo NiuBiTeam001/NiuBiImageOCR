@@ -677,6 +677,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 setOcrCount((Integer) msg.obj);
             } else if (msg.what == 3) {
                 setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
+                Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
             } else if (msg.what == 4) {
                 //启动相机
                 startCamera();
