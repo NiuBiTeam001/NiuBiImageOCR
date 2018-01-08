@@ -255,19 +255,19 @@
                 android:layout_height="1dp"
                 android:background="@color/line_color1" />
 
-            <TextView
-                android:id="@+id/stop_scan_ocr"
-                style="@style/sidebar_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/main_stop_app"
-                android:textColor="@color/text_color1"
-                android:textSize="@dimen/small_title" />
+            <!--<TextView-->
+                <!--android:id="@+id/stop_scan_ocr"-->
+                <!--style="@style/sidebar_style"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/main_stop_app"-->
+                <!--android:textColor="@color/text_color1"-->
+                <!--android:textSize="@dimen/small_title" />-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/line_color1" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/line_color1" />-->
 
             <TextView
                 android:id="@+id/update"

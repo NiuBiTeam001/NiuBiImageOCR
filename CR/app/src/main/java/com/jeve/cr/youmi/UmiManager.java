@@ -2,15 +2,22 @@ package com.jeve.cr.youmi;
 
 
 import android.app.Activity;
-import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jeve.cr.CrApplication;
+import com.jeve.cr.R;
+import com.jeve.cr.config.MainConfig;
+import com.jeve.cr.tool.UserSystemTool;
 
 import net.youmi.android.AdManager;
 import net.youmi.android.nm.sp.SpotListener;
 import net.youmi.android.nm.sp.SpotManager;
 import net.youmi.android.nm.sp.SpotRequestListener;
+
+import java.util.Random;
 
 /**
  * umi管理类
@@ -69,7 +76,7 @@ public class UmiManager {
     /**
      * 展示插屏广告
      */
-    public static void showSpot(Activity activity) {
+    public static void showSpot(final Activity activity, final Handler handler) {
         SpotManager.getInstance(activity).showSpot(activity, new SpotListener() {
             @Override
             public void onShowSuccess() {
@@ -89,8 +96,32 @@ public class UmiManager {
             @Override
             public void onSpotClicked(boolean isWebPage) {
                 Log.d(TAG, "onSpotClicked()");
+                final int random = getRandom();
+                UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
+                    @Override
+                    public void onUserRecordUpdateListener(int respondCode) {
+                        if (respondCode == UserSystemTool.SUCCESS){
+                            Message msg = Message.obtain();
+                            msg.what = 6;
+                            msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
+                            handler.sendMessage(msg);
+                        }
+                    }
+                });
             }
         });
+    }
+
+    /**
+     * 获取随机一到三的数字
+     *
+     * @return
+     */
+    private static int getRandom() {
+        int max = 3;
+        int min = 1;
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
     }
 
     /**

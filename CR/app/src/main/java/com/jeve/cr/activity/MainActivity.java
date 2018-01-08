@@ -70,6 +70,8 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+import static android.R.id.list;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
     private String originalPath;
@@ -140,8 +142,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
-        TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
-        stopOcr.setOnClickListener(this);
+//        TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
+//        stopOcr.setOnClickListener(this);
         TextView update = (TextView) findViewById(R.id.update);
         update.setOnClickListener(this);
         MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
@@ -251,95 +253,104 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
-                if (getOcrScan().getStop()) {
-                    Toast.makeText(this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!DeviceTool.isNetworkConnected(this)) {
-                    Toast.makeText(this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
-                    Toast.makeText(this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
-                    //没有次数,叫用户看广告赚取次数
-                    Toast.makeText(this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //获取网络次数
-                UserSystemTool.getInstance().updateUserTimes(-1, new UserSystemTool.UserRecordUpdateListener() {
+                String OBJECT_ID = "19db0d160b";
+                BmobQuery<SaveUs> query = new BmobQuery<>();
+                query.getObject(OBJECT_ID, new QueryListener<SaveUs>() {
                     @Override
-                    public void onUserRecordUpdateListener(int respondCode) {
-                        //总次数加一
-                        RecordOcrTotalTimesTool.updateTotalTimes(1);
-                        //用户次数减一
-                        MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() - 1);
-                        //设置用户次数
-                        setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
-                        if (respondCode == UserSystemTool.SUCCESS) {
-                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
-                            if (orcModen == 0) {
-                                UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
-                                //文字识别
-                                OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
-                                    @Override
-                                    public void success(String str) {
-                                        Log.d("LJW", "识别成功" + str);
-                                        if (TextUtils.isEmpty(str)) {
-                                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                            handler.sendEmptyMessage(0);
-                                            return;
-                                        }
-                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
-                                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                                        intent.putExtra("result", str);
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void error(String error) {
-                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                        handler.sendEmptyMessage(1);
-                                    }
-                                });
-                            } else if (orcModen == 1) {
-                                UMTool.getInstence().sendEvent(UMTool.Action.CR_BANK_CR);
-                                //银行卡识别
-                                OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool
-                                        .OcrBankCallBack() {
-                                    @Override
-                                    public void success(String carNum, String bankName) {
-                                        Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
-                                        if (TextUtils.isEmpty(carNum)) {
-                                            UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                            handler.sendEmptyMessage(0);
-                                            return;
-                                        }
-                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
-                                        StringBuffer stringBuffer = new StringBuffer();
-                                        stringBuffer.append(getString(R.string.main_bank_num));
-                                        stringBuffer.append(carNum);
-                                        stringBuffer.append("\n");
-                                        stringBuffer.append(getString(R.string.main_bank_bank));
-                                        stringBuffer.append(bankName);
-                                        Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                                        intent.putExtra("result", stringBuffer.toString());
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void error(String error) {
-                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
-                                        handler.sendEmptyMessage(0);
-                                    }
-                                });
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT)
-                                    .show();
+                    public void done(SaveUs saveUs, BmobException e) {
+                        //注意saveUs可能为null
+                        if (saveUs != null && saveUs.getStop()) {
+                            Toast.makeText(MainActivity.this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
+                        if (!DeviceTool.isNetworkConnected(MainActivity.this)) {
+                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
+                            Toast.makeText(MainActivity.this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
+                            //没有次数,叫用户看广告赚取次数
+                            Toast.makeText(MainActivity.this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        //获取网络次数
+                        UserSystemTool.getInstance().updateUserTimes(-1, new UserSystemTool.UserRecordUpdateListener() {
+                            @Override
+                            public void onUserRecordUpdateListener(int respondCode) {
+                                //总次数加一
+                                RecordOcrTotalTimesTool.updateTotalTimes(1);
+                                //用户次数减一
+                                MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() - 1);
+                                //设置用户次数
+                                setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
+                                if (respondCode == UserSystemTool.SUCCESS) {
+                                    UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_CLICK);
+                                    if (orcModen == 0) {
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
+                                        //文字识别
+                                        OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
+                                            @Override
+                                            public void success(String str) {
+                                                Log.d("LJW", "识别成功" + str);
+                                                if (TextUtils.isEmpty(str)) {
+                                                    UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                                    handler.sendEmptyMessage(0);
+                                                    return;
+                                                }
+                                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
+                                                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                                                intent.putExtra("result", str);
+                                                startActivity(intent);
+                                            }
+
+                                            @Override
+                                            public void error(String error) {
+                                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        });
+                                    } else if (orcModen == 1) {
+                                        UMTool.getInstence().sendEvent(UMTool.Action.CR_BANK_CR);
+                                        //银行卡识别
+                                        OCRTool.getInstence().OCRBankCard(BitmapTool.PRIMITIVE_PATH, new OCRTool
+                                                .OcrBankCallBack() {
+                                            @Override
+                                            public void success(String carNum, String bankName) {
+                                                Log.d("LJW", "识别成功bank" + carNum + " - " + bankName);
+                                                if (TextUtils.isEmpty(carNum)) {
+                                                    UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                                    handler.sendEmptyMessage(0);
+                                                    return;
+                                                }
+                                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
+                                                StringBuffer stringBuffer = new StringBuffer();
+                                                stringBuffer.append(getString(R.string.main_bank_num));
+                                                stringBuffer.append(carNum);
+                                                stringBuffer.append("\n");
+                                                stringBuffer.append(getString(R.string.main_bank_bank));
+                                                stringBuffer.append(bankName);
+                                                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                                                intent.putExtra("result", stringBuffer.toString());
+                                                startActivity(intent);
+                                            }
+
+                                            @Override
+                                            public void error(String error) {
+                                                UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
+                                                handler.sendEmptyMessage(0);
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }
+                        });
                     }
                 });
                 break;
@@ -386,11 +397,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 });
                 break;
             case R.id.ad_re:
-                UmiManager.showSpot(this);
+                UmiManager.showSpot(this,handler);
                 break;
-            case R.id.stop_scan_ocr:
-                stopOcrScan();
-                break;
+//            case R.id.stop_scan_ocr:
+//                stopOcrScan();
+//                break;
             case R.id.update:
                 startActivity(new Intent(this, UpdateEditActivity.class));
                 break;
@@ -701,6 +712,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     requestPermission(MainActivity.this, writePermission, SD_REQUEST_PERMISSION_CODE);
                 }
+            }else if (msg.what == 6){
+                setOcrCount((Integer) msg.obj);
             }
         }
     };
@@ -743,15 +756,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private SaveUs getOcrScan() {
         String OBJECT_ID = "19db0d160b";
         BmobQuery<SaveUs> query = new BmobQuery<>();
-        final SaveUs[] mSaveUs = new SaveUs[1];
+        final ArrayList<SaveUs> list = new ArrayList<>();
         query.getObject(OBJECT_ID, new QueryListener<SaveUs>() {
             @Override
             public void done(SaveUs saveUs, BmobException e) {
                 //注意saveUs可能为null
-                mSaveUs[0] = saveUs;
+                list.add(saveUs);
             }
         });
-        return mSaveUs[0];
+        return list.get(0);
     }
 
     @Override

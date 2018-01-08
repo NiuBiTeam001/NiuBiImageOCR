@@ -34,9 +34,9 @@ public class UpdateManager implements View.OnClickListener {
             return;
         }
         //查询时间是否过期
-//        if (getQueryTimeInterval() < 12) {
-//            return;
-//        }
+        if (getQueryTimeInterval() < 12) {
+            return;
+        }
         MainConfig.getInstance().setUpdateQueryTime(System.currentTimeMillis());
 
         BmobQuery<UpdateInfo> query = new BmobQuery<>();
