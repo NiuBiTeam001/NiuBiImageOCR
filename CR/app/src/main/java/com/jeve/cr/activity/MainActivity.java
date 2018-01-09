@@ -97,6 +97,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout drawer_re;
     private RelativeLayout ad_re, get_free_re;
 
+    private Boolean isOcring = false;
+    //是否已经选取了图片
+    private Boolean isSelectPhoto = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,12 +251,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 back_viewpager.setVisibility(View.VISIBLE);
                 ad_re.setVisibility(View.VISIBLE);
                 get_free_re.setVisibility(View.VISIBLE);
+                isSelectPhoto = false;
                 break;
             case R.id.edit_re:
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_DEAL_CLICK);
                 startActivityForResult(new Intent(this, ImageEditActivity.class), RESULT_ACTIVITY_DEAL);
                 break;
             case R.id.ocr_re:
+                //正在识别，不作任何操作
+                if (isOcring) return;
+                isOcring = true;
+
+                if (!DeviceTool.isNetworkConnected(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+                    isOcring = false;
+                    return;
+                }
+                if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
+                    Toast.makeText(MainActivity.this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
+                    isOcring = false;
+                    return;
+                }
+                if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
+                    //没有次数,叫用户看广告赚取次数
+                    Toast.makeText(MainActivity.this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
+                    isOcring = false;
+                    return;
+                }
+
                 String OBJECT_ID = "19db0d160b";
                 BmobQuery<SaveUs> query = new BmobQuery<>();
                 query.getObject(OBJECT_ID, new QueryListener<SaveUs>() {
@@ -261,20 +287,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         //注意saveUs可能为null
                         if (saveUs != null && saveUs.getStop()) {
                             Toast.makeText(MainActivity.this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (!DeviceTool.isNetworkConnected(MainActivity.this)) {
-                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
-                            Toast.makeText(MainActivity.this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
-                            //没有次数,叫用户看广告赚取次数
-                            Toast.makeText(MainActivity.this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
+                            isOcring = false;
                             return;
                         }
                         //获取网络次数
@@ -299,18 +312,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                                 if (TextUtils.isEmpty(str)) {
                                                     UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                                     handler.sendEmptyMessage(0);
+                                                    isOcring = false;
                                                     return;
                                                 }
                                                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
                                                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                                                 intent.putExtra("result", str);
                                                 startActivity(intent);
+                                                isOcring = false;
                                             }
 
                                             @Override
                                             public void error(String error) {
                                                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                                 handler.sendEmptyMessage(1);
+                                                isOcring = false;
                                             }
                                         });
                                     } else if (orcModen == 1) {
@@ -324,6 +340,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                                 if (TextUtils.isEmpty(carNum)) {
                                                     UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                                     handler.sendEmptyMessage(0);
+                                                    isOcring = false;
                                                     return;
                                                 }
                                                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_SUCCESS);
@@ -336,18 +353,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                                                 intent.putExtra("result", stringBuffer.toString());
                                                 startActivity(intent);
+                                                isOcring = false;
                                             }
 
                                             @Override
                                             public void error(String error) {
                                                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CR_ERROR);
                                                 handler.sendEmptyMessage(0);
+                                                isOcring = false;
                                             }
                                         });
                                     }
                                 } else {
                                     Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT)
                                             .show();
+                                    isOcring = false;
                                 }
                             }
                         });
@@ -397,7 +417,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 });
                 break;
             case R.id.ad_re:
-                UmiManager.showSpot(this,handler);
+                UmiManager.showSpot(this, handler);
                 break;
 //            case R.id.stop_scan_ocr:
 //                stopOcrScan();
@@ -537,6 +557,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     BitmapTool.savePrimitiveImag(originalBitmap);
                     new DeleteSystemSamePhotoThread(originalPath).start();
+
+                    isSelectPhoto = true;
                 }
             } catch (Exception e) {
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_ERROR);
@@ -563,6 +585,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ad_re.setVisibility(View.GONE);
                 get_free_re.setVisibility(View.GONE);
                 BitmapTool.savePrimitiveImag(originalBitmap);
+
+                isSelectPhoto = true;
             }
         } else if (requestCode == RESULT_ACTIVITY_DEAL) {
             if (data == null)
@@ -675,6 +699,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isSelectPhoto) {
+                //返回主界面样子
+                showimage_iv.setVisibility(View.GONE);
+                select_again_re.setVisibility(View.GONE);
+                edit_re.setVisibility(View.GONE);
+                ocr_re.setVisibility(View.GONE);
+                main_count_ll.setVisibility(View.VISIBLE);
+                select_ll.setVisibility(View.VISIBLE);
+                back_viewpager.setVisibility(View.VISIBLE);
+                ad_re.setVisibility(View.VISIBLE);
+                get_free_re.setVisibility(View.VISIBLE);
+                isSelectPhoto = false;
+                return false;
+            }
             if (System.currentTimeMillis() - time > 2000) {
                 time = System.currentTimeMillis();
                 Toast.makeText(MainActivity.this, getString(R.string.main_out_tip), Toast.LENGTH_SHORT).show();
@@ -712,7 +750,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     requestPermission(MainActivity.this, writePermission, SD_REQUEST_PERMISSION_CODE);
                 }
-            }else if (msg.what == 6){
+            } else if (msg.what == 6) {
                 setOcrCount((Integer) msg.obj);
             }
         }
