@@ -9,7 +9,11 @@ import android.view.TextureView;
 import com.jeve.cr.bean.UserRecord;
 import com.jeve.cr.config.MainConfig;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import cn.bmob.v3.Bmob;
@@ -48,7 +52,7 @@ public class UserInitTool {
             } else {
                 getUseCount(handler);
             }
-        }else{
+        } else {
             //没有网络情况下
             handler.sendEmptyMessage(3);
         }
@@ -89,24 +93,31 @@ public class UserInitTool {
         query.getObject(objectID, new QueryListener<UserRecord>() {
             @Override
             public void done(final UserRecord userRecord, BmobException e) {
-                Bmob.getServerTime(new QueryListener<Long>() {
+                new Thread(new Runnable() {
                     @Override
-                    public void done(Long time, BmobException e) {
+                    public void run() {
                         //如果大于了一天需要将置为可以免费获取
-                        SimpleDateFormat format = new SimpleDateFormat("dd");
-                        int format1 = Integer.parseInt(format.format(new Date(time)));
-                        int format2 = Integer.parseInt(format.format(new Date(userRecord.getResetTime())));
-                        if (Math.abs(format1 - format2) >= 1) {
-                            userRecord.setTodayGetTime(false);
-                            userRecord.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
+                        try {
+                            URLConnection conn = new URL("https://www.baidu.com/").openConnection();
+                            long time = conn.getDate();
+                            SimpleDateFormat format = new SimpleDateFormat("dd");
+                            int format1 = Integer.parseInt(format.format(new Date(time)));
+                            int format2 = Integer.parseInt(format.format(new Date(userRecord.getResetTime())));
+                            if (Math.abs(format1 - format2) >= 1) {
+                                userRecord.setResetTime(time);
+                                userRecord.setTodayGetTime(false);
+                                userRecord.update(MainConfig.getInstance().getUserObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
 
-                                }
-                            });
+                                    }
+                                });
+                            }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                     }
-                });
+                }).start();
             }
         });
     }
