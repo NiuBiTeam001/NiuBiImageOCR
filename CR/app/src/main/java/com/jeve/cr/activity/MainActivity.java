@@ -70,8 +70,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import static android.R.id.list;
-
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
     private String originalPath;
@@ -691,10 +689,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     /**
-     * 双击back退出
+     * back键设置
      */
     private long time;
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
@@ -751,6 +748,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     requestPermission(MainActivity.this, writePermission, SD_REQUEST_PERMISSION_CODE);
                 }
             } else if (msg.what == 6) {
+                //设置次数
                 setOcrCount((Integer) msg.obj);
             }
         }
@@ -828,15 +826,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //照片提示说明
     private void showPhotoSelectTipPop() {
-        // TODO: 2016/5/17 构建一个popupwindow的布局
+        // 构建一个popupwindow的布局
         View popupView = MainActivity.this.getLayoutInflater().inflate(R.layout.popwindowlayout, null);
         Point point = DeviceTool.getScreenSize(this);
         final PopupWindow window = new PopupWindow(popupView, (int) (point.x / 4.0f * 3), (int) (point.y / 4.0f * 3));
-        // TODO: 2016/5/17 设置可以触摸弹出框以外的区域
+        // 设置可以触摸弹出框以外的区域
         window.setOutsideTouchable(false);
-        // TODO：更新popupwindow的状态
+        // 更新popupwindow的状态
         window.update();
-        // TODO: 2016/5/17 以下拉的方式显示，并且可以设置显示的位置
+        // 以下拉的方式显示，并且可以设置显示的位置
         int setX = (int) ((point.x - (point.x / 4.0f * 3)) / 2);
         window.showAsDropDown(drawer_re, setX, 20);
         TextView close = popupView.findViewById(R.id.pop_close);
