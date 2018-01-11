@@ -80,4 +80,7 @@
     <string name="update_failed">提交失败</string>
     <string name="update_now">现在更新</string>
     <string name="update_next_time_tip">以后再说</string>
+
+    <!--结果页面-->
+    <string name="result_share_content">分享文字到...</string>
 </resources>

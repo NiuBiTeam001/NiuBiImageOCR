@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
 import com.jeve.cr.config.MainConfig;
+import com.jeve.cr.tool.ShareTool;
 import com.jeve.cr.tool.UMTool;
 
 /**
@@ -104,7 +105,9 @@ public class ResultActivity extends BaseActivity implements View.OnClickListener
                 copy_tip_re.setVisibility(View.GONE);
                 break;
             case R.id.share_re:
-
+                //分享
+                String share_txt = result_tv.getText().toString();
+                ShareTool.txtShare(this, share_txt);
                 break;
         }
     }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.jeve.cr.CrApplication;
+import com.jeve.cr.R;
 
 import java.io.File;
 
@@ -16,14 +17,14 @@ import java.io.File;
  */
 
 public class ShareTool {
-    public static void goToMarket(){
+    public static void goToMarket() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setData(Uri.parse("market://details?id=" + CrApplication.getContext().getPackageName()));
-        try{
+        try {
             CrApplication.getContext().startActivity(intent);
-        }catch (Exception e){
+        } catch (Exception e) {
             openLinkBySystem("");
         }
     }
@@ -41,6 +42,7 @@ public class ShareTool {
 
     /**
      * 分享文件
+     *
      * @param context
      * @param file
      */
@@ -59,6 +61,7 @@ public class ShareTool {
 
     /**
      * 根据文件后缀名获得对应的MIME类型。
+     *
      * @param filePath
      * @return
      */
@@ -78,5 +81,15 @@ public class ShareTool {
             }
         }
         return mime;
+    }
+
+    /**
+     * 文字分享
+     */
+    public static void txtShare(Context context, String share_txt) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, share_txt);
+        context.startActivity(Intent.createChooser(intent, CrApplication.getContext().getString(R.string.result_share_content)));
     }
 }
