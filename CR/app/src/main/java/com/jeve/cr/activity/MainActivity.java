@@ -396,6 +396,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 public void onUserRecordUpdateListener(int respondCode) {
                                     if (respondCode == UserSystemTool.SUCCESS) {
                                         //成功了，显示次数
+                                        Toast.makeText(MainActivity.this, getString(R.string.main_get_free_count_success), Toast.LENGTH_SHORT).show();
                                         setOcrCount(2);
                                         UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool
                                                 .UserRecordUpdateListener() {
@@ -692,6 +693,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * back键设置
      */
     private long time;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub

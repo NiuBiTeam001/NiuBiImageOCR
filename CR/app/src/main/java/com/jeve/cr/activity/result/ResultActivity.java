@@ -69,6 +69,7 @@ public class ResultActivity extends BaseActivity implements View.OnClickListener
         copy_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
         back_re.setOnClickListener(this);
+        share_re.setOnClickListener(this);
 
         result_tv.setText(intent.getStringExtra("result"));
         result_tv.clearFocus();
