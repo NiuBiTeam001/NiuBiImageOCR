@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -97,6 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout drawer_re;
     private RelativeLayout ad_re, get_free_re;
     private NetAnim load;
+    private FrameLayout load_fr;
 
     private Boolean isLoading = false;
 
@@ -138,6 +140,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         main_count_ll = (LinearLayout) findViewById(R.id.main_count_ll);
         load = (NetAnim) findViewById(R.id.load);
+        load_fr = (FrameLayout) findViewById(R.id.load_fr);
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
@@ -188,8 +191,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 allOcrCount = times.getTotalTimes();
             }
         });
-
-        load.animStart();
     }
 
     @Override
@@ -267,21 +268,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //正在识别，不作任何操作
                 if (isOcring) return;
                 isOcring = true;
-
+                loadStart();
                 if (!DeviceTool.isNetworkConnected(MainActivity.this)) {
                     Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
                     isOcring = false;
+                    loadEnd();
                     return;
                 }
                 if (allOcrCount >= 12000) {//用于测试。发布的第一个月要修改
                     Toast.makeText(MainActivity.this, getString(R.string.main_all_count), Toast.LENGTH_SHORT).show();
                     isOcring = false;
+                    loadEnd();
                     return;
                 }
                 if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
                     //没有次数,叫用户看广告赚取次数
                     Toast.makeText(MainActivity.this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
                     isOcring = false;
+                    loadEnd();
                     return;
                 }
 
@@ -294,6 +298,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         if (saveUs != null && saveUs.getStop()) {
                             Toast.makeText(MainActivity.this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT)
                                     .show();
+                            loadEnd();
                             isOcring = false;
                             return;
                         }
@@ -328,6 +333,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                                                 intent.putExtra("result", str);
                                                 startActivity(intent);
+                                                loadEnd();
                                                 isOcring = false;
                                             }
 
@@ -362,6 +368,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                                                 intent.putExtra("result", stringBuffer.toString());
                                                 startActivity(intent);
+                                                loadEnd();
                                                 isOcring = false;
                                             }
 
@@ -378,6 +385,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                             .LENGTH_SHORT)
                                             .show();
                                     isOcring = false;
+                                    loadEnd();
                                 }
                             }
                         });
@@ -409,7 +417,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 public void onUserRecordUpdateListener(int respondCode) {
                                     if (respondCode == UserSystemTool.SUCCESS) {
                                         //成功了，显示次数
-                                        Toast.makeText(MainActivity.this, getString(R.string.main_get_free_count_success), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, getString(R.string
+                                                .main_get_free_count_success), Toast.LENGTH_SHORT).show();
                                         setOcrCount(2);
                                         UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool
                                                 .UserRecordUpdateListener() {
@@ -745,9 +754,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (msg.what == 0) {
                 Toast.makeText(MainActivity.this, getString(R.string.ocr_error), Toast.LENGTH_SHORT)
                         .show();
+                loadEnd();
             } else if (msg.what == 1) {
                 Toast.makeText(MainActivity.this, getString(R.string.ocr_error2), Toast.LENGTH_SHORT)
                         .show();
+                loadEnd();
             } else if (msg.what == 2) {
                 setOcrCount((Integer) msg.obj);
             } else if (msg.what == 3) {
@@ -767,6 +778,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (msg.what == 6) {
                 //设置次数
                 setOcrCount((Integer) msg.obj);
+            }else if(msg.what == 7){
+                loadEnd();
             }
         }
     };
@@ -862,6 +875,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 window.dismiss();
             }
         });
+    }
+
+    /**
+     * 开始loading
+     */
+    private void loadStart() {
+        load_fr.setVisibility(View.VISIBLE);
+        load.animStart();
+        isLoading = true;
+    }
+
+    /**
+     * 结束loading
+     */
+    private void loadEnd() {
+        load_fr.setVisibility(View.GONE);
+        load.stopAnim();
+        isLoading = false;
     }
 
     @Override

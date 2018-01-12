@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jeve.cr.R;
 import com.jeve.cr.tool.DeviceTool;
 
 
@@ -42,7 +43,7 @@ public class NetAnim extends View {
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
-        paint.setColor(Color.BLACK);
+        paint.setColor(context.getResources().getColor(R.color.loading_color));
         paint.setStrokeWidth(4);
         paint.setStyle(Paint.Style.STROKE);//设置空心
 

@@ -40,7 +40,7 @@ public class UserInitTool {
                     public void onUserRecordLister(UserRecord record, int respondCode) {
                         if (record == null && respondCode != UserSystemTool.NET_UNENABLE_RESPOND_CODE) {
                             //表示数据库之前并没有保存唯一设备id的这条数据
-                            UserSystemTool.getInstance().initUser(3);
+                            UserSystemTool.getInstance().initUser(3,handler);
                         } else if (record != null) {
                             //避免用户清除数据后，将本地objectid清除
                             MainConfig.getInstance().setUserObjectId(record.getObjectId());

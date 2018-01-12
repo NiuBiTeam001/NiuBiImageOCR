@@ -1,6 +1,8 @@
 package com.jeve.cr.tool;
 
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.jeve.cr.bean.UserRecord;
@@ -65,7 +67,7 @@ public class UserSystemTool {
         return tool;
     }
 
-    public void initUser(int retryTime) {
+    public void initUser(int retryTime, final Handler handler) {
         final int[] retry = {retryTime};
         record.setUserId(deviceId);
         record.setUseTimes(2);
@@ -80,10 +82,14 @@ public class UserSystemTool {
                         //表示成功
                         if (e == null) {
                             MainConfig.getInstance().setUserObjectId(s);
+                            Message message = new Message();
+                            message.obj = s;
+                            message.what = 2;
+                            handler.sendMessage(message);
                         } else {//失败 s 为null
                             --retry[0];
                             if (retry[0] >= 1) {
-                                initUser(retry[0]);
+                                initUser(retry[0],handler);
                             }
                         }
                     }
