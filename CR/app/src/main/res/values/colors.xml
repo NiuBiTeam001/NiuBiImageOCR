@@ -15,6 +15,7 @@
     <color name="bg_color1">#cacaca</color>
     <color name="copy_tip_back">#df444444</color>
     <color name="text_red">#ff4444</color>
+    <color name="loading_back">#77cacaca</color>
 
     <!--自定义剪裁控件边框颜色-->
     <color name="edit_line_color">#cc838282</color>

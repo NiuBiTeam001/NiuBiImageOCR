@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -54,6 +55,7 @@ import com.jeve.cr.tool.UserInitTool;
 import com.jeve.cr.tool.UserSystemTool;
 import com.jeve.cr.update.UpdateEditActivity;
 import com.jeve.cr.update.UpdateManager;
+import com.jeve.cr.view.NetAnim;
 import com.jeve.cr.youmi.UmiManager;
 
 import net.youmi.android.nm.sp.SpotManager;
@@ -94,6 +96,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout main_count_ll;
     private RelativeLayout drawer_re;
     private RelativeLayout ad_re, get_free_re;
+    private NetAnim load;
+
+    private Boolean isLoading = false;
 
     private Boolean isOcring = false;
     //是否已经选取了图片
@@ -132,6 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         main_count_ll = (LinearLayout) findViewById(R.id.main_count_ll);
+        load = (NetAnim) findViewById(R.id.load);
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
@@ -182,6 +188,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 allOcrCount = times.getTotalTimes();
             }
         });
+
+        load.animStart();
     }
 
     @Override
@@ -284,7 +292,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void done(SaveUs saveUs, BmobException e) {
                         //注意saveUs可能为null
                         if (saveUs != null && saveUs.getStop()) {
-                            Toast.makeText(MainActivity.this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.main_all_stop), Toast.LENGTH_SHORT)
+                                    .show();
                             isOcring = false;
                             return;
                         }
@@ -295,7 +304,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 //总次数加一
                                 RecordOcrTotalTimesTool.updateTotalTimes(1);
                                 //用户次数减一
-                                MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() - 1);
+                                MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance()
+                                        .getUserLeaveOcrTimes() - 1);
                                 //设置用户次数
                                 setOcrCount(MainConfig.getInstance().getUserLeaveOcrTimes());
                                 if (respondCode == UserSystemTool.SUCCESS) {
@@ -303,7 +313,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     if (orcModen == 0) {
                                         UMTool.getInstence().sendEvent(UMTool.Action.CR_TEXT_CR);
                                         //文字识别
-                                        OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool.OcrCallBack() {
+                                        OCRTool.getInstence().OCRTest(BitmapTool.PRIMITIVE_PATH, new OCRTool
+                                                .OcrCallBack() {
                                             @Override
                                             public void success(String str) {
                                                 Log.d("LJW", "识别成功" + str);
@@ -363,7 +374,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                         });
                                     }
                                 } else {
-                                    Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT)
+                                    Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast
+                                            .LENGTH_SHORT)
                                             .show();
                                     isOcring = false;
                                 }
@@ -386,7 +398,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     .show();
                         } else {
                             if (record.getUseTimes() > 0) {
-                                Toast.makeText(MainActivity.this, getString(R.string.get_ocr_time_tip), Toast.LENGTH_SHORT)
+                                Toast.makeText(MainActivity.this, getString(R.string.get_ocr_time_tip), Toast
+                                        .LENGTH_SHORT)
                                         .show();
                                 return;
                             }
@@ -692,10 +705,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * back键设置
      */
     private long time;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isLoading)
+                return false;
             if (isSelectPhoto) {
                 //返回主界面样子
                 showimage_iv.setVisibility(View.GONE);
