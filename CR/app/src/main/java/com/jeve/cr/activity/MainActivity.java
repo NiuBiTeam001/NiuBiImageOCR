@@ -97,8 +97,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout main_count_ll;
     private RelativeLayout drawer_re;
     private RelativeLayout ad_re, get_free_re;
-    private NetAnim load;
-    private FrameLayout load_fr;
+//    private NetAnim load;
+//    private FrameLayout load_fr;
 
     private Boolean isLoading = false;
 
@@ -139,8 +139,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         main_count_ll = (LinearLayout) findViewById(R.id.main_count_ll);
-        load = (NetAnim) findViewById(R.id.load);
-        load_fr = (FrameLayout) findViewById(R.id.load_fr);
+//        load = (NetAnim) findViewById(R.id.load);
+//        load_fr = (FrameLayout) findViewById(R.id.load_fr);
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
@@ -188,7 +188,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         RecordOcrTotalTimesTool.getRecordOcrTotalTimes(new RecordOcrTotalTimesTool.RecordOcrTotalTimesListener() {
             @Override
             public void onRecordOcrTotalTimesListener(RecordOcrTotalTimes times) {
-                allOcrCount = times.getTotalTimes();
+                if (times != null)
+                    allOcrCount = times.getTotalTimes();
             }
         });
     }
@@ -778,7 +779,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else if (msg.what == 6) {
                 //设置次数
                 setOcrCount((Integer) msg.obj);
-            }else if(msg.what == 7){
+            } else if (msg.what == 7) {
                 loadEnd();
             }
         }
@@ -881,8 +882,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 开始loading
      */
     private void loadStart() {
-        load_fr.setVisibility(View.VISIBLE);
-        load.animStart();
+//        load_fr.setVisibility(View.VISIBLE);
+//        load.animStart();
         isLoading = true;
     }
 
@@ -890,8 +891,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 结束loading
      */
     private void loadEnd() {
-        load_fr.setVisibility(View.GONE);
-        load.stopAnim();
+//        load_fr.setVisibility(View.GONE);
+//        load.stopAnim();
         isLoading = false;
     }
 

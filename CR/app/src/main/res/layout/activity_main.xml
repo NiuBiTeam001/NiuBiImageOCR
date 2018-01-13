@@ -213,24 +213,24 @@
         </RelativeLayout>
 
         <!--loading-->
-        <FrameLayout
-            android:id="@+id/load_fr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible">
+        <!--<FrameLayout-->
+            <!--android:id="@+id/load_fr"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="invisible">-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/loading_back"
-                android:clickable="true"/>
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/loading_back"-->
+                <!--android:clickable="true"/>-->
 
-            <com.jeve.cr.view.NetAnim
-                android:id="@+id/load"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-        </FrameLayout>
+            <!--<com.jeve.cr.view.NetAnim-->
+                <!--android:id="@+id/load"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"/>-->
+        <!--</FrameLayout>-->
     </FrameLayout>
 
     <!--侧边栏-->
