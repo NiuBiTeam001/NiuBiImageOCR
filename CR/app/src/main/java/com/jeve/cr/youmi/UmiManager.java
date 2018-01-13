@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.jeve.cr.CrApplication;
 import com.jeve.cr.R;
+import com.jeve.cr.activity.MainActivity;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.UserSystemTool;
 
@@ -105,6 +106,7 @@ public class UmiManager {
                             msg.what = 6;
                             msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
                             handler.sendMessage(msg);
+                            Toast.makeText(activity, String.format(activity.getString(R.string.get_ocr_time_by_ad), random+""), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

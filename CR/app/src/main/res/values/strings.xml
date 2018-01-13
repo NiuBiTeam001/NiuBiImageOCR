@@ -63,8 +63,9 @@
     <string name="ocr_error2">识别失败，您需要提供一张字迹清晰，工整的图片，并检查手机时间是否正确！</string>
 
     <!--User System-->
-    <string name="get_ocr_times">对不起，你今天已经领了哦！</string>
+    <string name="get_ocr_times">对不起，您今天已经领了哦！</string>
     <string name="get_ocr_time_tip">您仍有剩余次数可以用，请先使用完剩余次数再领取！</string>
+    <string name="get_ocr_time_by_ad">恭喜您获得了%s次！通过看广告能够再次获取次数哦！</string>
 
     <!--update-->
     <string name="update_title">更新</string>

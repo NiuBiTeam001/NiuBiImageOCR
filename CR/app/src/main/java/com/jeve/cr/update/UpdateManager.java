@@ -3,21 +3,27 @@ package com.jeve.cr.update;
 import android.app.Activity;
 import android.app.Dialog;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jeve.cr.CrApplication;
 import com.jeve.cr.R;
 import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.DeviceTool;
 
+import java.io.File;
+
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 /**
  * note:更新管理类
@@ -121,7 +127,7 @@ public class UpdateManager implements View.OnClickListener {
         }
     }
 
-    private void setDialogView( Activity activity) {
+    private void setDialogView(Activity activity) {
         DisplayMetrics dm = activity.getResources().getDisplayMetrics();
         int displayWidth = dm.widthPixels;
         WindowManager.LayoutParams p = dialog.getWindow().getAttributes();//获取对话框当前的参数值
@@ -142,5 +148,28 @@ public class UpdateManager implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    public void uploadApkFile() {
+        String picPath = "sdcard/CR/CR_20171213_232603971.jpg";
+        final BmobFile bmobFile = new BmobFile(new File(picPath));
+        bmobFile.uploadblock(new UploadFileListener() {
+
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    //bmobFile.getFileUrl()--返回的上传文件的完整地址
+                    Log.d("zl---UpdateManager---",bmobFile.getFileUrl());
+                } else {
+                    Log.d("zl---UpdateManager---",bmobFile.getFileUrl());
+                }
+
+            }
+
+            @Override
+            public void onProgress(Integer value) {
+                // 返回的上传进度（百分比）
+            }
+        });
     }
 }

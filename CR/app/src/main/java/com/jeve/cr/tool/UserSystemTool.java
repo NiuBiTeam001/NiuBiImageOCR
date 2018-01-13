@@ -12,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
+import java.net.URLConnection;
+
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -70,32 +73,39 @@ public class UserSystemTool {
     public void initUser(int retryTime, final Handler handler) {
         final int[] retry = {retryTime};
         record.setUserId(deviceId);
-        record.setUseTimes(2);
+        record.setUseTimes(4);
         record.setTodayGetTime(false);
-        Bmob.getServerTime(new QueryListener<Long>() {
+        new Thread(new Runnable() {
             @Override
-            public void done(Long time, BmobException e) {
-                record.setResetTime(time);
-                record.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        //表示成功
-                        if (e == null) {
-                            MainConfig.getInstance().setUserObjectId(s);
-                            Message message = new Message();
-                            message.obj = s;
-                            message.what = 2;
-                            handler.sendMessage(message);
-                        } else {//失败 s 为null
-                            --retry[0];
-                            if (retry[0] >= 1) {
-                                initUser(retry[0],handler);
+            public void run() {
+                try {
+                    URLConnection conn = new URL("https://www.baidu.com/").openConnection();
+                    long time = conn.getDate();
+                    record.setResetTime(time);
+                    record.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            //表示成功
+                            if (e == null) {
+                                MainConfig.getInstance().setUserObjectId(s);
+                                Message message = new Message();
+                                message.obj = 4;
+                                message.what = 2;
+                                handler.sendMessage(message);
+                            } else {//失败 s 为null
+                                --retry[0];
+                                if (retry[0] >= 1) {
+                                    initUser(retry[0],handler);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
-        });
+        }).start();
     }
 
     /**
