@@ -68,13 +68,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, UmiManager.ADCallBack {
     private static final String TAG = "zl---MainActivity---";
     private String originalPath;
     private static final int CAMERA_REQUEST_CODE = 2;//调用相机请求码
@@ -99,14 +100,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout main_count_ll;
     private RelativeLayout drawer_re;
     private RelativeLayout ad_re, get_free_re;
-//    private NetAnim load;
-//    private FrameLayout load_fr;
+    private NetAnim load;
+    private FrameLayout load_fr;
 
     private Boolean isLoading = false;
 
     private Boolean isOcring = false;
     //是否已经选取了图片
     private Boolean isSelectPhoto = false;
+
+    private Boolean isClickAD = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +144,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         back_viewpager = (ViewPager) findViewById(R.id.back_viewpager);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         main_count_ll = (LinearLayout) findViewById(R.id.main_count_ll);
-//        load = (NetAnim) findViewById(R.id.load);
-//        load_fr = (FrameLayout) findViewById(R.id.load_fr);
+        load = (NetAnim) findViewById(R.id.load);
+        load_fr = (FrameLayout) findViewById(R.id.load_fr);
         String versionContent = "v" + DeviceTool.getVersionName(this);
         version.setText(versionContent);
         camera_iv.setOnClickListener(this);
@@ -211,10 +214,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startCamera();
                 break;
             case READ_PHONE_STATE:
-                UmiManager.showSpot(this, handler);
-                Toast.makeText(this, getString(R.string.main_please_click_ad_again), Toast.LENGTH_SHORT).show();
+                UmiManager.showSpot(this, this);
+                loadStart();
+                new AdFirstWaitThr().start();
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -446,11 +451,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 });
                 break;
             case R.id.ad_re:
-                if (!checkPermission(Manifest.permission.READ_PHONE_STATE)){
-                    requestPermission(this, Manifest.permission.READ_PHONE_STATE,READ_PHONE_STATE);
+                Log.d("LJW", "点击广告");
+                if (isClickAD) return;
+                Log.d("LJW", "广告没有被拦截");
+                if (!checkPermission(Manifest.permission.READ_PHONE_STATE)) {
+                    requestPermission(this, Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
                     break;
                 }
-                UmiManager.showSpot(this, handler);
+                isClickAD = true;
+                Log.d("LJW", "广告 isClickAD = true");
+                UmiManager.showSpot(this, this);
                 break;
 //            case R.id.stop_scan_ocr:
 //                stopOcrScan();
@@ -733,6 +743,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isLoading)
                 return false;
+            if (SpotManager.getInstance(this).isSpotShowing()) {
+                UmiManager.hideSpot(this);
+                return false;
+            }
             if (isSelectPhoto) {
                 //返回主界面样子
                 showimage_iv.setVisibility(View.GONE);
@@ -745,10 +759,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ad_re.setVisibility(View.VISIBLE);
                 get_free_re.setVisibility(View.VISIBLE);
                 isSelectPhoto = false;
-                return false;
-            }
-            if (SpotManager.getInstance(this).isSpotShowing()) {
-                UmiManager.hideSpot(this);
                 return false;
             }
             if (System.currentTimeMillis() - time > 2000) {
@@ -795,6 +805,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 setOcrCount((Integer) msg.obj);
             } else if (msg.what == 7) {
                 loadEnd();
+            } else if (msg.what == 8) {
+                loadEnd();
+                Toast.makeText(MainActivity.this, getString(R.string.main_please_click_ad_again), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -887,8 +900,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 开始loading
      */
     private void loadStart() {
-//        load_fr.setVisibility(View.VISIBLE);
-//        load.animStart();
+        load_fr.setVisibility(View.VISIBLE);
+        load.animStart();
         isLoading = true;
     }
 
@@ -896,9 +909,66 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 结束loading
      */
     private void loadEnd() {
-//        load_fr.setVisibility(View.GONE);
-//        load.stopAnim();
+        load_fr.setVisibility(View.GONE);
+        load.stopAnim();
         isLoading = false;
+    }
+
+    //广告回调
+    @Override
+    public void adShowSuccess(Boolean success) {
+        if (!success) {
+            Log.d("LJW", "adShowSuccess success = " + success);
+            isClickAD = false;
+        }
+    }
+
+    @Override
+    public void adClose() {
+        isClickAD = false;
+    }
+
+    @Override
+    public void adClick() {
+        isClickAD = false;
+        final int random = getRandom();
+        UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
+            @Override
+            public void onUserRecordUpdateListener(int respondCode) {
+                if (respondCode == UserSystemTool.SUCCESS) {
+                    Message msg = Message.obtain();
+                    msg.what = 6;
+                    msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
+                    handler.sendMessage(msg);
+                    Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取随机一到二的数字
+     */
+    private static int getRandom() {
+        int max = 2;
+        int min = 1;
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
+    }
+
+    /**
+     * 广告初次申请权限等待线程(2s)
+     */
+    private class AdFirstWaitThr extends Thread {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+                handler.sendEmptyMessage(8);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

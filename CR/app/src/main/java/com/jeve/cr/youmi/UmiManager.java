@@ -77,53 +77,32 @@ public class UmiManager {
     /**
      * 展示插屏广告
      */
-    public static void showSpot(final Activity activity, final Handler handler) {
+    public static void showSpot(final Activity activity, final ADCallBack adCallBack) {
         SpotManager.getInstance(activity).showSpot(activity, new SpotListener() {
             @Override
             public void onShowSuccess() {
                 Log.d(TAG, "onShowSuccess()");
+                adCallBack.adShowSuccess(true);
             }
 
             @Override
             public void onShowFailed(int i) {
                 Log.d(TAG, "onShowFailed()");
+                adCallBack.adShowSuccess(false);
             }
 
             @Override
             public void onSpotClosed() {
                 Log.d(TAG, "onSpotClosed()");
+                adCallBack.adClose();
             }
 
             @Override
             public void onSpotClicked(boolean isWebPage) {
                 Log.d(TAG, "onSpotClicked()");
-                final int random = getRandom();
-                UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
-                    @Override
-                    public void onUserRecordUpdateListener(int respondCode) {
-                        if (respondCode == UserSystemTool.SUCCESS){
-                            Message msg = Message.obtain();
-                            msg.what = 6;
-                            msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
-                            handler.sendMessage(msg);
-                            Toast.makeText(activity, String.format(activity.getString(R.string.get_ocr_time_by_ad), random+""), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                adCallBack.adClick();
             }
         });
-    }
-
-    /**
-     * 获取随机一到三的数字
-     *
-     * @return
-     */
-    private static int getRandom() {
-        int max = 3;
-        int min = 1;
-        Random random = new Random();
-        return random.nextInt(max) % (max - min + 1) + min;
     }
 
     /**
@@ -161,5 +140,14 @@ public class UmiManager {
      */
     public static void spotExit(Activity activity) {
         SpotManager.getInstance(activity).onAppExit();
+    }
+
+    //广告回调接口
+    public interface ADCallBack {
+        void adShowSuccess(Boolean success);
+
+        void adClose();
+
+        void adClick();
     }
 }
