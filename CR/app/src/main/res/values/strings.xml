@@ -51,9 +51,7 @@
     <string name="main_stop_app">终止程序扫描</string>
     <string name="main_update">升级</string>
     <string name="main_get_free_count_success">领取成功</string>
-
-    <!--feedback-->
-
+    <string name="main_please_click_ad_again">请再次点击广告！</string>
 
     <!--照片编辑-->
     <string name="image_edit_finish">完成</string>

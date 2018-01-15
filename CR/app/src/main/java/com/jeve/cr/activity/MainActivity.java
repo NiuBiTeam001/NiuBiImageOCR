@@ -1,5 +1,6 @@
 package com.jeve.cr.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -84,6 +85,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private int orcModen;
     private final int CAMERA_REQUEST_PERMISSION_CODE = 5;
     private final int SD_REQUEST_PERMISSION_CODE = 6;
+    private final int READ_PHONE_STATE = 7;
     private int allOcrCount = 0;
     private int photoSelectClick = 0;
 
@@ -208,6 +210,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_CAMERA_CLICK);
                 startCamera();
                 break;
+            case READ_PHONE_STATE:
+                UmiManager.showSpot(this, handler);
+                Toast.makeText(this, getString(R.string.main_please_click_ad_again), Toast.LENGTH_SHORT).show();
+                break;
+            default: break;
         }
     }
 
@@ -439,6 +446,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 });
                 break;
             case R.id.ad_re:
+                if (!checkPermission(Manifest.permission.READ_PHONE_STATE)){
+                    requestPermission(this, Manifest.permission.READ_PHONE_STATE,READ_PHONE_STATE);
+                    break;
+                }
                 UmiManager.showSpot(this, handler);
                 break;
 //            case R.id.stop_scan_ocr:
@@ -719,7 +730,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isLoading)
                 return false;
@@ -735,6 +745,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ad_re.setVisibility(View.VISIBLE);
                 get_free_re.setVisibility(View.VISIBLE);
                 isSelectPhoto = false;
+                return false;
+            }
+            if (SpotManager.getInstance(this).isSpotShowing()) {
+                UmiManager.hideSpot(this);
                 return false;
             }
             if (System.currentTimeMillis() - time > 2000) {
@@ -832,15 +846,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         return list.get(0);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (SpotManager.getInstance(this).isSpotShowing()) {
-            UmiManager.hideSpot(this);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
