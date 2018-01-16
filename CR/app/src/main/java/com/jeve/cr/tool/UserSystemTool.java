@@ -88,6 +88,7 @@ public class UserSystemTool {
                             //表示成功
                             if (e == null) {
                                 MainConfig.getInstance().setUserObjectId(s);
+                                MainConfig.getInstance().setUserLeaveOcrTimes(4);
                                 Message message = new Message();
                                 message.obj = 4;
                                 message.what = 2;

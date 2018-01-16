@@ -432,6 +432,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                         //成功了，显示次数
                                         Toast.makeText(MainActivity.this, getString(R.string
                                                 .main_get_free_count_success), Toast.LENGTH_SHORT).show();
+                                        MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() + 2);
                                         setOcrCount(2);
                                         UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool
                                                 .UserRecordUpdateListener() {
@@ -939,6 +940,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Message msg = Message.obtain();
                     msg.what = 6;
                     msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
+                    MainConfig.getInstance().setUserLeaveOcrTimes(random + MainConfig.getInstance().getUserLeaveOcrTimes());
                     handler.sendMessage(msg);
                     Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
                 }

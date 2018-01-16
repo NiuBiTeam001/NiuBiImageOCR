@@ -47,8 +47,7 @@ public class UpdateEditActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.update_send_re:
-//                send();
-                new UpdateManager().uploadApkFile();
+                send();
                 break;
             default:
                 break;
