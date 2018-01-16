@@ -39,10 +39,10 @@ public class UpdateManager implements View.OnClickListener {
         if (!DeviceTool.isNetworkConnected(CrApplication.getContext())) {
             return;
         }
-        //查询时间是否过期
-        if (getQueryTimeInterval() < 12) {
-            return;
-        }
+//        //查询时间是否过期
+//        if (getQueryTimeInterval() < 12) {
+//            return;
+//        }
         MainConfig.getInstance().setUpdateQueryTime(System.currentTimeMillis());
 
         BmobQuery<UpdateInfo> query = new BmobQuery<>();
@@ -150,26 +150,4 @@ public class UpdateManager implements View.OnClickListener {
         }
     }
 
-    public void uploadApkFile() {
-        String picPath = "sdcard/CR/CR_20171213_232603971.jpg";
-        final BmobFile bmobFile = new BmobFile(new File(picPath));
-        bmobFile.uploadblock(new UploadFileListener() {
-
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    //bmobFile.getFileUrl()--返回的上传文件的完整地址
-                    Log.d("zl---UpdateManager---",bmobFile.getFileUrl());
-                } else {
-                    Log.d("zl---UpdateManager---",bmobFile.getFileUrl());
-                }
-
-            }
-
-            @Override
-            public void onProgress(Integer value) {
-                // 返回的上传进度（百分比）
-            }
-        });
-    }
 }
