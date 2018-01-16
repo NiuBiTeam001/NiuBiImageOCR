@@ -70,5 +70,7 @@ public class UMTool {
         public static String CR_FEEDBACK_SUCCESS = "cr_feedback_success";
         public static String CR_ALLCOPY = "cr_allcopy";
         public static String CR_FREE_COPY = "cr_free_copy";
+        public static String CR_AD_SHOW = "cr_ad_show";
+        public static String CR_AD_CLICK = "cr_ad_click";
     }
 }
