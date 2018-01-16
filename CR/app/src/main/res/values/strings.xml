@@ -78,8 +78,7 @@
     <string name="update_content_tip">更新内容不能为null</string>
     <string name="update_success">提交成功</string>
     <string name="update_failed">提交失败</string>
-    <string name="update_now">现在更新</string>
-    <string name="update_next_time_tip">以后再说</string>
+    <string name="update_sure">确定</string>
 
     <!--结果页面-->
     <string name="result_share_content">分享文本到...</string>

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView
@@ -36,39 +36,12 @@
         android:layout_marginTop="@dimen/distance_8dp" />
 
     <Button
-        android:id="@+id/force_update"
+        android:id="@+id/update_sure"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="@string/update_now"
+        android:text="@string/update_sure"
         android:textColor="@color/text_color1"
-        android:textSize="@dimen/body_16sp"
-        android:visibility="gone" />
+        android:textSize="@dimen/body_16sp" />
 
-    <LinearLayout
-        android:id="@+id/half_force_update_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/update_next_time"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/update_next_time_tip"
-            android:textColor="@color/text_color1"
-            android:textSize="@dimen/body_16sp" />
-
-        <Button
-            android:id="@+id/half_force_update"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/distance_16dp"
-            android:gravity="center"
-            android:text="@string/update_now"
-            android:textColor="@color/text_color1"
-            android:textSize="@dimen/body_16sp" />
-    </LinearLayout>
 </LinearLayout>
