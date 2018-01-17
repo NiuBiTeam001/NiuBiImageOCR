@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.TextureView;
 
 import com.jeve.cr.bean.UserRecord;
@@ -50,6 +51,7 @@ public class UserInitTool {
                     }
                 });
             } else {
+                Log.d("zl---UserInitTool---","objectId:" + MainConfig.getInstance().getUserObjectId());
                 getUseCount(handler);
             }
         } else {

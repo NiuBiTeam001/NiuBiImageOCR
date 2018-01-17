@@ -85,6 +85,7 @@ public class UserSystemTool {
                     record.save(new SaveListener<String>() {
                         @Override
                         public void done(String s, BmobException e) {
+                            Log.d(TAG,"objectId:" + s);
                             //表示成功
                             if (e == null) {
                                 MainConfig.getInstance().setUserObjectId(s);
