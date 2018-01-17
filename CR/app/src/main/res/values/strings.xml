@@ -21,7 +21,7 @@
     <string name="album_title">相册</string>
 
     <string name="main_activity_select_photo">请选择需要识别的图片，并去除识别内容以外的内容，以免造成识别误差！</string>
-    <string name="main_activity_ocr_count">识别次数：</string>
+    <string name="main_activity_ocr_count">剩余识别次数：</string>
     <string name="main_get_ocr_count_free">免费获取次数</string>
 
     <!--主页-->

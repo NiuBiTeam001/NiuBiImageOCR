@@ -30,7 +30,7 @@ public class AppExceptionDeal implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable ex) {
-
+        Log.d("LJW", ex.toString());
         if (!handleException(ex) && uncaughtExceptionHandler != null) {
             //如果用户没有处理则让系统默认的异常处理器来处理
             uncaughtExceptionHandler.uncaughtException(t, ex);

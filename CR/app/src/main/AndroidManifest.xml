@@ -79,10 +79,6 @@
             android:name=".activity.result.ResultActivity"
             android:screenOrientation="portrait"></activity>
 
-        <activity
-            android:name=".update.UpdateEditActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

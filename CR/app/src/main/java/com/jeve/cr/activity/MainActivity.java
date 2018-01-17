@@ -10,7 +10,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -55,7 +54,6 @@ import com.jeve.cr.tool.RecordOcrTotalTimesTool;
 import com.jeve.cr.tool.UMTool;
 import com.jeve.cr.tool.UserInitTool;
 import com.jeve.cr.tool.UserSystemTool;
-import com.jeve.cr.update.UpdateEditActivity;
 import com.jeve.cr.update.UpdateManager;
 import com.jeve.cr.view.NetAnim;
 import com.jeve.cr.youmi.UmiManager;
@@ -158,10 +156,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         edit_re.setOnClickListener(this);
         ocr_re.setOnClickListener(this);
         copy_tip_re.setOnClickListener(this);
-//        TextView stopOcr = (TextView) findViewById(R.id.stop_scan_ocr);
-//        stopOcr.setOnClickListener(this);
-        TextView update = (TextView) findViewById(R.id.update);
-        update.setOnClickListener(this);
         MainBackViewPagerAdapter mainBackViewPagerAdapter = new MainBackViewPagerAdapter(this);
         back_viewpager.setAdapter(mainBackViewPagerAdapter);
         back_viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -411,17 +405,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.get_free_re:
                 //免费获取次数
+                loadStart();
+                if (!DeviceTool.isNetworkConnected(MainActivity.this)) {
+                    Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+                    loadEnd();
+                    return;
+                }
                 UserSystemTool.getInstance().queryUser(new UserSystemTool.UserRecordQueryListener() {
                     @Override
                     public void onUserRecordQueryLister(UserRecord record) {
                         if (record.getTodayGetTime()) {
                             Toast.makeText(MainActivity.this, getString(R.string.get_ocr_times), Toast.LENGTH_SHORT)
                                     .show();
+                            loadEnd();
                         } else {
                             if (record.getUseTimes() > 0) {
                                 Toast.makeText(MainActivity.this, getString(R.string.get_ocr_time_tip), Toast
                                         .LENGTH_SHORT)
                                         .show();
+                                loadEnd();
                                 return;
                             }
                             UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool
@@ -440,10 +442,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                             public void onUserRecordUpdateListener(int respondCode) {
                                             }
                                         });
+                                        loadEnd();
                                     } else {
                                         //失败给出提示
                                         Toast.makeText(MainActivity.this, getString(R.string.feedback_send_failed),
                                                 Toast.LENGTH_SHORT).show();
+                                        loadEnd();
                                     }
                                 }
                             });
@@ -452,24 +456,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 });
                 break;
             case R.id.ad_re:
-                Log.d("LJW", "点击广告");
                 if (isClickAD) return;
-                Log.d("LJW", "广告没有被拦截");
                 if (!checkPermission(Manifest.permission.READ_PHONE_STATE)) {
                     requestPermission(this, Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
                     break;
                 }
                 isClickAD = true;
-                Log.d("LJW", "广告 isClickAD = true");
                 UmiManager.showSpot(this, this);
-                break;
-//            case R.id.stop_scan_ocr:
-//                stopOcrScan();
-//                break;
-            case R.id.update:
-                startActivity(new Intent(this, UpdateEditActivity.class));
-                break;
-            default:
                 break;
         }
     }
