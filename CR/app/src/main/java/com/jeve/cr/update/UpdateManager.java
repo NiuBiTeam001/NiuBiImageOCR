@@ -33,6 +33,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 public class UpdateManager implements View.OnClickListener {
 
     private Dialog dialog;
+    private int updateType;//0 半强制  1： 强制
 
     public void checkUpdate(final Activity activity) {
         //网络判断
@@ -74,33 +75,26 @@ public class UpdateManager implements View.OnClickListener {
     }
 
     private void showUpdateDialog(UpdateInfo info, Activity activity) {
+        updateType = info.getUpdateType();
         View layout = LayoutInflater.from(activity).inflate(R.layout.dialog_update_layout, null);
         TextView versionName = layout.findViewById(R.id.update_version_name);
         versionName.setText(info.getVersionName());
         TextView content = layout.findViewById(R.id.update_content);
         content.setText(getUpdateContent(info.getContent()));
-        Button force = layout.findViewById(R.id.force_update);
-        Button halfForce = layout.findViewById(R.id.half_force_update);
-        Button nextTime = layout.findViewById(R.id.update_next_time);
-        LinearLayout halfForceLL = layout.findViewById(R.id.half_force_update_ll);
+        Button sure = layout.findViewById(R.id.update_sure);
         dialog = new Dialog(activity);
         dialog.setContentView(layout);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         switch (info.getUpdateType()) {
             //半强制
             case 0:
-                force.setVisibility(View.GONE);
-                halfForceLL.setVisibility(View.VISIBLE);
-                halfForce.setOnClickListener(this);
-                nextTime.setOnClickListener(this);
+                sure.setOnClickListener(this);
                 MainConfig.getInstance().setHalfForceUpdate(true);
                 dialog.show();
                 break;
             //强制
             case 1:
-                force.setVisibility(View.VISIBLE);
-                halfForceLL.setVisibility(View.GONE);
-                force.setOnClickListener(this);
+                sure.setOnClickListener(this);
                 dialog.setCancelable(false);
                 dialog.show();
                 break;
@@ -138,12 +132,13 @@ public class UpdateManager implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.update_next_time:
-                dialog.dismiss();
-                break;
-            case R.id.force_update:
-            case R.id.half_force_update:
-                //TODO 到应用市场
+            case R.id.update_sure:
+                if (updateType == 0){
+                    dialog.dismiss();
+                }else if (updateType == 1){
+                    android.os.Process.killProcess(android.os.Process.myPid());   //获取PID
+                    System.exit(0);
+                }
                 break;
             default:
                 break;

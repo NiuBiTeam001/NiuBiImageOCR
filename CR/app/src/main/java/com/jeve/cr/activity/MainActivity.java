@@ -921,6 +921,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (!success) {
             Log.d("LJW", "adShowSuccess success = " + success);
             isClickAD = false;
+        } else {
+            UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_SHOW);
         }
     }
 
@@ -932,6 +934,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void adClick() {
         isClickAD = false;
+        UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
         final int random = getRandom();
         UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
             @Override
