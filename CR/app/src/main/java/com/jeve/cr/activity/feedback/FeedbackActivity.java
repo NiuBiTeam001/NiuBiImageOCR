@@ -22,8 +22,11 @@ import android.widget.Toast;
 import com.jeve.cr.BaseActivity;
 import com.jeve.cr.R;
 import com.jeve.cr.bean.Feedback;
+import com.jeve.cr.config.MainConfig;
 import com.jeve.cr.tool.DeviceTool;
 import com.jeve.cr.tool.UMTool;
+
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -34,6 +37,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
     private ProgressBar progressBar;
     private RelativeLayout send_re;
     private EditText type_et;
+    private EditText email_et;
     private PopupWindow popupWindow;
     private RelativeLayout title_re;
 
@@ -53,6 +57,11 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         type_et = (EditText) findViewById(R.id.request_type_et);
         send_re = (RelativeLayout) findViewById(R.id.feedback_send_re);
         suggestion_et = (EditText) findViewById(R.id.feedback_suggestion_et);
+        email_et = (EditText) findViewById(R.id.feeback_contact_et);
+        String emailAddress = MainConfig.getInstance().getEmailAddress();
+        if (!TextUtils.isEmpty(emailAddress)){
+            email_et.setText(emailAddress);
+        }
         progressBar = (ProgressBar) findViewById(R.id.feedback_progressbar);
         back_re.setOnClickListener(this);
         send_re.setOnClickListener(this);
@@ -85,13 +94,25 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                 popupWindow.dismiss();
                 break;
             case R.id.feedback_send_re:
+                String email = email_et.getText().toString();
+                if (TextUtils.isEmpty(email)){
+                    Toast.makeText(this, getString(R.string.feedback_email_empty), Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 String suggestion = suggestion_et.getText().toString();
                 if (TextUtils.isEmpty(suggestion)) {
                     Toast.makeText(this, getString(R.string.feedback_send_tip), Toast.LENGTH_SHORT).show();
                     break;
                 }
+
+                if (!checkEmail(email)){
+                    Toast.makeText(this, getString(R.string.feedback_email_invalid), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                MainConfig.getInstance().setEmailAddress(email);
                 send(suggestion);
                 break;
+            default: break;
         }
     }
 
@@ -110,6 +131,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         } else {
             content.setTag(type_et.getText().toString());
         }
+        content.setEmail(email_et.getText().toString());
         content.setContent(TextUtils.isEmpty(suggestion) ? "" : suggestion);
         content.setDeviceInfo(DeviceTool.getDeviceInfo());
         content.save(new SaveListener<String>() {
@@ -215,5 +237,20 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /**
+     * 检查email
+     */
+    private boolean  checkEmail(String email){
+        String pattern = "^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\" +
+                ".[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a" +
+                "-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$";
+        return check(pattern, email);
+    }
 
+    /**
+     * 开始检验
+     */
+    private boolean check(String reg, String string) {
+        return Pattern.compile(reg).matcher(string).matches();
+    }
 }

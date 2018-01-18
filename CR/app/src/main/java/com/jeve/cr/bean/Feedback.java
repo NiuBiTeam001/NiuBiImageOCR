@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobObject;
 public class Feedback extends BmobObject {
     private String tag;//其它，bug，文案，界面
     private String content;
+    private String email;
     private String deviceInfo;
 
     public void setDeviceInfo(String deviceInfo) {
@@ -23,5 +24,9 @@ public class Feedback extends BmobObject {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

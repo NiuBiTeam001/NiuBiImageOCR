@@ -4,12 +4,15 @@
     <!--Feedback-->
     <string name="feedback_title">反馈</string>
     <string name="feedback_type">请选择反馈类型</string>
+    <string name="feedback_contact">请留下邮箱作为联系方式</string>
     <string name="feedback_tag_others">其它</string>
     <string name="feedback_tag_bug">功能反馈</string>
     <string name="feedback_tag_language">应用文案问题</string>
     <string name="feedback_tag_ui">用户交互问题</string>
     <string name="feedback_suggestion">请给我们建议，帮助我们更好的优化应用！</string>
     <string name="feedback_send_tip">请填写一下反馈内容吧！</string>
+    <string name="feedback_email_empty">请填写一下邮箱地址！</string>
+    <string name="feedback_email_invalid">无效的邮箱地址！</string>
     <string name="feedback_send_failed">请检查一下网络，稍后再试！</string>
     <string name="feedback_send_success">提交成功啦！</string>
     <string name="feedback_send">发送</string>

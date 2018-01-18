@@ -68,6 +68,11 @@ public class MainConfig extends BaseConfig {
     private final String PHOTO_SELECT_TIP = "photo_select_tip";
 
     /**
+     * 邮箱地址
+     */
+    private final String EMAIL_ADDRESS = "email_address";
+
+    /**
      * 设置拍照的时间
      */
     public void setTakePhotoTime(Long time) {
@@ -176,4 +181,12 @@ public class MainConfig extends BaseConfig {
     public Boolean getPhotoSelectTip() {
         return getBoolean(PHOTO_SELECT_TIP, false);
     }
+
+    /**
+     * 设置邮箱的地址
+     * @param emailAddress
+     */
+    public void setEmailAddress(String emailAddress){setString(EMAIL_ADDRESS,emailAddress);}
+
+    public String getEmailAddress(){return getString(EMAIL_ADDRESS,"");}
 }
