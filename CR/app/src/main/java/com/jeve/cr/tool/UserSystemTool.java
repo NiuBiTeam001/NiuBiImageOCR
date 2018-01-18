@@ -70,7 +70,7 @@ public class UserSystemTool {
         return tool;
     }
 
-    public void initUser(int retryTime, final Handler handler) {
+    void initUser(int retryTime, final Handler handler) {
         final int[] retry = {retryTime};
         record.setUserId(deviceId);
         record.setUseTimes(4);

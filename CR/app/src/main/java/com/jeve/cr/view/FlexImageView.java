@@ -63,10 +63,10 @@ public class FlexImageView extends android.support.v7.widget.AppCompatImageView 
         layoutParams.width = bitmapWidth;
         layoutParams.height = bitmapHeight;
         setLayoutParams(layoutParams);
-        topY = paintWidth;
-        bottomY = bitmapHeight - paintWidth;
-        leftX = paintWidth;
-        rightX = bitmapWidth - paintWidth;
+        topY = paintWidth + 30;
+        bottomY = bitmapHeight - paintWidth - 30;
+        leftX = paintWidth + 30;
+        rightX = bitmapWidth - paintWidth - 30;
         rectF = new RectF(leftX, topY, rightX, bottomY);
         invalidate();
     }

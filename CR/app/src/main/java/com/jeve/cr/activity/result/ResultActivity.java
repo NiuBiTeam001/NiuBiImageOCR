@@ -98,6 +98,7 @@ public class ResultActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.back_re:
                 finish();
+                break;
             case R.id.copy_re:
                 UMTool.getInstence().sendEvent(UMTool.Action.CR_ALLCOPY);
                 copyTest(result_tv.getText().toString());

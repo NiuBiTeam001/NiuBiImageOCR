@@ -11,10 +11,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:gravity="center"
-        android:textStyle="bold"
         android:text="@string/main_photo_select_tip_title"
         android:textColor="@color/text_color1"
-        android:textSize="@dimen/appbar_text" />
+        android:textSize="@dimen/appbar_text"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -65,10 +65,10 @@
         android:background="@drawable/popcloseback"
         android:elevation="4dp"
         android:gravity="center"
-        android:paddingBottom="16dp"
-        android:paddingEnd="40dp"
-        android:paddingStart="40dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="3dp"
+        android:paddingEnd="30dp"
+        android:paddingStart="30dp"
+        android:paddingTop="3dp"
         android:text="@string/main_photo_select_tip_close"
         android:textColor="@color/text_color1"
         android:textSize="@dimen/appbar_text" />
