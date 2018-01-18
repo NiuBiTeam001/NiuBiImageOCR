@@ -80,10 +80,34 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/feedback_contact_re"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_below="@+id/feedback_request_type_re"
+            android:layout_marginLeft="@dimen/distance_16dp"
+            android:layout_marginRight="@dimen/distance_16dp"
+            android:layout_marginTop="@dimen/distance_8dp">
+
+            <EditText
+                android:id="@+id/feeback_contact_et"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/et_backgroud"
+                android:elevation="@dimen/distance_8dp"
+                android:hint="@string/feedback_contact"
+                android:paddingEnd="@dimen/distance_8dp"
+                android:paddingStart="@dimen/distance_8dp"
+                android:textColor="@color/text_color1"
+                android:textColorHint="@color/et_hint_color"
+                android:textSize="@dimen/content_text" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/feedback_suggestion_re"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/feedback_request_type_re"
+            android:layout_below="@+id/feedback_contact_re"
             android:layout_marginLeft="@dimen/distance_16dp"
             android:layout_marginRight="@dimen/distance_16dp"
             android:layout_marginTop="@dimen/distance_8dp">
