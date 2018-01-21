@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.IDN;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -81,11 +82,15 @@ public class UserSystemTool {
                 try {
                     URLConnection conn = new URL("https://www.baidu.com/").openConnection();
                     long time = conn.getDate();
-                    record.setResetTime(time);
+                    if (time == 0) {
+                        record.setResetTime(System.currentTimeMillis());
+                    } else {
+                        record.setResetTime(time);
+                    }
                     record.save(new SaveListener<String>() {
                         @Override
                         public void done(String s, BmobException e) {
-                            Log.d(TAG,"objectId:" + s);
+                            Log.d(TAG, "objectId:" + s);
                             //表示成功
                             if (e == null) {
                                 MainConfig.getInstance().setUserObjectId(s);
@@ -97,12 +102,12 @@ public class UserSystemTool {
                             } else {//失败 s 为null
                                 --retry[0];
                                 if (retry[0] >= 1) {
-                                    initUser(retry[0],handler);
+                                    initUser(retry[0], handler);
                                 }
                             }
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

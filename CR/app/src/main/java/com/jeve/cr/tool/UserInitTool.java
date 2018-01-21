@@ -35,31 +35,32 @@ public class UserInitTool {
     public static void initUser(Context context, final Handler handler) {
         if (DeviceTool.isNetworkConnected(context)) {
             //第一次进入应用，需要在后台建立用户设备id，和次数的数据库，后面处理只需要进行修改或其它处理
-            if (TextUtils.isEmpty(MainConfig.getInstance().getUserObjectId())) {
-                UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
-                    @Override
-                    public void onUserRecordLister(UserRecord record, int respondCode) {
-                        if (record == null && respondCode != UserSystemTool.NET_UNENABLE_RESPOND_CODE) {
-                            //表示数据库之前并没有保存唯一设备id的这条数据
-                            UserSystemTool.getInstance().initUser(3,handler);
-                        } else if (record != null) {
-                            //避免用户清除数据后，将本地objectid清除
-                            MainConfig.getInstance().setUserObjectId(record.getObjectId());
-                            //获取识别次数
-                            getUseCount(handler);
-                        }
+//            if (TextUtils.isEmpty(MainConfig.getInstance().getUserObjectId())) {
+            UserSystemTool.getInstance().getUser(new UserSystemTool.UserRecordListener() {
+                @Override
+                public void onUserRecordLister(UserRecord record, int respondCode) {
+                    if (record == null && respondCode != UserSystemTool.NET_UNENABLE_RESPOND_CODE) {
+                        //表示数据库之前并没有保存唯一设备id的这条数据
+                        UserSystemTool.getInstance().initUser(3, handler);
+                    } else if (record != null) {
+                        //避免用户清除数据后，将本地objectid清除
+                        MainConfig.getInstance().setUserObjectId(record.getObjectId());
+                        //获取识别次数
+                        getUseCount(handler);
                     }
-                });
-            } else {
-                Log.d("zl---UserInitTool---","objectId:" + MainConfig.getInstance().getUserObjectId());
-                getUseCount(handler);
-            }
+                }
+            });
+//            } else {
+//                Log.d("zl---UserInitTool---","objectId:" + MainConfig.getInstance().getUserObjectId());
+//                getUseCount(handler);
+//            }
         } else {
             //没有网络情况下
             handler.sendEmptyMessage(3);
         }
 
     }
+
 
     /**
      * 获取免费次数
@@ -77,6 +78,7 @@ public class UserInitTool {
                     message.what = 2;
                     handler.sendMessage(message);
                 }
+
                 //设置免费领取
                 initUserFreeGet();
             }
