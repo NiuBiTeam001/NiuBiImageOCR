@@ -29,6 +29,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.waps.AppConnect;
 
 import static android.R.id.list;
 
@@ -41,14 +42,15 @@ public class CrApplication extends Application {
 
     private static Context context;
     ArrayList<Activity> list = new ArrayList<>();
-    private static final String APPLICATION_ID = "57e5fc30ae14024bb7f93f303f142e25";
+    private static final String BMOBAPPLICATION_ID = "57e5fc30ae14024bb7f93f303f142e25";
+    private static final String WAPAPP_ID = "843cdffea9ade4d7a44827fc5aa4df77";
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
         //Bmob初始化
-        Bmob.initialize(this, APPLICATION_ID);
+        Bmob.initialize(this, BMOBAPPLICATION_ID);
         //百度SDK初始化
         OCRTool.getInstence().init(this);
         //全局报错处理初始化
@@ -58,9 +60,13 @@ public class CrApplication extends Application {
         //友盟
         UMTool.getInstence().init();
         //有米初始化
-        UmiManager.initUmi();
-        //插屏初始化
-        UmiManager.initSpotAd();
+//        UmiManager.initUmi();
+        //万普广告初始化
+        AppConnect.getInstance(WAPAPP_ID,"waps",this);
+        //万普插屏广告初始化
+        AppConnect.getInstance(this).initPopAd(this);
+//        //有米插屏初始化
+//        UmiManager.initSpotAd();
     }
 
     public static Context getContext() {

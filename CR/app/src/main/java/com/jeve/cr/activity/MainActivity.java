@@ -72,6 +72,9 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.waps.AppConnect;
+import cn.waps.AppListener;
+import cn.waps.UpdatePointsListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, UmiManager.ADCallBack {
     private static final String TAG = "zl---MainActivity---";
@@ -456,13 +459,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 });
                 break;
             case R.id.ad_re:
-                if (isClickAD) return;
-                if (!checkPermission(Manifest.permission.READ_PHONE_STATE)) {
+//                if (isClickAD) return;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkPermission(Manifest.permission.READ_PHONE_STATE)) {
                     requestPermission(this, Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
                     break;
                 }
-                isClickAD = true;
-                UmiManager.showSpot(this, this);
+//                isClickAD = true;
+//                UmiManager.showSpot(this, this);
+                final boolean[] haveData = {true};
+                if (AppConnect.getInstance(this).hasPopAd(this)) {
+                    AppConnect.getInstance(this).setPopAdNoDataListener(new AppListener() {
+                        @Override
+                        public void onPopNoData() {
+//                            Log.i("debug", "插屏广告暂无可用数据");
+                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
+                            haveData[0] = false;
+                        }
+                    });
+                    if (haveData[0]) {
+                        AppConnect.getInstance(this).showPopAd(this);
+                    }
+                }
                 break;
         }
     }
@@ -856,15 +873,52 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        AppConnect.getInstance(this).getPoints(new UpdatePointsListener() {
+            /**
+             *
+             * @param s
+             * @param i  表示下载完应用，并且已经安装获取的积分
+             */
+            @Override
+            public void getUpdatePoints(String s, int i) {
+                if (i > 0){
+                    UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
+                    final int random = getRandom();
+                    UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
+                        @Override
+                        public void onUserRecordUpdateListener(int respondCode) {
+                            if (respondCode == UserSystemTool.SUCCESS) {
+                                Message msg = Message.obtain();
+                                msg.what = 6;
+                                msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
+                                MainConfig.getInstance().setUserLeaveOcrTimes(random + MainConfig.getInstance().getUserLeaveOcrTimes());
+                                handler.sendMessage(msg);
+                                Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void getUpdatePointsFailed(String s) {
+                Log.i(TAG,"getUpdatePointsFailed()  S --" + s);
+            }
+        });
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-        UmiManager.spotOnPause(this);
+//        UmiManager.spotOnPause(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UmiManager.spotOnStop(this);
+//        UmiManager.spotOnStop(this);
     }
 
     //照片提示说明
@@ -927,21 +981,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void adClick() {
         isClickAD = false;
-        UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
-        final int random = getRandom();
-        UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
-            @Override
-            public void onUserRecordUpdateListener(int respondCode) {
-                if (respondCode == UserSystemTool.SUCCESS) {
-                    Message msg = Message.obtain();
-                    msg.what = 6;
-                    msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
-                    MainConfig.getInstance().setUserLeaveOcrTimes(random + MainConfig.getInstance().getUserLeaveOcrTimes());
-                    handler.sendMessage(msg);
-                    Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+//        UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
+//        final int random = getRandom();
+//        UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
+//            @Override
+//            public void onUserRecordUpdateListener(int respondCode) {
+//                if (respondCode == UserSystemTool.SUCCESS) {
+//                    Message msg = Message.obtain();
+//                    msg.what = 6;
+//                    msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
+//                    MainConfig.getInstance().setUserLeaveOcrTimes(random + MainConfig.getInstance().getUserLeaveOcrTimes());
+//                    handler.sendMessage(msg);
+//                    Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
     }
 
     /**
@@ -971,8 +1025,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onDestroy() {
+        AppConnect.getInstance(this).close();
         super.onDestroy();
-        UmiManager.spotOnDestroy(this);
-        UmiManager.spotExit(this);
+//        UmiManager.spotOnDestroy(this);
+//        UmiManager.spotExit(this);
     }
 }

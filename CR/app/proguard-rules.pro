@@ -13,6 +13,11 @@
 
 -keepattributes *Annotation*,InnerClasses
 
+#万普需要添加的混淆
+-keep public class cn.waps.** {*;}
+-keep public interface cn.waps.** {*;}
+-dontwarn cn.waps.**
+
 #基本
 -keep public class * extends android.support.v7.app.AppCompatActivity
 -keep public class * extends android.app.Application
