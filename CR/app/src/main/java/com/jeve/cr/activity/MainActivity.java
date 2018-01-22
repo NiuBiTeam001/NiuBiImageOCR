@@ -459,12 +459,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 });
                 break;
             case R.id.ad_re:
-//                if (isClickAD) return;
+                if (isClickAD) return;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkPermission(Manifest.permission.READ_PHONE_STATE)) {
                     requestPermission(this, Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
                     break;
                 }
-//                isClickAD = true;
 //                UmiManager.showSpot(this, this);
                 final boolean[] haveData = {true};
                 if (AppConnect.getInstance(this).hasPopAd(this)) {
@@ -478,6 +477,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     });
                     if (haveData[0]) {
                         AppConnect.getInstance(this).showPopAd(this);
+                        isClickAD = true;
                     }
                 }
                 break;
@@ -883,7 +883,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
              */
             @Override
             public void getUpdatePoints(String s, int i) {
-                if (i > 0){
+                if (i > 0) {
+                    isClickAD = false;
                     UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
                     final int random = getRandom();
                     UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
@@ -904,7 +905,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             @Override
             public void getUpdatePointsFailed(String s) {
-                Log.i(TAG,"getUpdatePointsFailed()  S --" + s);
+                Log.i(TAG, "getUpdatePointsFailed()  S --" + s);
             }
         });
     }
