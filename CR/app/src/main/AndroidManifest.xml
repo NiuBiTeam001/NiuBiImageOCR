@@ -20,8 +20,6 @@
 
     <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--万普需要的权限-->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:name=".CrApplication"

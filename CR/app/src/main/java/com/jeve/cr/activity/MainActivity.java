@@ -3,6 +3,7 @@ package com.jeve.cr.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,9 +57,6 @@ import com.jeve.cr.tool.UserInitTool;
 import com.jeve.cr.tool.UserSystemTool;
 import com.jeve.cr.update.UpdateManager;
 import com.jeve.cr.view.NetAnim;
-import com.jeve.cr.youmi.UmiManager;
-
-import net.youmi.android.nm.sp.SpotManager;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -72,11 +70,8 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
-import cn.waps.AppConnect;
-import cn.waps.AppListener;
-import cn.waps.UpdatePointsListener;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, UmiManager.ADCallBack {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "zl---MainActivity---";
     private String originalPath;
     private static final int CAMERA_REQUEST_CODE = 2;//调用相机请求码
@@ -211,7 +206,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startCamera();
                 break;
             case READ_PHONE_STATE:
-                UmiManager.showSpot(this, this);
                 loadStart();
                 new AdFirstWaitThr().start();
                 break;
@@ -459,27 +453,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 });
                 break;
             case R.id.ad_re:
-                if (isClickAD) return;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkPermission(Manifest.permission.READ_PHONE_STATE)) {
                     requestPermission(this, Manifest.permission.READ_PHONE_STATE, READ_PHONE_STATE);
                     break;
                 }
-//                UmiManager.showSpot(this, this);
-                final boolean[] haveData = {true};
-                if (AppConnect.getInstance(this).hasPopAd(this)) {
-                    AppConnect.getInstance(this).setPopAdNoDataListener(new AppListener() {
-                        @Override
-                        public void onPopNoData() {
-//                            Log.i("debug", "插屏广告暂无可用数据");
-                            Toast.makeText(MainActivity.this, getString(R.string.main_net_error), Toast.LENGTH_SHORT).show();
-                            haveData[0] = false;
-                        }
-                    });
-                    if (haveData[0]) {
-                        AppConnect.getInstance(this).showPopAd(this);
-                        isClickAD = true;
-                    }
-                }
+
                 break;
                 default:break;
         }
@@ -755,10 +733,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isLoading)
                 return false;
-            if (SpotManager.getInstance(this).isSpotShowing()) {
-                UmiManager.hideSpot(this);
-                return false;
-            }
             if (isSelectPhoto) {
                 //返回主界面样子
                 showimage_iv.setVisibility(View.GONE);
@@ -873,56 +847,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return list.get(0);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppConnect.getInstance(this).getPoints(new UpdatePointsListener() {
-            /**
-             *
-             * @param s
-             * @param i  表示下载完应用，并且已经安装获取的积分
-             */
-            @Override
-            public void getUpdatePoints(String s, int i) {
-                if (i > 0) {
-                    isClickAD = false;
-                    UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
-                    final int random = getRandom();
-                    UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
-                        @Override
-                        public void onUserRecordUpdateListener(int respondCode) {
-                            if (respondCode == UserSystemTool.SUCCESS) {
-                                Message msg = Message.obtain();
-                                msg.what = 6;
-                                msg.obj = random + MainConfig.getInstance().getUserLeaveOcrTimes();
-                                MainConfig.getInstance().setUserLeaveOcrTimes(random + MainConfig.getInstance().getUserLeaveOcrTimes());
-                                handler.sendMessage(msg);
-                                Toast.makeText(MainActivity.this, String.format(getString(R.string.get_ocr_time_by_ad), random + ""), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void getUpdatePointsFailed(String s) {
-                Log.i(TAG, "getUpdatePointsFailed()  S --" + s);
-            }
-        });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        UmiManager.spotOnPause(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        UmiManager.spotOnStop(this);
-    }
-
     //照片提示说明
     private void showPhotoSelectTipPop() {
         // 构建一个popupwindow的布局
@@ -964,25 +888,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         isLoading = false;
     }
 
-    //广告回调
-    @Override
-    public void adShowSuccess(Boolean success) {
-        if (!success) {
-            Log.d("LJW", "adShowSuccess success = " + success);
-            isClickAD = false;
-        } else {
-            UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_SHOW);
-        }
-    }
 
-    @Override
-    public void adClose() {
-        isClickAD = false;
-    }
-
-    @Override
-    public void adClick() {
-        isClickAD = false;
+        //////////////////////////////广告成功之后的处理////////////////////////////////////
 //        UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
 //        final int random = getRandom();
 //        UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
@@ -998,7 +905,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                }
 //            }
 //        });
-    }
+        //////////////////////////////广告成功之后的处理////////////////////////////////////
 
     /**
      * 获取随机一到二的数字
@@ -1027,9 +934,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onDestroy() {
-        AppConnect.getInstance(this).close();
         super.onDestroy();
-//        UmiManager.spotOnDestroy(this);
-//        UmiManager.spotExit(this);
     }
 }

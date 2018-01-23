@@ -9,14 +9,7 @@
 #Bmob代码混淆
 -keep class cn.bmob.v3.**
 
--keep public class com.mi.adtracker.MiAdTracker{ *; }
-
 -keepattributes *Annotation*,InnerClasses
-
-#万普需要添加的混淆
--keep public class cn.waps.** {*;}
--keep public interface cn.waps.** {*;}
--dontwarn cn.waps.**
 
 #基本
 -keep public class * extends android.support.v7.app.AppCompatActivity

@@ -45,7 +45,4 @@ dependencies {
     //兼容Android6.0
     compile 'cn.bmob.android:http-legacy:1.0'
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-    compile name: 'YoumiSdk_v7.5.0_2017-07-18', ext: 'aar'
-    compile files('libs/miadtracker.jar')
-    compile files('libs/AppOffer_3.0.3.jar')
 }
