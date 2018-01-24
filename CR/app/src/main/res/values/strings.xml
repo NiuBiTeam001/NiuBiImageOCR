@@ -43,7 +43,7 @@
     <string name="main_bank_bank">银行卡：</string>
     <string name="main_net_error">请检查网络是否连接！</string>
     <string name="main_all_stop">处理人数过多，请稍后再试！</string>
-    <string name="main_ad_watch">抱歉！识别次数已用完。您可以领取免费次数或通过广告获取次数。</string>
+    <string name="main_ad_watch">抱歉！识别次数已用完。您可以领取免费次数。</string>
     <string name="main_all_count">抱歉！识别用户过多，请稍后再试！</string>
     <string name="main_photo_select_tip_title">照片选取说明</string>
     <string name="main_photo_select_tip_content01">1.请选取亮度较好的图片。</string>

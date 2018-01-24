@@ -71,7 +71,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "zl---MainActivity---";
     private String originalPath;
     private static final int CAMERA_REQUEST_CODE = 2;//调用相机请求码
@@ -260,7 +260,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 main_count_ll.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 back_viewpager.setVisibility(View.VISIBLE);
-                ad_re.setVisibility(View.VISIBLE);
+//                ad_re.setVisibility(View.VISIBLE);
                 get_free_re.setVisibility(View.VISIBLE);
                 isSelectPhoto = false;
                 break;
@@ -285,7 +285,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     loadEnd();
                     return;
                 }
-                if (MainConfig.getInstance().getUserLeaveOcrTimes() == 0) {
+                if (MainConfig.getInstance().getUserLeaveOcrTimes() <= 0) {
                     //没有次数,叫用户看广告赚取次数
                     Toast.makeText(MainActivity.this, getString(R.string.main_ad_watch), Toast.LENGTH_SHORT).show();
                     isOcring = false;
@@ -423,7 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                                 loadEnd();
                                 return;
                             }
-                            UserSystemTool.getInstance().updateUserTimes(2, new UserSystemTool
+                            UserSystemTool.getInstance().updateUserTimes(6, new UserSystemTool
                                     .UserRecordUpdateListener() {
                                 @Override
                                 public void onUserRecordUpdateListener(int respondCode) {
@@ -432,7 +432,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                                         Toast.makeText(MainActivity.this, getString(R.string
                                                 .main_get_free_count_success), Toast.LENGTH_SHORT).show();
                                         MainConfig.getInstance().setUserLeaveOcrTimes(MainConfig.getInstance().getUserLeaveOcrTimes() + 2);
-                                        setOcrCount(2);
+                                        setOcrCount(6);
                                         UserSystemTool.getInstance().updateUserIsGetTimes(true, new UserSystemTool
                                                 .UserRecordUpdateListener() {
                                             @Override
@@ -459,7 +459,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 }
 
                 break;
-                default:break;
+            default:
+                break;
         }
     }
 
@@ -742,7 +743,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 main_count_ll.setVisibility(View.VISIBLE);
                 select_ll.setVisibility(View.VISIBLE);
                 back_viewpager.setVisibility(View.VISIBLE);
-                ad_re.setVisibility(View.VISIBLE);
+//                ad_re.setVisibility(View.VISIBLE);
                 get_free_re.setVisibility(View.VISIBLE);
                 isSelectPhoto = false;
                 return false;
@@ -889,7 +890,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
 
-        //////////////////////////////广告成功之后的处理////////////////////////////////////
+    //////////////////////////////广告成功之后的处理////////////////////////////////////
 //        UMTool.getInstence().sendEvent(UMTool.Action.CR_AD_CLICK);
 //        final int random = getRandom();
 //        UserSystemTool.getInstance().updateUserTimes(random, new UserSystemTool.UserRecordUpdateListener() {
@@ -905,7 +906,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 //                }
 //            }
 //        });
-        //////////////////////////////广告成功之后的处理////////////////////////////////////
+    //////////////////////////////广告成功之后的处理////////////////////////////////////
 
     /**
      * 获取随机一到二的数字
